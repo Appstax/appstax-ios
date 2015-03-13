@@ -9,19 +9,12 @@
 /* Begin PBXBuildFile section */
 		5447482419AF41950088400C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 54B6296519AC778D00ADE316 /* Main.storyboard */; };
 		5447482719AF5AEB0088400C /* NoteColors.m in Sources */ = {isa = PBXBuildFile; fileRef = 5447482619AF5AEB0088400C /* NoteColors.m */; };
-		5447482819AF5AEB0088400C /* NoteColors.m in Sources */ = {isa = PBXBuildFile; fileRef = 5447482619AF5AEB0088400C /* NoteColors.m */; };
 		5447482A19AF5F6D0088400C /* Colors.png in Resources */ = {isa = PBXBuildFile; fileRef = 5447482919AF5F6D0088400C /* Colors.png */; };
-		5447482B19AF5F6D0088400C /* Colors.png in Resources */ = {isa = PBXBuildFile; fileRef = 5447482919AF5F6D0088400C /* Colors.png */; };
 		5447482D19AF61B80088400C /* Colors2.png in Resources */ = {isa = PBXBuildFile; fileRef = 5447482C19AF61B80088400C /* Colors2.png */; };
-		5447482E19AF61B80088400C /* Colors2.png in Resources */ = {isa = PBXBuildFile; fileRef = 5447482C19AF61B80088400C /* Colors2.png */; };
 		5447483119AF65A20088400C /* NoteColorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5447483019AF65A20088400C /* NoteColorView.m */; };
-		5447483219AF65A20088400C /* NoteColorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5447483019AF65A20088400C /* NoteColorView.m */; };
 		54800EC61941DA7200E79D83 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54800EC51941DA7200E79D83 /* Foundation.framework */; };
 		54800EC81941DA7200E79D83 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54800EC71941DA7200E79D83 /* CoreGraphics.framework */; };
 		54800ECA1941DA7200E79D83 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54800EC91941DA7200E79D83 /* UIKit.framework */; };
-		54800EE81941DA7200E79D83 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54800EE71941DA7200E79D83 /* XCTest.framework */; };
-		54800EE91941DA7200E79D83 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54800EC51941DA7200E79D83 /* Foundation.framework */; };
-		54800EEA1941DA7200E79D83 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54800EC91941DA7200E79D83 /* UIKit.framework */; };
 		54994629197E669700AF806A /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54994628197E669700AF806A /* Security.framework */; };
 		54B6297319AC778D00ADE316 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 54B6296419AC778D00ADE316 /* AppDelegate.m */; };
 		54B6297519AC778D00ADE316 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 54B6296819AC778D00ADE316 /* DetailViewController.m */; };
@@ -29,27 +22,14 @@
 		54B6297819AC778D00ADE316 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 54B6296C19AC778D00ADE316 /* main.m */; };
 		54B6297919AC778D00ADE316 /* MasterTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 54B6296E19AC778D00ADE316 /* MasterTableViewCell.m */; };
 		54B6297A19AC778D00ADE316 /* MasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 54B6297019AC778D00ADE316 /* MasterViewController.m */; };
+		54B860471AB3830200B618A4 /* Appstax.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54F985631AB2593D000096ED /* Appstax.framework */; };
 		54F06D2519B0603A005A97C2 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54F06D2419B0603A005A97C2 /* QuartzCore.framework */; };
 		54F06D2819B07011005A97C2 /* RootController.m in Sources */ = {isa = PBXBuildFile; fileRef = 54F06D2719B07011005A97C2 /* RootController.m */; };
 		54F06D2D19B07516005A97C2 /* LeftSidebarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 54F06D2C19B07516005A97C2 /* LeftSidebarView.m */; };
 		54F06D2F19B07536005A97C2 /* LeftSidebarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 54F06D2E19B07536005A97C2 /* LeftSidebarView.xib */; };
 		54F32FCA19B70F52003658D4 /* LoginViews.xib in Resources */ = {isa = PBXBuildFile; fileRef = 54F32FC919B70F52003658D4 /* LoginViews.xib */; };
-		54F9855B1AB25314000096ED /* Appstax.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54F985581AB2527D000096ED /* Appstax.framework */; };
-		54F985641AB2593D000096ED /* Appstax.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54F985631AB2593D000096ED /* Appstax.framework */; };
-		54F985651AB2593D000096ED /* Appstax.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54F985631AB2593D000096ED /* Appstax.framework */; };
-		54F985661AB25948000096ED /* Appstax.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54F985631AB2593D000096ED /* Appstax.framework */; };
 		54F985671AB25948000096ED /* Appstax.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 54F985631AB2593D000096ED /* Appstax.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		54800EEB1941DA7200E79D83 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 54800EBA1941DA7200E79D83 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 54800EC11941DA7200E79D83;
-			remoteInfo = MasterDetailExample;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		54F9855D1AB25314000096ED /* Embed Frameworks */ = {
@@ -76,8 +56,6 @@
 		54800EC51941DA7200E79D83 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		54800EC71941DA7200E79D83 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		54800EC91941DA7200E79D83 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		54800EE61941DA7200E79D83 /* AXNotesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AXNotesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		54800EE71941DA7200E79D83 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		54994628197E669700AF806A /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		54B6296319AC778D00ADE316 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		54B6296419AC778D00ADE316 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -100,7 +78,6 @@
 		54F06D2C19B07516005A97C2 /* LeftSidebarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeftSidebarView.m; sourceTree = "<group>"; };
 		54F06D2E19B07536005A97C2 /* LeftSidebarView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LeftSidebarView.xib; sourceTree = "<group>"; };
 		54F32FC919B70F52003658D4 /* LoginViews.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginViews.xib; sourceTree = "<group>"; };
-		54F985581AB2527D000096ED /* Appstax.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Appstax.framework; path = "/Users/keronsen/Projects/appstax-ios/build/appstax-ios/Appstax.framework"; sourceTree = "<absolute>"; };
 		54F985631AB2593D000096ED /* Appstax.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Appstax.framework; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
@@ -109,25 +86,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				54B860471AB3830200B618A4 /* Appstax.framework in Frameworks */,
 				54F06D2519B0603A005A97C2 /* QuartzCore.framework in Frameworks */,
 				54994629197E669700AF806A /* Security.framework in Frameworks */,
-				54F985641AB2593D000096ED /* Appstax.framework in Frameworks */,
-				54F9855B1AB25314000096ED /* Appstax.framework in Frameworks */,
 				54800EC81941DA7200E79D83 /* CoreGraphics.framework in Frameworks */,
 				54800ECA1941DA7200E79D83 /* UIKit.framework in Frameworks */,
-				54F985661AB25948000096ED /* Appstax.framework in Frameworks */,
 				54800EC61941DA7200E79D83 /* Foundation.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		54800EE31941DA7200E79D83 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				54800EE81941DA7200E79D83 /* XCTest.framework in Frameworks */,
-				54800EEA1941DA7200E79D83 /* UIKit.framework in Frameworks */,
-				54F985651AB2593D000096ED /* Appstax.framework in Frameworks */,
-				54800EE91941DA7200E79D83 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -147,7 +111,6 @@
 			isa = PBXGroup;
 			children = (
 				54800EC21941DA7200E79D83 /* AXNotes.app */,
-				54800EE61941DA7200E79D83 /* AXNotesTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -161,7 +124,6 @@
 				54800EC71941DA7200E79D83 /* CoreGraphics.framework */,
 				54800EC91941DA7200E79D83 /* UIKit.framework */,
 				54994628197E669700AF806A /* Security.framework */,
-				54800EE71941DA7200E79D83 /* XCTest.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -236,24 +198,6 @@
 			productReference = 54800EC21941DA7200E79D83 /* AXNotes.app */;
 			productType = "com.apple.product-type.application";
 		};
-		54800EE51941DA7200E79D83 /* AXNotesTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 54800EFA1941DA7200E79D83 /* Build configuration list for PBXNativeTarget "AXNotesTests" */;
-			buildPhases = (
-				54800EE21941DA7200E79D83 /* Sources */,
-				54800EE31941DA7200E79D83 /* Frameworks */,
-				54800EE41941DA7200E79D83 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				54800EEC1941DA7200E79D83 /* PBXTargetDependency */,
-			);
-			name = AXNotesTests;
-			productName = MasterDetailExampleTests;
-			productReference = 54800EE61941DA7200E79D83 /* AXNotesTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -262,11 +206,6 @@
 			attributes = {
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = AppStax;
-				TargetAttributes = {
-					54800EE51941DA7200E79D83 = {
-						TestTargetID = 54800EC11941DA7200E79D83;
-					};
-				};
 			};
 			buildConfigurationList = 54800EBD1941DA7200E79D83 /* Build configuration list for PBXProject "AXNotes" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -282,7 +221,6 @@
 			projectRoot = "";
 			targets = (
 				54800EC11941DA7200E79D83 /* AXNotes */,
-				54800EE51941DA7200E79D83 /* AXNotesTests */,
 			);
 		};
 /* End PBXProject section */
@@ -298,15 +236,6 @@
 				5447482D19AF61B80088400C /* Colors2.png in Resources */,
 				54F32FCA19B70F52003658D4 /* LoginViews.xib in Resources */,
 				5447482A19AF5F6D0088400C /* Colors.png in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		54800EE41941DA7200E79D83 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				5447482E19AF61B80088400C /* Colors2.png in Resources */,
-				5447482B19AF5F6D0088400C /* Colors.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -329,24 +258,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		54800EE21941DA7200E79D83 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				5447483219AF65A20088400C /* NoteColorView.m in Sources */,
-				5447482819AF5AEB0088400C /* NoteColors.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		54800EEC1941DA7200E79D83 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 54800EC11941DA7200E79D83 /* AXNotes */;
-			targetProxy = 54800EEB1941DA7200E79D83 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		54B6296519AC778D00ADE316 /* Main.storyboard */ = {
@@ -480,50 +392,6 @@
 			};
 			name = Release;
 		};
-		54800EFB1941DA7200E79D83 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/MasterDetailExample.app/MasterDetailExample";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-					"/Users/keronsen/Projects/appstax-ios/build/appstax-ios",
-					"$(PROJECT_DIR)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "MasterDetailExample/MasterDetailExample-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = "MasterDetailExampleTests/NotesTests-Info.plist";
-				PRODUCT_NAME = AXNotesTests;
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = xctest;
-			};
-			name = Debug;
-		};
-		54800EFC1941DA7200E79D83 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/MasterDetailExample.app/MasterDetailExample";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-					"/Users/keronsen/Projects/appstax-ios/build/appstax-ios",
-					"$(PROJECT_DIR)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "MasterDetailExample/MasterDetailExample-Prefix.pch";
-				INFOPLIST_FILE = "MasterDetailExampleTests/NotesTests-Info.plist";
-				PRODUCT_NAME = AXNotesTests;
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = xctest;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -541,15 +409,6 @@
 			buildConfigurations = (
 				54800EF81941DA7200E79D83 /* Debug */,
 				54800EF91941DA7200E79D83 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		54800EFA1941DA7200E79D83 /* Build configuration list for PBXNativeTarget "AXNotesTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				54800EFB1941DA7200E79D83 /* Debug */,
-				54800EFC1941DA7200E79D83 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
