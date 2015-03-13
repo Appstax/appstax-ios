@@ -6,15 +6,15 @@ git:
   depth: 1
 env:
   global:
-  - secure: BIthbR5ZAiPMoajy4C10WJwabbR2uWxFzHCL6pyAqLNFI3gaOUw7BV2yiKi5Pd7IIl/Lg6Nn54j6XcqKyhkHmMkU4He+01Q1Afk90BhvglP439m7NVtp+KcKtZRIesdRfFuLsEkiOBZBAHXCNPhjMY3PE/HYK5cBE5aFmIPsD74=
-  - secure: NpRsNEh2rYQzJRC3Slw0t4SBYAhrxNbUVx1yEKBTSBvXP8I0wUveaqt9PBXXE7zeTFsU1y9N5YCfFu/whETb7c8HDhiF8phHYqEPj6DMYYfSl5JjKiD4/C4xTPA6GQt5CjwIL+nm+LVTlhfyZdWu3Wn+HMU0LakLS1XEE53AU68=
+  - secure: CMIkvacdAxHwNi16VKK8p5Bc8OJuFGZ/fFwrrpwzHKgUtVTsEQPlnsCo4R6CloWnmyEJYRs/UmlGwPJbRXS0sI50srk4kX3LUPkTaRkAFsOLpyZs1kpYy6YNm/V8j7F+p5iOvuDkzkOSD3QTMzM7Y0V8bTVqOZLFU8R0nizZgSY=
+  - secure: rfhzlf6vFWa8X3BGaHumE+w6LYebNffWwkN6UBdQY4p1K/VbRoVaEMwAUh1pUysjmJW1Ch0DGjFshj8oS0PiYtm4DkPRollXSH53FnhtMb5R5q8HYTEoN4C1ZeN73bBnySwviwit2zWLEFFq21qa/PaJpeKHSVAEuahB4hS69hQ=
   - CODE_SIGN_IDENTITY="iPhone Distribution: Appstax Technologies AS (L8V2M7RADW)"
   - PROFILE_NAME="Travis_Ad_Hoc_Distribution_Profile"
 deploy:
-  - provider: releases
-    api_key:
-      secure: jUE2mYhPRhTQ87cDcSXIiI1ncoqTq1vNeKJBqb8wbpkYE6Fmp5S7/nBV+iXNwyoV9Ls3LvvEz6FLjecX7UI2eVrLtjLGZhro9HqCBKoWDX7H6usLR6WBFeycY+0xFTTMRTTE/0LfTpOrZrbs03wyt8WhlyvKHoSBpjN6UPBEDvs=
-    skip_cleanup: true
-    file: "Build/appstax-ios.zip"
-    on:
-      tags: true
+- provider: releases
+  api_key:
+    secure: jUE2mYhPRhTQ87cDcSXIiI1ncoqTq1vNeKJBqb8wbpkYE6Fmp5S7/nBV+iXNwyoV9Ls3LvvEz6FLjecX7UI2eVrLtjLGZhro9HqCBKoWDX7H6usLR6WBFeycY+0xFTTMRTTE/0LfTpOrZrbs03wyt8WhlyvKHoSBpjN6UPBEDvs=
+  skip_cleanup: true
+  file: Build/appstax-ios.zip
+  on:
+    tags: true
