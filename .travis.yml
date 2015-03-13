@@ -10,3 +10,11 @@ env:
   - secure: NpRsNEh2rYQzJRC3Slw0t4SBYAhrxNbUVx1yEKBTSBvXP8I0wUveaqt9PBXXE7zeTFsU1y9N5YCfFu/whETb7c8HDhiF8phHYqEPj6DMYYfSl5JjKiD4/C4xTPA6GQt5CjwIL+nm+LVTlhfyZdWu3Wn+HMU0LakLS1XEE53AU68=
   - CODE_SIGN_IDENTITY="iPhone Distribution: Appstax Technologies AS (L8V2M7RADW)"
   - PROFILE_NAME="Travis_Ad_Hoc_Distribution_Profile"
+deploy:
+  - provider: releases
+    api_key:
+      secure: jUE2mYhPRhTQ87cDcSXIiI1ncoqTq1vNeKJBqb8wbpkYE6Fmp5S7/nBV+iXNwyoV9Ls3LvvEz6FLjecX7UI2eVrLtjLGZhro9HqCBKoWDX7H6usLR6WBFeycY+0xFTTMRTTE/0LfTpOrZrbs03wyt8WhlyvKHoSBpjN6UPBEDvs=
+    skip_cleanup: true
+    file: "Build/appstax-ios.zip"
+    on:
+      tags: true
