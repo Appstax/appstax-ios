@@ -13,7 +13,7 @@ env:
 deploy:
 - provider: releases
   api_key:
-    secure: jUE2mYhPRhTQ87cDcSXIiI1ncoqTq1vNeKJBqb8wbpkYE6Fmp5S7/nBV+iXNwyoV9Ls3LvvEz6FLjecX7UI2eVrLtjLGZhro9HqCBKoWDX7H6usLR6WBFeycY+0xFTTMRTTE/0LfTpOrZrbs03wyt8WhlyvKHoSBpjN6UPBEDvs=
+    secure: z3NEF86jqUkyPXlsLVDmEodysR25zr594f8e+H96zgFES64VcjeKbItpu4OCoCVJCrq3Km8Cm5sdpT8jImkMkr+f8xVNUfHBiziy/xRKrLBUYlJN/A+rTwYAo9fSy8xJ3yUxa53irz20qHsQ9PNzn9ETpkBiUWU+2Gt9FPFWLqo=
   skip_cleanup: true
   file: Build/appstax-ios.zip
   on:
