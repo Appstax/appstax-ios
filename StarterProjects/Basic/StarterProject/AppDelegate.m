@@ -5,7 +5,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
-    [Appstax setAppKey:@"1234-5678-your-app-key"];
+    [Appstax setAppKey:@"<<appstax-app-key>>"];
     
     return YES;
 }
