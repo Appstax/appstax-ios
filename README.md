@@ -1,14 +1,8 @@
 
-### Pre-release note
-
-Please note that this repository contains pre-release software, and cannot be used until the Appstax services are officially released. If you are a registered early access developer, please download the JavaScript SDK from [appstax.com](http://appstax.com/#/download). You will be notified when you should change to the updated version in this repository.
-
-Want beta access? [Send us an email](ea@appstax.com) to request an early access code.
-
 Appstax iOS SDK
 ===============
 
-This is the official SDK for [Appstax](http://appstax.com). Please read the [iOS Guide](http://appstax.com/docs/Guides/iOS-SDK-Guide.html) to get up and running.
+This is the official SDK for [Appstax](http://appstax.com). Please read the [iOS Guide](http://appstax.com/docs/iOS-SDK-Guide.html) to get up and running.
 
 Installing
 ----------
