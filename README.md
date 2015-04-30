@@ -2,7 +2,7 @@
 Appstax iOS SDK
 ===============
 
-This is the official SDK for [Appstax](http://appstax.com). Please read the [iOS Guide](http://appstax.com/docs/iOS-SDK-Guide.html) to get up and running.
+This is the official SDK for [Appstax](https://appstax.com). Please read the [iOS Guide](https://appstax.com/docs/iOS-SDK-Guide) to get up and running.
 
 Installing
 ----------
@@ -22,7 +22,7 @@ contact[@"email"] = @"john@appleseed.com";
 [contact save];
 ```
 
-See the [iOS Guide](http://appstax.com/docs/Guides/iOS-SDK-Guide.html) for more info on how to set up your app and data model.
+See the [iOS Guide](https://appstax.com/docs/iOS-SDK-Guide) for more info on how to set up your app and data model.
 
 
 Building from source
