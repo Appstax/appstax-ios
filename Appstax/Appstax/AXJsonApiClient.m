@@ -59,8 +59,15 @@
         NSString *mimetype = part[@"mimeType"];
         NSData *data = part[@"data"];
         [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-        [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; filename=\"%@\"\r\n", partName, filename] dataUsingEncoding:NSUTF8StringEncoding]];
-        [body appendData:[[NSString stringWithFormat:@"Content-Type: %@\r\n\r\n", mimetype] dataUsingEncoding:NSUTF8StringEncoding]];
+        if(filename != nil && ![filename isEqualToString:@""]) {
+            [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; filename=\"%@\"\r\n", partName, filename] dataUsingEncoding:NSUTF8StringEncoding]];
+        } else {
+            [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"\r\n", partName] dataUsingEncoding:NSUTF8StringEncoding]];
+        }
+        if(mimetype != nil && ![mimetype isEqualToString:@""]) {
+            [body appendData:[[NSString stringWithFormat:@"Content-Type: %@\r\n", mimetype] dataUsingEncoding:NSUTF8StringEncoding]];
+        }
+        [body appendData:[@"\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
         [body appendData:data];
         [body appendData:[@"\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
     }
@@ -68,7 +75,7 @@
     
     [self sendHttpBody:body
                  toUrl:url
-                method:@"PUT"
+                method:method
                headers:@{@"Content-Type":contentType}
             completion:^(NSData *responseData, NSError *error) {
                 if(completion) {

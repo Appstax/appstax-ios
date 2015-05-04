@@ -31,6 +31,8 @@
 @interface AXObject ()
 @property (readonly) NSDictionary *allProperties;
 @property (readonly) NSDictionary *allPropertiesForSaving;
+@property (readonly) NSDictionary *allFileProperties;
+@property (readonly) BOOL hasUnsavedFiles;
 @property AXObjectStatus status;
 - (instancetype)initWithCollectionName:(NSString *)collectionName;
 - (instancetype)initWithCollectionName:(NSString *)collectionName properties:(NSDictionary *)properties status:(AXObjectStatus)status;

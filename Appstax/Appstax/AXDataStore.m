@@ -32,11 +32,21 @@
 
 - (void)save:(AXObject *)object completion:(void(^)(AXObject *, NSError*))completion {
     object.status = AXObjectStatusSaving;
-    id handler = ^(NSDictionary *dictionary, NSError *error) {
+    if(object.objectID == nil) {
+        if(object.hasUnsavedFiles) {
+            [self saveNewObjectWithFiles:object completion:completion];
+        } else {
+            [self saveNewObjectWithoutFiles:object completion:completion];
+        }
+    } else {
+        [self updateObject:object completion:completion];
+    }
+}
+
+- (void)updateObject:(AXObject *)object completion:(void(^)(AXObject *, NSError*))completion {
+    NSURL *url = [_apiClient urlByConcatenatingStrings:@[@"objects/", object.collectionName, @"/", object.objectID]];
+    [_apiClient putDictionary:object.allPropertiesForSaving toUrl:url completion:^(NSDictionary *dictionary, NSError *error) {
         if(!error) {
-            if([dictionary.allKeys containsObject:@"sysObjectId"]) {
-                [object overrideObjectID:dictionary[@"sysObjectId"]];
-            }
             [[[Appstax defaultContext] fileService] saveFilesForObject:object completion:^(NSError *error) {
                 object.status = error ? AXObjectStatusModified : AXObjectStatusSaved;
                 if(completion != nil) {
@@ -46,14 +56,57 @@
         } else if(error && completion) {
             completion(nil, error);
         }
-    };
-    if(object.objectID == nil) {
-        NSURL *url = [_apiClient urlByConcatenatingStrings:@[@"objects/", object.collectionName]];
-        [_apiClient postDictionary:object.allPropertiesForSaving toUrl:url completion:handler];
-    } else {
-        NSURL *url = [_apiClient urlByConcatenatingStrings:@[@"objects/", object.collectionName, @"/", object.objectID]];
-        [_apiClient putDictionary:object.allPropertiesForSaving toUrl:url completion:handler];
+    }];
+}
+
+- (void)saveNewObjectWithoutFiles:(AXObject *)object completion:(void(^)(AXObject *, NSError*))completion {
+    NSURL *url = [_apiClient urlByConcatenatingStrings:@[@"objects/", object.collectionName]];
+    [_apiClient postDictionary:object.allPropertiesForSaving toUrl:url completion:^(NSDictionary *dictionary, NSError *error) {
+        object.status = error ? AXObjectStatusModified : AXObjectStatusSaved;
+        if(!error) {
+            if([dictionary.allKeys containsObject:@"sysObjectId"]) {
+                [object overrideObjectID:dictionary[@"sysObjectId"]];
+            }
+            completion(object, nil);
+        } else if(error && completion) {
+            completion(nil, error);
+        }
+    }];
+}
+
+- (void)saveNewObjectWithFiles:(AXObject *)object completion:(void(^)(AXObject *, NSError*))completion {
+    AXFileService *fileService = [[Appstax defaultContext] fileService];
+    NSURL *url = [_apiClient urlByConcatenatingStrings:@[@"objects/", object.collectionName]];
+    NSMutableDictionary *multipart = [NSMutableDictionary dictionary];
+    
+    for(NSString *key in object.allFileProperties.keyEnumerator) {
+        AXFile *file = object[key];
+        file.status = AXFileStatusSaving;
+        multipart[key] = @{@"data":[fileService dataForFile:file],
+                           @"mimeType":file.mimeType,
+                           @"filename":file.filename };
     }
+    multipart[@"sysObjectData"] = @{@"data":[_apiClient serializeDictionary:object.allPropertiesForSaving]};
+    
+    [_apiClient sendMultipartFormData:multipart
+                                toUrl:url
+                               method:@"POST"
+                           completion:^(NSDictionary *dictionary, NSError *error) {
+                               object.status = error ? AXObjectStatusModified : AXObjectStatusSaved;
+                               if(!error) {
+                                   if([dictionary.allKeys containsObject:@"sysObjectId"]) {
+                                       [object overrideObjectID:dictionary[@"sysObjectId"]];
+                                   }
+                                   for(NSString *key in object.allFileProperties.keyEnumerator) {
+                                       AXFile *file = object[key];
+                                       file.status = AXFileStatusSaved;
+                                       file.url = [fileService urlForFileName:file.filename objectID:object.objectID propertyName:key collectionName:object.collectionName];
+                                   }
+                               }
+                               if(completion) {
+                                   completion(object, error);
+                               }
+                           }];
 }
 
 - (void)saveObjects:(NSArray *)objects completion:(void(^)(NSError *error))completion {

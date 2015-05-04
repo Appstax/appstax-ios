@@ -84,13 +84,13 @@
 
 - (void)testShouldStoreFilePropertiesInObjects {
     __block XCTestExpectation *exp1 = [self expectationWithDescription:@"async1"];
-    __block NSDictionary *postData;
+    __block NSString *postData;
 
     [AXStubs method:@"POST"
             urlPath:@"/objects/messages"
          responding:^OHHTTPStubsResponse *(NSURLRequest *request) {
              NSData *httpBody = [NSURLProtocol propertyForKey:@"HTTPBody" inRequest:request];
-             postData = [NSJSONSerialization JSONObjectWithData:httpBody options:0 error:nil];
+             postData = [[NSString alloc] initWithData:httpBody encoding:NSUTF8StringEncoding];
              return [OHHTTPStubsResponse responseWithJSONObject:@{@"sysObjectId":@"objid"}
                                                      statusCode:200 headers:nil];
          }];
@@ -105,34 +105,33 @@
     }];
     
     [self waitForExpectationsWithTimeout:3 handler:^(NSError *error) {
-        XCTAssertEqualObjects(postData[@"title"], @"The title!");
-        XCTAssertEqualObjects(postData[@"attachment"][@"sysDatatype"], @"file");
-        XCTAssertEqualObjects(postData[@"attachment"][@"filename"], @"test.txt");
+        AXAssertContains(postData, @"\"title\":\"The title!\"");
+        AXAssertContains(postData, @"\"filename\":\"test.txt\"");
+        AXAssertContains(postData, @"\"sysDatatype\":\"file\"");
     }];
 }
 
-- (void)testShouldPutFilesAfterSavingObjectAndUpdateStatusWhileSaving {
+- (void)testShouldMultipartPostObjectWithFilesAndUpdateStatusWhileSaving {
     __block XCTestExpectation *exp1 = [self expectationWithDescription:@"async1"];
-    __block XCTestExpectation *exp2 = [self expectationWithDescription:@"async2"];
-    __block XCTestExpectation *exp3 = [self expectationWithDescription:@"async3"];
-    __block NSString *filePutBody1;
-    __block NSString *filePutBody2;
-    __block NSDictionary *filePutHeaders1;
-    __block NSDictionary *filePutHeaders2;
+    __block NSString *postBody;
+    __block NSDictionary *postHeaders;
     __block NSData *fileData1 = [@"The attachment1 content" dataUsingEncoding:NSUTF8StringEncoding];
     __block NSData *fileData2 = [@"The attachment2 content" dataUsingEncoding:NSUTF8StringEncoding];
     __block AXFile *file1 = [AXFile fileWithData:fileData1 name:@"text.txt"];
     __block AXFile *file2 = [AXFile fileWithData:fileData2 name:@"picture.png"];
-    __block AXFileStatus statusWhileSavingObject1;
-    __block AXFileStatus statusWhileSavingObject2;
-    __block AXFileStatus statusWhileSavingFile1;
-    __block AXFileStatus statusWhileSavingFile2;
+    __block AXFileStatus status1WhileSavingObject;
+    __block AXFileStatus status2WhileSavingObject;
+    __block BOOL file1PutFound = NO;
+    __block BOOL file2PutFound = NO;
     
     [AXStubs method:@"POST"
             urlPath:@"/objects/messages"
          responding:^OHHTTPStubsResponse *(NSURLRequest *request) {
-             statusWhileSavingObject1 = file1.status;
-             statusWhileSavingObject2 = file2.status;
+             status1WhileSavingObject = file1.status;
+             status2WhileSavingObject = file2.status;
+             NSData *body = [NSURLProtocol propertyForKey:@"HTTPBody" inRequest:request];
+             postBody = [[NSString alloc] initWithData:body encoding:NSUTF8StringEncoding];
+             postHeaders = [NSDictionary dictionaryWithDictionary:request.allHTTPHeaderFields];
              return [OHHTTPStubsResponse responseWithJSONObject:@{@"sysObjectId":@"id1234"}
                                                      statusCode:200 headers:nil];
          }];
@@ -140,11 +139,7 @@
     [AXStubs method:@"PUT"
             urlPath:@"/files/messages/id1234/attachment1/text.txt"
          responding:^OHHTTPStubsResponse *(NSURLRequest *request) {
-             filePutHeaders1 = [NSDictionary dictionaryWithDictionary:request.allHTTPHeaderFields];
-             NSData *body = [NSURLProtocol propertyForKey:@"HTTPBody" inRequest:request];
-             filePutBody1 = [[NSString alloc] initWithData:body encoding:NSUTF8StringEncoding];
-             statusWhileSavingFile1 = file1.status;
-             [exp1 fulfill];
+             file1PutFound = YES;
              return [OHHTTPStubsResponse responseWithJSONObject:@{}
                                                      statusCode:200 headers:nil];
          }];
@@ -152,11 +147,7 @@
     [AXStubs method:@"PUT"
             urlPath:@"/files/messages/id1234/attachment2/picture.png"
          responding:^OHHTTPStubsResponse *(NSURLRequest *request) {
-             filePutHeaders2 = [NSDictionary dictionaryWithDictionary:request.allHTTPHeaderFields];
-             NSData *body = [NSURLProtocol propertyForKey:@"HTTPBody" inRequest:request];
-             filePutBody2 = [[NSString alloc] initWithData:body encoding:NSUTF8StringEncoding];
-             statusWhileSavingFile2 = file2.status;
-             [exp2 fulfill];
+             file2PutFound = YES;
              return [OHHTTPStubsResponse responseWithJSONObject:@{}
                                                      statusCode:200 headers:nil];
          }];
@@ -166,24 +157,23 @@
     object[@"attachment1"] = file1;
     object[@"attachment2"] = file2;
     [object save:^(NSError *error) {
-        [exp3 fulfill];
+        [exp1 fulfill];
     }];
     
     [self waitForExpectationsWithTimeout:3 handler:^(NSError *error) {
-        AXAssertContains(filePutHeaders1[@"Content-Type"], @"multipart/form-data; boundary=");
-        AXAssertContains(filePutHeaders2[@"Content-Type"], @"multipart/form-data; boundary=");
-        AXAssertContains(filePutBody1, @"Content-Disposition: form-data; name=\"file\"; filename=\"text.txt\"");
-        AXAssertContains(filePutBody2, @"Content-Disposition: form-data; name=\"file\"; filename=\"picture.png\"");
-        AXAssertContains(filePutBody1, @"Content-Type: text/plain");
-        AXAssertContains(filePutBody2, @"Content-Type: image/png");
-        AXAssertContains(filePutBody1, @"The attachment1 content");
-        AXAssertContains(filePutBody2, @"The attachment2 content");
-        XCTAssertEqual(statusWhileSavingObject1, AXFileStatusNew);
-        XCTAssertEqual(statusWhileSavingObject2, AXFileStatusNew);
-        XCTAssertEqual(statusWhileSavingFile1, AXFileStatusSaving);
-        XCTAssertEqual(statusWhileSavingFile2, AXFileStatusSaving);
+        AXAssertContains(postHeaders[@"Content-Type"], @"multipart/form-data; boundary=");
+        AXAssertContains(postBody, @"Content-Disposition: form-data; name=\"attachment1\"; filename=\"text.txt\"");
+        AXAssertContains(postBody, @"Content-Disposition: form-data; name=\"attachment2\"; filename=\"picture.png\"");
+        AXAssertContains(postBody, @"Content-Type: text/plain");
+        AXAssertContains(postBody, @"Content-Type: image/png");
+        AXAssertContains(postBody, @"The attachment1 content");
+        AXAssertContains(postBody, @"The attachment2 content");
+        XCTAssertEqual(status1WhileSavingObject, AXFileStatusSaving);
+        XCTAssertEqual(status2WhileSavingObject, AXFileStatusSaving);
         XCTAssertEqual(file1.status, AXFileStatusSaved);
         XCTAssertEqual(file2.status, AXFileStatusSaved);
+        XCTAssertFalse(file1PutFound);
+        XCTAssertFalse(file2PutFound);
     }];
 }
 
@@ -192,10 +182,6 @@
     
     [AXStubs method:@"POST" urlPath:@"/objects/notes"
            response:@{@"sysObjectId":@"id1234"} statusCode:200];
-    [AXStubs method:@"PUT" urlPath:@"/files/notes/id1234/attachment1/text.txt"
-           response:@{} statusCode:204];
-    [AXStubs method:@"PUT" urlPath:@"/files/notes/id1234/attachment2/picture.png"
-           response:@{} statusCode:204];
     
     AXObject *object = [AXObject create:@"notes"];
     AXFile *file1 = [AXFile fileWithData:[NSData data] name:@"text.txt"];
@@ -306,10 +292,13 @@
     }];
 }
 
-- (void)testShouldSaveChangedFilesWhenSavingOtherwiseUnchangedObject {
+- (void)testShouldSaveChangedFilesAndUpdateStatusWhenSavingOtherwiseUnchangedObject {
     __block XCTestExpectation *exp1 = [self expectationWithDescription:@"async1"];
     __block BOOL objectRequestFound = NO;
     __block BOOL fileRequestFound = NO;
+    __block AXFile *file = [AXFile fileWithData:[NSData data] name:@"name1"];
+    __block AXFileStatus statusWhileSavingObject;
+    __block AXFileStatus statusWhileSavingFile;
     
     [AXStubs method:@"GET" urlPath:@"/objects/notes/001"
            response:@{@"sysObjectId":@"001",
@@ -322,6 +311,7 @@
             urlPath:@"/objects/notes/001"
          responding:^OHHTTPStubsResponse *(NSURLRequest *request) {
              objectRequestFound = YES;
+             statusWhileSavingObject = file.status;
              return [OHHTTPStubsResponse responseWithJSONObject:@{}
                                                      statusCode:200 headers:nil];
          }];
@@ -330,12 +320,13 @@
             urlPath:@"/files/notes/001/file/name1"
          responding:^OHHTTPStubsResponse *(NSURLRequest *request) {
              fileRequestFound = YES;
+             statusWhileSavingFile = file.status;
              return [OHHTTPStubsResponse responseWithJSONObject:@{}
                                                      statusCode:200 headers:nil];
          }];
     
     [AXObject find:@"notes" withId:@"001" completion:^(AXObject *object, NSError *error) {
-        object[@"file"] = [AXFile fileWithData:[NSData data] name:@"name1"];
+        object[@"file"] = file;
         [object save:^(NSError *error) {
             [exp1 fulfill];
         }];
@@ -344,6 +335,9 @@
     [self waitForExpectationsWithTimeout:3 handler:^(NSError *error) {
         XCTAssertTrue(objectRequestFound);
         XCTAssertTrue(fileRequestFound);
+        XCTAssertEqual(statusWhileSavingObject, AXFileStatusNew);
+        XCTAssertEqual(statusWhileSavingFile, AXFileStatusSaving);
+        XCTAssertEqual(file.status, AXFileStatusSaved);
     }];
 }
 
@@ -351,10 +345,10 @@
     __block XCTestExpectation *exp1 = [self expectationWithDescription:@"async1"];
     __block NSData *filePutBody;
     
-    [AXStubs method:@"POST"
-            urlPath:@"/objects/profiles"
+    [AXStubs method:@"PUT"
+            urlPath:@"/objects/profiles/id1234"
          responding:^OHHTTPStubsResponse *(NSURLRequest *request) {
-             return [OHHTTPStubsResponse responseWithJSONObject:@{@"sysObjectId":@"id1234"}
+             return [OHHTTPStubsResponse responseWithJSONObject:@{}
                                                      statusCode:200 headers:nil];
          }];
     
@@ -370,7 +364,7 @@
     NSString *path = [[NSBundle bundleForClass:[self class]] pathForResource:@"clouds" ofType:@"jpg"];
     AXFile *file = [AXFile fileWithPath:path];
     
-    AXObject *profile = [AXObject create:@"profiles"];
+    AXObject *profile = [AXObject create:@"profiles" properties:@{@"sysObjectId":@"id1234"}];
     profile[@"background"] = file;
     [profile save:^(NSError *error) {
         [exp1 fulfill];

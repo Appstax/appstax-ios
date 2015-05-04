@@ -12,5 +12,6 @@
 - (void)loadDataForFile:(AXFile *)file completion:(void(^)(AXFile *file, NSData *data, NSError *error))completion;
 - (void)loadImageDataForFile:(AXFile *)file size:(CGSize)size crop:(BOOL)crop completion:(void(^)(AXFile *file, NSData *data, NSError *error))completion;
 - (NSURL *)urlForFileName:(NSString *)filename objectID:(NSString *)objectID propertyName:(NSString *)propertyName collectionName:(NSString *)collectionName;
+- (NSData *)dataForFile:(AXFile *)file;
 
 @end

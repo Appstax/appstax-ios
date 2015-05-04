@@ -15,5 +15,8 @@
 - (void)deleteUrl:(NSURL *)url completion:(void(^)(NSError *error))completion;
 - (NSURL *)urlByConcatenatingStrings:(NSArray *)strings;
 - (NSURL *)urlFromTemplate:(NSString *)template parameters:(NSDictionary *)parameters;
+- (NSData *)serializeDictionary:(NSDictionary *)dictionary;
+- (NSDictionary *)deserializeDictionary:(NSData *)data;
+- (NSArray *)deserializeArray:(NSData *)data;
 
 @end

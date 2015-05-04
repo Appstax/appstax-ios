@@ -87,6 +87,26 @@
     return result;
 }
 
+- (NSDictionary *)allFileProperties {
+    NSMutableDictionary *result = [NSMutableDictionary dictionary];
+    for(NSString *key in _properties.keyEnumerator) {
+        id value = _properties[key];
+        if([value isKindOfClass:[AXFile class]]) {
+            result[key] = value;
+        }
+    }
+    return result;
+}
+
+- (BOOL)hasUnsavedFiles {
+    for(AXFile *file in self.allFileProperties.objectEnumerator) {
+        if(file.status == AXFileStatusNew) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
 - (NSString *)description {
     return [_collectionName stringByAppendingString:_properties.description];
 }
