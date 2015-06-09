@@ -1,5 +1,6 @@
 
 #import <XCTest/XCTest.h>
+@import Appstax;
 #import "AXQuery.h"
 #import "AXObject.h"
 #import "AppstaxInternals.h"

@@ -2,6 +2,7 @@
 
 #import "AXImageView.h"
 #import "AppstaxInternals.h"
+#import <Appstax/Appstax-Swift.h>
 
 @interface AXImageView()
 @property AXFile *file;

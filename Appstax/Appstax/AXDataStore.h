@@ -3,11 +3,11 @@
 
 @class AXObject;
 @class AXQuery;
-@class AXJsonApiClient;
+@class AXApiClient;
 
 @interface AXDataStore : NSObject
 
-- (instancetype)initWithApiClient:(AXJsonApiClient *)apiClient;
+- (instancetype)initWithApiClient:(AXApiClient *)apiClient;
 - (AXObject *)create:(NSString *)collectionName;
 - (AXObject *)create:(NSString *)collectionName properties:(NSDictionary *)properties;
 - (void)save:(AXObject *)object completion:(void(^)(AXObject *object, NSError *error))completion;

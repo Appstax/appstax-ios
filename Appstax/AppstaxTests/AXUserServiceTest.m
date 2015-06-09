@@ -1,5 +1,6 @@
 
 #import <XCTest/XCTest.h>
+@import Appstax;
 #import "AppstaxInternals.h"
 #import "AXAsssertions.h"
 #import "OHHTTPStubs.h"
@@ -8,7 +9,7 @@
 
 @interface AXUserServiceTest : XCTestCase
 @property AXKeychain *keychain;
-@property AXJsonApiClient *apiClient;
+@property AXApiClient *apiClient;
 @end
 
 @implementation AXUserServiceTest
@@ -111,7 +112,7 @@
 }
 
 - (void)testShouldUseSessionIdFromSignupWhenItSucceeds {
-    AXJsonApiClient *apiClient = [[Appstax defaultContext] apiClient];
+    AXApiClient *apiClient = [[Appstax defaultContext] apiClient];
     __block XCTestExpectation *exp1 = [self expectationWithDescription:@"async1"];
     
     [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
@@ -374,7 +375,7 @@
 
 - (void)testLogoutShouldSendDeleteRequest {
     __block XCTestExpectation *exp1 = [self expectationWithDescription:@"async1"];
-    [[[Appstax defaultContext] apiClient] setSessionID:@"session1234"];
+    [[[Appstax defaultContext] apiClient] updateSessionID:@"session1234"];
     
     [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
         return [[request.URL path] isEqualToString:@"/sessions/session1234"] &&
@@ -392,7 +393,7 @@
 - (void)testLogoutShouldRemoveCurrentUserAndSession {
     AXUser *user = [[AXUser alloc] initWithUsername:@"myuser" properties:@{@"sysObjectId":@"theobjectid"}];
     [[[Appstax defaultContext] userService] setCurrentUser:user];
-    [[[Appstax defaultContext] apiClient] setSessionID:@"session911"];
+    [[[Appstax defaultContext] apiClient] updateSessionID:@"session911"];
     
     XCTAssertEqualObjects(user, [AXUser currentUser]);
     

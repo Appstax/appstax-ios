@@ -1,19 +1,19 @@
 
 #import <XCTest/XCTest.h>
+@import Appstax;
 #import "AXAsssertions.h"
 #import "OHHTTPStubs.h"
 #import "OHHTTPStubsResponse+JSON.h"
-#import "AXJsonApiClient.h"
 
 @interface AXJsonApiClientTests : XCTestCase
-@property AXJsonApiClient *apiClient;
+@property AXApiClient *apiClient;
 @end
 
 @implementation AXJsonApiClientTests
 
 - (void)setUp {
     [super setUp];
-    _apiClient = [[AXJsonApiClient alloc] initWithAppKey:@"appkey" baseUrl:@"http://mybaseurl:1337/base/path/"];
+    _apiClient = [[AXApiClient alloc] initWithAppKey:@"appkey" baseUrl:@"http://mybaseurl:1337/base/path/"];
 }
 
 - (void)tearDown {

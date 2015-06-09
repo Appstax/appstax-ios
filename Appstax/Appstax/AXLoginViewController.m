@@ -3,6 +3,7 @@
 #import "Appstax.h"
 #import "AppstaxInternals.h"
 #import "AXUserService.h"
+#import <Appstax/Appstax-Swift.h>
 
 @interface AXLoginViewController ()
 @property (weak, nonatomic) IBOutlet UITextField *usernameTextField;

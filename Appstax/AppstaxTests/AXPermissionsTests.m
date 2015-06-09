@@ -1,11 +1,12 @@
 
 #import <XCTest/XCTest.h>
+@import Appstax;
 #import "AppstaxInternals.h"
 #import "AXAsssertions.h"
 #import "AXStubs.h"
 
 @interface AXPermissionsTests : XCTestCase
-@property AXJsonApiClient *apiClient;
+@property AXApiClient *apiClient;
 @end
 
 @implementation AXPermissionsTests

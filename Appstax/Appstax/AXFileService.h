@@ -1,12 +1,13 @@
 
 #import <Foundation/Foundation.h>
-#import "AXJsonApiClient.h"
 #import "AXFile.h"
 #import "AXObject.h"
 
+@class AXApiClient;
+
 @interface AXFileService : NSObject
 
-- (instancetype)initWithApiClient:(AXJsonApiClient *)apiClient;
+- (instancetype)initWithApiClient:(AXApiClient *)apiClient;
 
 - (void)saveFilesForObject:(AXObject *)object completion:(void(^)(NSError *error))completion;
 - (void)loadDataForFile:(AXFile *)file completion:(void(^)(AXFile *file, NSData *data, NSError *error))completion;

@@ -1,11 +1,12 @@
 
-#import "AXUserService.h"
 #import "AppstaxInternals.h"
+#import "AXUserService.h"
 #import "AXLoginUIManager.h"
 #import "AXKeychain.h"
+#import <Appstax/Appstax-Swift.h>
 
 @interface AXUserService ()
-@property AXJsonApiClient *apiClient;
+@property AXApiClient *apiClient;
 @property AXUser *currentUser;
 @property AXLoginUIManager *loginManager;
 @property AXKeychain *keychain;
@@ -13,7 +14,7 @@
 
 @implementation AXUserService
 
-- (instancetype)initWithApiClient:(AXJsonApiClient *)apiClient {
+- (instancetype)initWithApiClient:(AXApiClient *)apiClient {
     self = [super init];
     if(self) {
         _apiClient = apiClient;
@@ -86,7 +87,7 @@
 }
 
 - (void)setSessionID:(NSString *)sessionID {
-    _apiClient.sessionID = sessionID;
+    [_apiClient updateSessionID:sessionID];
 }
 
 - (void)logout {
@@ -97,7 +98,7 @@
     _keychain[@"SessionID"] = nil;
     _keychain[@"Username"] = nil;
     _currentUser = nil;
-    _apiClient.sessionID = nil;
+    [_apiClient updateSessionID:nil];
 }
 
 - (void)restoreUserFromPreviousSession {
@@ -105,7 +106,7 @@
     NSString *username = _keychain[@"Username"];
     NSString *userObjectID = _keychain[@"UserObjectID"];
     if(sessionID != nil && username != nil && userObjectID != nil) {
-        [_apiClient setSessionID:sessionID];
+        [_apiClient updateSessionID:sessionID];
         _currentUser = [[AXUser alloc] initWithUsername:username properties:@{@"sysObjectId":userObjectID}];
     }
 }

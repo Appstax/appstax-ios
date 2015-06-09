@@ -1,6 +1,7 @@
 
 #import "AXFile.h"
 #import "AppstaxInternals.h"
+#import <Appstax/Appstax-Swift.h>
 
 @implementation AXFile
 

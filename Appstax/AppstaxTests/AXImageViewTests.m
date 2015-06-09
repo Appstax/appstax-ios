@@ -1,5 +1,6 @@
 
 #import <XCTest/XCTest.h>
+@import Appstax;
 #import "AppstaxInternals.h"
 #import "AXAsssertions.h"
 #import "OHHTTPStubs.h"
@@ -8,7 +9,7 @@
 #import <mach/mach.h>
 
 @interface AXImageViewTests : XCTestCase
-@property AXJsonApiClient *apiClient;
+@property AXApiClient *apiClient;
 @end
 
 @implementation AXImageViewTests

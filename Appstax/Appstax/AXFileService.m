@@ -1,14 +1,15 @@
 
-#import "AXFileService.h"
 #import "AppstaxInternals.h"
+#import "AXFileService.h"
+#import <Appstax/Appstax-Swift.h>
 
 @interface AXFileService()
-@property AXJsonApiClient *apiClient;
+@property AXApiClient *apiClient;
 @end
 
 @implementation AXFileService
 
-- (instancetype)initWithApiClient:(AXJsonApiClient *)apiClient {
+- (instancetype)initWithApiClient:(AXApiClient *)apiClient {
     self = [super init];
     if(self != nil) {
         _apiClient = apiClient;

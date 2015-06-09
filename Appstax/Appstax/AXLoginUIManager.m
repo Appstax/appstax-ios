@@ -2,6 +2,7 @@
 #import "AppstaxInternals.h"
 #import "AXLoginUIManager.h"
 #import "AXLoginViewController.h"
+#import <Appstax/Appstax-Swift.h>
 
 @interface AXLoginUIManager ()
 @property AXLoginViewController *signupViewController;

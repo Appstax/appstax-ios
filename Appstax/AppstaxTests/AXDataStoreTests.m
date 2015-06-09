@@ -1,5 +1,6 @@
 
 #import <XCTest/XCTest.h>
+@import Appstax;
 #import "AppstaxInternals.h"
 #import "AXAsssertions.h"
 #import "OHHTTPStubs.h"
@@ -7,7 +8,7 @@
 #import "AXStubs.h"
 
 @interface AXDataStoreTests : XCTestCase
-@property AXJsonApiClient *apiClient;
+@property AXApiClient *apiClient;
 @end
 
 @implementation AXDataStoreTests
@@ -415,7 +416,7 @@
     }];
     
     [self waitForExpectationsWithTimeout:3 handler:^(NSError *error) {
-        XCTAssertEqualObjects(filterParameter, @"Name+like+%27%25Jo%25%27+and+Gender%3D%27Female%27");
+        XCTAssertEqualObjects(filterParameter, @"Name%20like%20%27%25Jo%25%27%20and%20Gender%3D%27Female%27");
     }];
 }
 
@@ -498,7 +499,7 @@
     }];
     
     [self waitForExpectationsWithTimeout:3 handler:^(NSError *error) {
-        XCTAssertEqualObjects(filterParameter, @"Name+like+%27%25lex%25%27+and+Gender%3D%27Male%27");
+        XCTAssertEqualObjects(filterParameter, @"Name%20like%20%27%25lex%25%27%20and%20Gender%3D%27Male%27");
     }];
 }
 
@@ -523,7 +524,7 @@
         }];
     
     [self waitForExpectationsWithTimeout:3 handler:^(NSError *error) {
-        XCTAssertEqualObjects(filterParameter, @"Gender%3D%27Female%27+and+Hometown%3D%27New+York%27");
+        XCTAssertEqualObjects(filterParameter, @"Gender%3D%27Female%27%20and%20Hometown%3D%27New%20York%27");
     }];
 }
 
@@ -548,7 +549,7 @@
         }];
     
     [self waitForExpectationsWithTimeout:3 handler:^(NSError *error) {
-        XCTAssertEqualObjects(filterParameter, @"Title+like+%27%25music%25%27+or+Content+like+%27%25music%25%27");
+        XCTAssertEqualObjects(filterParameter, @"Title%20like%20%27%25music%25%27%20or%20Content%20like%20%27%25music%25%27");
     }];
 }
 
@@ -573,7 +574,7 @@
         }];
     
     [self waitForExpectationsWithTimeout:3 handler:^(NSError *error) {
-        XCTAssertEqualObjects(filterParameter, @"Title+like+%27%25burger%25%27+or+Tags+like+%27%25burger%25%27+or+Description+like+%27%25burger%25%27");
+        XCTAssertEqualObjects(filterParameter, @"Title%20like%20%27%25burger%25%27%20or%20Tags%20like%20%27%25burger%25%27%20or%20Description%20like%20%27%25burger%25%27");
     }];
 }
 

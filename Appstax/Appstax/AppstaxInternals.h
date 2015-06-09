@@ -1,7 +1,5 @@
 
-#import "Appstax.h"
 #import "AXDataStore.h"
-#import "AXJsonApiClient.h"
 #import "AXObject.h"
 #import "AXFile.h"
 #import "AXFileService.h"
@@ -11,9 +9,10 @@
 #import "AXPermissionsService.h"
 #import "AXKeychain.h"
 
+/*
 @interface Appstax ()
 @property NSString *appKey;
-@property (readonly) AXJsonApiClient *apiClient;
+@property (readonly) AXApiClient *apiClient;
 @property (readonly) AXDataStore *dataStore;
 @property (readonly) AXUserService *userService;
 @property (readonly) AXPermissionsService *permissionsService;
@@ -23,10 +22,7 @@
 + (Appstax *)defaultContext;
 + (NSString *)appKey;
 @end
-
-@interface AXJsonApiClient ()
-@property NSString *sessionID;
-@end
+*/
 
 @interface AXObject ()
 @property (readonly) NSDictionary *allProperties;

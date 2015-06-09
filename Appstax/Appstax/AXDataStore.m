@@ -2,14 +2,15 @@
 #import "AXDataStore.h"
 #import "AXQuery.h"
 #import "AppstaxInternals.h"
+#import <Appstax/Appstax-Swift.h>
 
 @interface AXDataStore()
-@property AXJsonApiClient *apiClient;
+@property AXApiClient *apiClient;
 @end
 
 @implementation AXDataStore
 
-- (instancetype)initWithApiClient:(AXJsonApiClient *)apiClient {
+- (instancetype)initWithApiClient:(AXApiClient *)apiClient {
     self = [super init];
     if(self) {
         _apiClient = apiClient;

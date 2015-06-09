@@ -1,6 +1,7 @@
 
 #import "AXUser.h"
 #import "AppstaxInternals.h"
+#import <Appstax/Appstax-Swift.h>
 
 @interface AXUser ()
 @property NSString *username;

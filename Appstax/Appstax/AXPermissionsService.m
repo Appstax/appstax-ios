@@ -1,13 +1,15 @@
 
+#import "AppstaxInternals.h"
 #import "AXPermissionsService.h"
+#import <Appstax/Appstax-Swift.h>
 
 @interface AXPermissionsService ()
-@property AXJsonApiClient *apiClient;
+@property AXApiClient *apiClient;
 @end
 
 @implementation AXPermissionsService
 
-- (instancetype)initWithApiClient:(AXJsonApiClient *)apiClient {
+- (instancetype)initWithApiClient:(AXApiClient *)apiClient {
     self = [super init];
     if(self) {
         _apiClient = apiClient;
@@ -16,7 +18,7 @@
 }
 
 - (void)grant:(NSArray *)grants revoke:(NSArray *)revokes objectID:(NSString *)objectID completion:(void(^)(NSError *))completion {
-    NSURL *url = [_apiClient urlFromTemplate:@"/permissions" parameters:nil];
+    NSURL *url = [_apiClient urlFromTemplate:@"/permissions" parameters:@{}];
     [_apiClient postDictionary:@{@"grants":[self fillPermissions:grants withObjectID:objectID],
                                  @"revokes":[self fillPermissions:revokes withObjectID:objectID]}
                          toUrl:url

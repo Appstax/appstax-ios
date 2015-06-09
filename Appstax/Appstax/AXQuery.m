@@ -1,5 +1,6 @@
 
 #import "AXQuery.h"
+#import <Appstax/Appstax-Swift.h>
 
 @interface AXQuery ()
 @property NSString *initialQueryString;

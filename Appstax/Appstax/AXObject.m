@@ -2,6 +2,7 @@
 #import "AppstaxInternals.h"
 #import "AXObject.h"
 #import "AXDataStore.h"
+#import <Appstax/Appstax-Swift.h>
 
 @class AXDataStore;
 
