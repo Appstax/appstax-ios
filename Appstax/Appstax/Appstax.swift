@@ -6,7 +6,7 @@ import Foundation
     private(set) public var apiClient: AXApiClient!
     private(set) public var appKey: String = ""
     private(set) public var fileService: AXFileService!
-    private(set) public var dataStore: AXDataStore!
+    private(set) public var objectService: AXObjectService!
     private(set) public var userService: AXUserService!
     private(set) public var permissionsService: AXPermissionsService!
     
@@ -26,7 +26,7 @@ import Foundation
     
     internal func setupServicesWithApiClient(apiClient: AXApiClient) {
         self.apiClient = apiClient
-        self.dataStore = AXDataStore(apiClient: apiClient)
+        self.objectService = AXObjectService(apiClient: apiClient)
         self.userService = AXUserService(apiClient: apiClient)
         self.permissionsService = AXPermissionsService(apiClient: apiClient)
         self.fileService = AXFileService(apiClient: apiClient)

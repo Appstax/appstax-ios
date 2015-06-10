@@ -35,14 +35,6 @@
     return self;
 }
 
-- (void)setUrl:(NSURL *)url {
-    _url = url;
-}
-
-- (void)setStatus:(AXFileStatus)status {
-    _status = status;
-}
-
 - (void)setData:(NSData *)data {
     _data = data;
 }

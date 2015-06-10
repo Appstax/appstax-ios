@@ -7,11 +7,11 @@
 #import "OHHTTPStubsResponse+JSON.h"
 #import "AXStubs.h"
 
-@interface AXDataStoreTests : XCTestCase
+@interface AXObjectServiceTests : XCTestCase
 @property AXApiClient *apiClient;
 @end
 
-@implementation AXDataStoreTests
+@implementation AXObjectServiceTests
 
 - (void)setUp {
     [super setUp];
@@ -574,7 +574,9 @@
         }];
     
     [self waitForExpectationsWithTimeout:3 handler:^(NSError *error) {
-        XCTAssertEqualObjects(filterParameter, @"Title%20like%20%27%25burger%25%27%20or%20Tags%20like%20%27%25burger%25%27%20or%20Description%20like%20%27%25burger%25%27");
+        AXAssertContains(filterParameter, @"Title%20like%20%27%25burger%25%27");
+        AXAssertContains(filterParameter, @"Tags%20like%20%27%25burger%25%27");
+        AXAssertContains(filterParameter, @"Description%20like%20%27%25burger%25%27");
     }];
 }
 

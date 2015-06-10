@@ -37,11 +37,11 @@
 }
 
 - (id)objectForKeyedSubscript:(id <NSCopying>)key {
-    return _dataObject[key];
+    return _dataObject[(NSString *)key];
 }
 
 - (void)setObject:(id)obj forKeyedSubscript:(id <NSCopying>)key {
-    _dataObject[key] = obj;
+    _dataObject[(NSString *)key] = obj;
 }
 
 #pragma mark - Class convenience methods

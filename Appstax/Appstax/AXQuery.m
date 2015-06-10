@@ -5,7 +5,6 @@
 @interface AXQuery ()
 @property NSString *initialQueryString;
 @property NSMutableArray *predicates;
-@property NSString *logicalOperator;
 @end
 
 @implementation AXQuery

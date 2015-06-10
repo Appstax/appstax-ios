@@ -3,6 +3,9 @@
 
 @interface AXQuery : NSObject
 
+// TODO: Make internal when converting to Swift
+@property NSString *logicalOperator;
+
 @property (readonly) NSString *queryString;
 
 + (instancetype)query;

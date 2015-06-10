@@ -1,9 +1,9 @@
 
 #import <Foundation/Foundation.h>
 #import "AXFile.h"
-#import "AXObject.h"
 
 @class AXApiClient;
+@class AXObject;
 
 @interface AXFileService : NSObject
 
