@@ -27,16 +27,38 @@
 }
 
 - (void)testShouldBuildUrlsWithTemplates {
-    NSURL *url = [_apiClient urlFromTemplate:@"/resource/:id" parameters:@{@"id":@"1002"}];
+    NSURL *url = [_apiClient urlFromTemplate:@"/resource/:id" parameters:@{@"id":@"1002"} queryParameters:@{}];
     XCTAssertEqualObjects([url absoluteString], @"http://mybaseurl:1337/base/path/resource/1002");
 }
 
 - (void)testShoulUrlEncodeParametersForTemplates {
     NSURL *url = [_apiClient urlFromTemplate:@"/objects/:collection?filter=:filter"
                                   parameters:@{@"collection":@"Møbler",
-                                               @"filter":@"Navn='%tärnö%'"}];
+                                               @"filter":@"Navn='%tärnö%'"}
+                             queryParameters:@{}];
     XCTAssertEqualObjects([url absoluteString],
                           @"http://mybaseurl:1337/base/path/objects/M%C3%B8bler?filter=Navn%3D%27%25t%C3%A4rn%C3%B6%25%27");
+}
+
+- (void)testShouldAppendQueryParameters {
+    NSURL *url = [_apiClient urlFromTemplate:@"/hello/:who"
+                                  parameters:@{@"who":@"world"}
+                             queryParameters:@{@"knock":@"true"}];
+    XCTAssertEqualObjects([url absoluteString], @"http://mybaseurl:1337/base/path/hello/world?knock=true");
+}
+
+- (void)testShouldAppendQueryParametersToExistingQuery {
+    NSURL *url = [_apiClient urlFromTemplate:@"/hello/:who?woods=yes"
+                                  parameters:@{@"who":@"world"}
+                             queryParameters:@{@"knock":@"true"}];
+    XCTAssertEqualObjects([url absoluteString], @"http://mybaseurl:1337/base/path/hello/world?woods=yes&knock=true");
+}
+
+- (void)testShouldEncodeQueryParameters {
+    NSURL *url = [_apiClient urlFromTemplate:@"/hello"
+                                  parameters:@{}
+                             queryParameters:@{@"who":@"w ø r l d"}];
+    XCTAssertEqualObjects([url absoluteString], @"http://mybaseurl:1337/base/path/hello?who=w%20%C3%B8%20r%20l%20d");
 }
 
 - (void)testShouldStorePostBodyInRequestProperty {

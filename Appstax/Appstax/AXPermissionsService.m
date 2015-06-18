@@ -18,7 +18,7 @@
 }
 
 - (void)grant:(NSArray *)grants revoke:(NSArray *)revokes objectID:(NSString *)objectID completion:(void(^)(NSError *))completion {
-    NSURL *url = [_apiClient urlFromTemplate:@"/permissions" parameters:@{}];
+    NSURL *url = [_apiClient urlFromTemplate:@"/permissions" parameters:@{} queryParameters:@{}];
     [_apiClient postDictionary:@{@"grants":[self fillPermissions:grants withObjectID:objectID],
                                  @"revokes":[self fillPermissions:revokes withObjectID:objectID]}
                          toUrl:url

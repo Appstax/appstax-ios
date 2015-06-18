@@ -105,16 +105,31 @@ import Foundation
         return NSURL(string: full)
     }
     
-    public func urlFromTemplate(template: String, parameters: [String:String]) -> NSURL? {
+    public func urlFromTemplate(template: String, parameters: [String:String], queryParameters: [String:String] = [:]) -> NSURL? {
         let url = NSMutableString(string: template)
         if(url.hasPrefix("/")) {
             url.replaceCharactersInRange(NSMakeRange(0, 1), withString: "")
-            url.insertString(baseUrl, atIndex: 0)
         }
+        url.insertString(baseUrl, atIndex: 0)
         for (key, value) in parameters {
             url.replaceOccurrencesOfString(":" + key, withString: urlEncode(value), options: .LiteralSearch, range: NSMakeRange(0, url.length))
         }
-        return NSURL(string: url as String)
+        
+        var queryString = ""
+        if queryParameters.count > 0 {
+            queryString = "&".join(queryParameters.keys.array.map({
+                key in
+                if let value = queryParameters[key] {
+                    return "\(key)=\(self.urlEncode(value))"
+                }
+                return ""
+            }))
+            var queryStringPrefix = (url.rangeOfString("?").toRange() == nil) ? "?" : "&"
+            queryString = "\(queryStringPrefix)\(queryString)"
+        }
+        
+        let full: String = url.stringByAppendingString(queryString)
+        return NSURL(string: full)
     }
     
     public func deserializeDictionary(data: NSData?) -> [String:AnyObject]? {

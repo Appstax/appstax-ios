@@ -54,4 +54,18 @@
     [self addPredicate:[NSString stringWithFormat:@"%@ like '%%%@%%'", property, value]];
 }
 
+#pragma mark - Relation properties
+
+- (void)relation:(NSString *)property hasObject:(AXObject *)object {
+    [self addPredicate:[NSString stringWithFormat:@"%@ has ('%@')", property, object.objectID]];
+}
+
+- (void)relation:(NSString *)property hasObjects:(NSArray *)objects {
+    NSMutableArray *quotedIds = [NSMutableArray array];
+    for(AXObject *object in objects) {
+        [quotedIds addObject:[NSString stringWithFormat:@"'%@'", object.objectID]];
+    }
+    [self addPredicate:[NSString stringWithFormat:@"%@ has (%@)", property, [quotedIds componentsJoinedByString:@","]]];
+}
+
 @end

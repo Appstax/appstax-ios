@@ -12,6 +12,7 @@
 
 - (void)setUp {
     [super setUp];
+    [Appstax setAppKey:@"test-api-key" baseUrl:@"http://localhost:3000/"];
     _query = [AXQuery query];
 }
 
@@ -36,6 +37,19 @@
 - (void)testShoulQueryStringContains {
     [_query string:@"mooz" contains:@"oo"];
     XCTAssertEqualObjects(_query.queryString, @"mooz like '%oo%'");
+}
+
+- (void)testShouldQueryObjectHasRelationForSingleObject {
+    AXObject *object = [AXObject create:@"foo" properties:@{@"sysObjectId":@"1234"}];
+    [_query relation:@"bar" hasObject:object];
+    XCTAssertEqualObjects(_query.queryString, @"bar has ('1234')");
+}
+
+- (void)testShouldQueryObjectHasRelationForMultipleObjects {
+    AXObject *object1 = [AXObject create:@"foo" properties:@{@"sysObjectId":@"1234"}];
+    AXObject *object2 = [AXObject create:@"foo" properties:@{@"sysObjectId":@"5678"}];
+    [_query relation:@"bar" hasObjects:@[object1, object2]];
+    XCTAssertEqualObjects(_query.queryString, @"bar has ('1234','5678')");
 }
 
 - (void)testShoulJoinPredicatesWithAndByDefault {

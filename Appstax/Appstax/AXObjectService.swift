@@ -27,16 +27,32 @@ import Foundation
         })
     }
     
-    public func save(object: AXObject, completion: ((AXObject, NSError?) -> ())?) {
-        object.status = .Saving
-        if object.objectID == nil {
-            if object.hasUnsavedFiles {
-                saveNewObjectWithFiles(object, completion: completion)
-            } else {
-                saveNewObjectWithoutFiles(object, completion: completion)
-            }
+    public func saveObject(object: AXObject, completion: ((AXObject, NSError?) -> ())?) {
+        if object.hasUnsavedRelations {
+            let error = "Error saving object. Found unsaved related objects. Save related objects first or consider using saveAll instead."
+            completion?(object, NSError(domain: "AXObjectError", code: 0, userInfo: [NSLocalizedDescriptionKey:error]))
         } else {
-            updateObject(object, completion: completion)
+            object.status = .Saving
+            
+            let savedProperties = object.allPropertiesForSaving
+            let afterSave: ((AXObject, NSError?) -> ()) = {
+                object, error in
+                if error != nil {
+                    completion?(object, error)
+                } else {
+                    object.afterSave(savedProperties, completion: { completion?(object, $0) })
+                }
+            }
+            
+            if object.objectID == nil {
+                if object.hasUnsavedFiles {
+                    saveNewObjectWithFiles(object, completion: afterSave)
+                } else {
+                    saveNewObjectWithoutFiles(object, completion: afterSave)
+                }
+            } else {
+                updateObject(object, completion: afterSave)
+            }
         }
     }
     
@@ -103,17 +119,20 @@ import Foundation
     }
     
     public func saveObjects(objects: [AXObject], completion: ((NSError?) -> ())?) {
-        var objectCount = objects.count
+        if objects.count == 0 {
+            completion?(nil)
+        }
+        
         var completionCount = 0
         var firstError: NSError?
         for object in objects {
-            save(object) {
+            saveObject(object) {
                 object, error in
                 completionCount++
                 if firstError == nil && error == nil {
                     firstError = error
                 }
-                if completionCount == objectCount {
+                if completionCount == objects.count {
                     completion?(firstError)
                 }
             }
@@ -125,8 +144,8 @@ import Foundation
         apiClient.deleteUrl(url, completion: completion)
     }
     
-    public func findAll(collectionName: String, completion: (([AXObject]?, NSError?) -> ())?) {
-        let url = urlForCollection(collectionName)
+    public func findAll(collectionName: String, options: [String:AnyObject]?, completion: (([AXObject]?, NSError?) -> ())?) {
+        let url = urlForCollection(collectionName, queryParameters: queryParametersFromQueryOptions(options))
         apiClient.dictionaryFromUrl(url) {
             dictionary, error in
             var objects: [AXObject] = []
@@ -137,8 +156,9 @@ import Foundation
         }
     }
     
-    public func find(collectionName: String, withId: String, completion: ((AXObject?, NSError?) -> ())?) {
-        let url = apiClient.urlByConcatenatingStrings(["objects/", collectionName, "/", withId])!
+    public func find(collectionName: String, withId id: String, options: [String:AnyObject]?, completion: ((AXObject?, NSError?) -> ())?) {
+        let url = urlForObject(collectionName, withId: id, queryParameters: queryParametersFromQueryOptions(options))
+        NSLog("Find with id: %@", url.absoluteString!)
         apiClient.dictionaryFromUrl(url) {
             dictionary, error in
             if let properties = dictionary {
@@ -149,7 +169,7 @@ import Foundation
         }
     }
     
-    public func find(collectionName: String, with propertyValues:[String:AnyObject], completion: (([AXObject]?, NSError?) -> ())?) {
+    public func find(collectionName: String, with propertyValues:[String:AnyObject], options: [String:AnyObject]?, completion: (([AXObject]?, NSError?) -> ())?) {
         var query = AXQuery()
         var keys = propertyValues.keys.array
         keys.sort({ $0 < $1 })
@@ -157,36 +177,41 @@ import Foundation
             if let stringValue = propertyValues[key] as? String {
                 query.string(key, equals: stringValue)
             }
+            if let objectValue = propertyValues[key] as? AXObject {
+                query.relation(key, hasObject: objectValue)
+            }
         }
-        find(collectionName, queryString:query.queryString, completion: completion)
+        find(collectionName, queryString:query.queryString, options: options, completion: completion)
     }
     
-    public func find(collectionName: String, search propertyValues: [String:String], completion: (([AXObject]?, NSError?) -> ())?) {
+    public func find(collectionName: String, search propertyValues: [String:String], options: [String:AnyObject]?, completion: (([AXObject]?, NSError?) -> ())?) {
         var query = AXQuery()
         query.logicalOperator = "or"
         for (key, value) in propertyValues {
             query.string(key, contains: propertyValues[key])
         }
-        find(collectionName, queryString:query.queryString, completion: completion)
+        find(collectionName, queryString:query.queryString, options: options, completion: completion)
     }
     
-    public func find(collectionName: String, search searchString: String, properties:[String], completion: (([AXObject]?, NSError?) -> ())?) {
+    public func find(collectionName: String, search searchString: String, properties:[String], options: [String:AnyObject]?, completion: (([AXObject]?, NSError?) -> ())?) {
         var propertyValues: [String:String] = [:]
         for property in properties {
             propertyValues[property] = searchString
         }
-        find(collectionName, search:propertyValues, completion:completion)
+        find(collectionName, search:propertyValues, options: options, completion:completion)
     }
     
-    public func find(collectionName: String, query queryBlock:((AXQuery) -> ()), completion: (([AXObject]?, NSError?) -> ())?) {
+    public func find(collectionName: String, query queryBlock:((AXQuery) -> ()), options: [String:AnyObject]?, completion: (([AXObject]?, NSError?) -> ())?) {
         let query = AXQuery()
         queryBlock(query)
-        find(collectionName, queryString: query.queryString, completion: completion)
+        find(collectionName, queryString: query.queryString, options: options, completion: completion)
     }
     
-    public func find(collectionName: String, queryString: String, completion: (([AXObject]?, NSError?) -> ())?) {
+    public func find(collectionName: String, queryString: String, options: [String:AnyObject]?, completion: (([AXObject]?, NSError?) -> ())?) {
         let query = AXQuery(queryString: queryString)
-        let url = apiClient.urlFromTemplate("/objects/:collection?filter=:filter", parameters: ["collection": collectionName, "filter": query.queryString])!
+        var queryParameters = queryParametersFromQueryOptions(options)
+        queryParameters["filter"] = query.queryString
+        let url = apiClient.urlFromTemplate("/objects/:collection", parameters: ["collection": collectionName], queryParameters: queryParameters)!
         apiClient.dictionaryFromUrl(url) {
             dictionary, error in
             var objects: [AXObject] = []
@@ -197,11 +222,25 @@ import Foundation
         }
     }
     
-    public func urlForObject(object: AXObject) -> NSURL {
-        return apiClient.urlByConcatenatingStrings(["objects/", object.collectionName, "/", object.objectID!])!
+    public func urlForObject(object: AXObject, queryParameters: [String:String] = [:]) -> NSURL {
+        return urlForObject(object.collectionName, withId: object.objectID!, queryParameters: queryParameters)
     }
     
-    public func urlForCollection(collectionName: String) -> NSURL {
-        return apiClient.urlByConcatenatingStrings(["objects/", collectionName])!
+    public func urlForObject(collectionName: String, withId id: String, queryParameters: [String:String] = [:]) -> NSURL {
+        let parameters = ["collection": collectionName, "id": id]
+        return apiClient.urlFromTemplate("objects/:collection/:id", parameters: parameters, queryParameters: queryParameters)!
+    }
+    
+    public func urlForCollection(collectionName: String, queryParameters: [String:String] = [:]) -> NSURL {
+        return apiClient.urlFromTemplate("objects/:collection", parameters: ["collection":collectionName], queryParameters: queryParameters)!
+    }
+    
+    private func queryParametersFromQueryOptions(options: [String:AnyObject]?) -> [String:String] {
+        var parameters: [String:String] = [:]
+        
+        if let expand = options?["expand"] as? Int {
+            parameters["expanddepth"] = "\(expand)"
+        }
+        return parameters
     }
 }

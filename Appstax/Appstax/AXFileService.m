@@ -96,7 +96,8 @@
                             parameters:@{@"collectionName":collectionName,
                                          @"objectID":objectID,
                                          @"propertyName":propertyName,
-                                         @"fileName":filename}];
+                                         @"fileName":filename}
+                       queryParameters:@{}];
 }
 
 - (NSURL *)imageUrlForFile:(AXFile *)file size:(CGSize)size crop:(BOOL)crop {
