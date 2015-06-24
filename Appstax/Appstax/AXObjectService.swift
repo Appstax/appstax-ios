@@ -129,7 +129,7 @@ import Foundation
             saveObject(object) {
                 object, error in
                 completionCount++
-                if firstError == nil && error == nil {
+                if firstError == nil && error != nil {
                     firstError = error
                 }
                 if completionCount == objects.count {

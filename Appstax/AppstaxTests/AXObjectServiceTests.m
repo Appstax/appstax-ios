@@ -343,6 +343,49 @@
     }];
 }
 
+- (void)testSaveObjectsShouldReportFirstError {
+    __block XCTestExpectation *exp1 = [self expectationWithDescription:@"async1"];
+    __block int postCallCount = 0;
+    __block NSTimeInterval responseTime = 0.1;
+    
+    [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+        return [[request.URL path] isEqualToString:@"/objects/testobjects"] &&
+        [request.HTTPMethod isEqualToString:@"POST"];
+    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+        responseTime += 0.1;
+        postCallCount++;
+        if(postCallCount == 2) {
+            return [[OHHTTPStubsResponse responseWithJSONObject:@{@"errorMessage":@"Oh, no!"}
+                                                     statusCode:422 headers:nil] requestTime:0.5 responseTime:responseTime];
+        } else {
+            return [[OHHTTPStubsResponse responseWithJSONObject:@{}
+                                                     statusCode:200 headers:nil] requestTime:0.5 responseTime:responseTime];
+        }
+    }];
+    
+    AXObject *object1 = [AXObject create:@"testobjects"];
+    AXObject *object2 = [AXObject create:@"testobjects"];
+    AXObject *object3 = [AXObject create:@"testobjects"];
+    
+    __block int completionCallCount = 0;
+    __block NSError *saveError;
+    [AXObject saveObjects:@[object1, object2, object3]
+               completion:^(NSError *error) {
+                   completionCallCount++;
+                   saveError = error;
+                   [exp1 fulfill];
+               }];
+    
+    [self waitForExpectationsWithTimeout:3 handler:^(NSError *error) {
+        XCTAssertEqual(3, postCallCount);
+        XCTAssertEqual(1, completionCallCount);
+        XCTAssertEqual(object1.status, AXObjectStatusSaved);
+        XCTAssertEqual(object2.status, AXObjectStatusModified);
+        XCTAssertEqual(object3.status, AXObjectStatusSaved);
+        XCTAssertNotNil(saveError);
+    }];
+}
+
 - (void)testShouldDeleteObject {
     __block __block XCTestExpectation *exp1 = [self expectationWithDescription:@"async1"];
     

@@ -216,7 +216,7 @@ import Foundation
     
     func logResponse(response: NSURLResponse?, data: NSData?, var error: NSError?) {
         if let httpResponse = response as? NSHTTPURLResponse {
-            if error != nil {
+            if error == nil {
                 error = errorFromResponse(httpResponse, data: data)
             }
             if error == nil {

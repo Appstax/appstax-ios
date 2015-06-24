@@ -10,6 +10,7 @@ import Appstax
         OHHTTPStubs.setEnabled(true)
         OHHTTPStubs.removeAllStubs()
         Appstax.setAppKey("test-api-key", baseUrl:"http://localhost:3000/");
+        Appstax.setLogLevel("debug");
     }
     
     override func tearDown() {
@@ -400,6 +401,38 @@ import Appstax
             AXAssertEqual(changes?["additions"]?.count, 2)
             AXAssertContains(changes?["additions"], "post-id-1")
             AXAssertContains(changes?["additions"], "post-id-2")
+        }
+    }
+    
+    func testSaveAllShouldFailOnHttpErrors() {
+        let async = expectationWithDescription("async")
+        
+        var blogsCalled = false
+        var postzCalled = false
+        AXStubs.method("POST", urlPath: "/objects/blogs") { request in
+            blogsCalled = true
+            return OHHTTPStubsResponse(JSONObject: ["sysObjectId":"postid"], statusCode: 200, headers: [:])
+        }
+        AXStubs.method("POST", urlPath: "/objects/postz") { request in
+            postzCalled = true
+            return OHHTTPStubsResponse(JSONObject: ["errorMessage":"Collection not found"], statusCode: 404, headers: [:])
+        }
+        
+        let blog  = AXObject.create("blogs", properties: ["title": "Zen"])
+        let post1 = AXObject.create("postz", properties: ["title": "Post 1"])
+        let post2 = AXObject.create("postz", properties: ["title": "Post 2"])
+        blog["posts"] = [post1, post2]
+        
+        var saveError: NSError?
+        blog.saveAll() { error in
+            saveError = error
+            async.fulfill()
+        }
+        
+        waitForExpectationsWithTimeout(3) { error in
+            XCTAssertTrue(postzCalled)
+            AXAssertNotNil(saveError)
+            XCTAssertFalse(blogsCalled)
         }
     }
     
