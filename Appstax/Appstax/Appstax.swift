@@ -18,6 +18,12 @@ import Foundation
         Appstax.defaultContext.setupServicesWithAppKey(appKey, baseUrl: baseUrl)
     }
     
+    public static func setLogLevel(levelName: String) {
+        if let level = AXLog.levelByName(levelName) {
+            AXLog.minLevel = level
+        }
+    }
+    
     internal func setupServicesWithAppKey(appKey: String, baseUrl: String = "https://appstax.com/api/latest/") {
         self.appKey = appKey
         self.apiClient = AXApiClient(appKey: appKey, baseUrl: baseUrl)
@@ -30,6 +36,7 @@ import Foundation
         self.userService = AXUserService(apiClient: apiClient)
         self.permissionsService = AXPermissionsService(apiClient: apiClient)
         self.fileService = AXFileService(apiClient: apiClient)
+        AXLog.info("Initialized Appstax with app key \(appKey) and base url \(apiClient.baseUrl)")
     }
     
     public static func frameworkBundle() -> NSBundle! {

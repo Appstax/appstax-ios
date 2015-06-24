@@ -72,6 +72,7 @@
 		54F9854D1AB23B7A000096ED /* OHHTTPStubsResponse+HTTPMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 54F985461AB23B7A000096ED /* OHHTTPStubsResponse+HTTPMessage.m */; };
 		54F9854E1AB23B7A000096ED /* OHHTTPStubsResponse+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 54F985481AB23B7A000096ED /* OHHTTPStubsResponse+JSON.m */; };
 		54F9854F1AB23B7A000096ED /* OHHTTPStubsResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 54F9854A1AB23B7A000096ED /* OHHTTPStubsResponse.m */; };
+		54FD6EB61B343B89000E89B6 /* AXLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54FD6EB51B343B89000E89B6 /* AXLog.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -145,6 +146,7 @@
 		54F985481AB23B7A000096ED /* OHHTTPStubsResponse+JSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "OHHTTPStubsResponse+JSON.m"; sourceTree = "<group>"; };
 		54F985491AB23B7A000096ED /* OHHTTPStubsResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHHTTPStubsResponse.h; sourceTree = "<group>"; };
 		54F9854A1AB23B7A000096ED /* OHHTTPStubsResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHHTTPStubsResponse.m; sourceTree = "<group>"; };
+		54FD6EB51B343B89000E89B6 /* AXLog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AXLog.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -194,6 +196,7 @@
 				54F984D41AB22801000096ED /* AXImageView.m */,
 				5484DD731B208FBE00D0FAFD /* AXApiClient.swift */,
 				54F984D81AB22801000096ED /* AXKeychain.m */,
+				54FD6EB51B343B89000E89B6 /* AXLog.swift */,
 				54F984DA1AB22801000096ED /* AXLoginUIManager.m */,
 				54F984DC1AB22801000096ED /* AXLoginViewController.m */,
 				54F984DD1AB22801000096ED /* AXLoginViewController.xib */,
@@ -433,6 +436,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				54F985001AB22801000096ED /* AXLoginUIManager.m in Sources */,
+				54FD6EB61B343B89000E89B6 /* AXLog.swift in Sources */,
 				544F7D5C1B2762AE00510DA2 /* AXObjectService.swift in Sources */,
 				54F984F71AB22801000096ED /* AXImageView.m in Sources */,
 				54F984F41AB22801000096ED /* AXFileService.m in Sources */,

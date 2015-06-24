@@ -174,8 +174,9 @@ import Foundation
     
     // PRIVATE
     
-    private func sendHttpBody(httpBody: NSData, toUrl: NSURL, method: String, headers: [String:String], completion: (NSData?, NSError?) -> ()) {
-        let request = makeRequestWithMethod(method, url: toUrl, headers: headers)
+    private func sendHttpBody(httpBody: NSData, toUrl url: NSURL, method: String, headers: [String:String], completion: (NSData?, NSError?) -> ()) {
+        let request = makeRequestWithMethod(method, url: url, headers: headers)
+        logRequest(request)
         request.HTTPBody = httpBody
         NSURLProtocol.setProperty(request.HTTPBody!, forKey: "HTTPBody", inRequest: request)
         urlSession.uploadTaskWithRequest(request, fromData: nil) {
@@ -210,21 +211,34 @@ import Foundation
     }
     
     func logRequest(request: NSURLRequest) {
-        
+        AXLog.debug("HTTP Request: \(request.HTTPMethod!) \(request.URL!)")
     }
     
     func logResponse(response: NSURLResponse?, data: NSData?, var error: NSError?) {
-        if error != nil && response != nil {
-            error = errorFromResponse(response!, data: data)
+        if let httpResponse = response as? NSHTTPURLResponse {
+            if error != nil {
+                error = errorFromResponse(httpResponse, data: data)
+            }
+            if error == nil {
+                AXLog.debug("HTTP Response: \(httpResponse.statusCode) \(httpResponse.URL!)")
+            } else {
+                AXLog.error("HTTP Response: \(httpResponse.statusCode) \(httpResponse.URL!)")
+                if let message = error?.localizedDescription {
+                    AXLog.error(message)
+                }
+            }
+        } else if let message = error?.localizedDescription {
+            AXLog.error(message)
         }
     }
     
     func errorFromResponse(response: NSURLResponse, data: NSData?) -> NSError? {
-        let httpResponse = response as! NSHTTPURLResponse
         var error: NSError?
-        if httpResponse.statusCode / 100 != 2 {
-            let message: String = deserializeDictionary(data)?["errorMessage"] as? String ?? ""
-            error = NSError(domain: "ApiClientHttpError", code: httpResponse.statusCode, userInfo: ["errorMessage": message])
+        if let httpResponse = response as? NSHTTPURLResponse {
+            if httpResponse.statusCode / 100 != 2 {
+                let message: String = deserializeDictionary(data)?["errorMessage"] as? String ?? ""
+                error = NSError(domain: "ApiClientHttpError", code: httpResponse.statusCode, userInfo: ["errorMessage": message])
+            }
         }
         return error
     }
