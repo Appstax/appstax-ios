@@ -17,7 +17,7 @@
         if(properties) {
             NSMutableDictionary *mutableProperties = [NSMutableDictionary dictionaryWithDictionary:properties];
             mutableProperties[@"sysUsername"] = username;
-            _dataObject = [AXObject create:@"Users" properties:mutableProperties];
+            _dataObject = [AXObject create:@"users" properties:mutableProperties];
             _objectID = properties[@"sysObjectId"];
         }
     }

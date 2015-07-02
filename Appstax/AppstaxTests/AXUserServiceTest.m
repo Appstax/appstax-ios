@@ -424,7 +424,7 @@
     __block NSDictionary *putData;
     
     [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
-        return [[request.URL path] isEqualToString:@"/objects/Users/homer-id"] &&
+        return [[request.URL path] isEqualToString:@"/objects/users/homer-id"] &&
         [request.HTTPMethod isEqualToString:@"PUT"];
     } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
         NSData *httpBody = [NSURLProtocol propertyForKey:@"HTTPBody" inRequest:request];
@@ -449,7 +449,7 @@
     __block NSDictionary *putData;
     
     [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
-        return [[request.URL path] isEqualToString:@"/objects/Users/homer-id"] &&
+        return [[request.URL path] isEqualToString:@"/objects/users/homer-id"] &&
         [request.HTTPMethod isEqualToString:@"PUT"];
     } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
         NSData *httpBody = [NSURLProtocol propertyForKey:@"HTTPBody" inRequest:request];
@@ -478,7 +478,7 @@
     __block XCTestExpectation *exp1 = [self expectationWithDescription:@"async1"];
     
     [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
-        return [[request.URL path] isEqualToString:@"/objects/Users/homer-id"] &&
+        return [[request.URL path] isEqualToString:@"/objects/users/homer-id"] &&
         [request.HTTPMethod isEqualToString:@"PUT"];
     } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
         return [OHHTTPStubsResponse responseWithJSONObject:@{@"errorMessage":@"The save error"}
@@ -529,7 +529,7 @@
     __block XCTestExpectation *exp2 = [self expectationWithDescription:@"async2"];
     
     [AXStubs method:@"POST" urlPath:@"/users" response:@{@"sysSessionId":@"sess",@"user":@{@"sysObjectId":@"user-id",@"FullName":@"Montgomery Burns"}} statusCode:200];
-    [AXStubs method:@"GET" urlPath:@"/objects/Users/user-id" response:@{@"sysObjectId":@"user-id",@"FullName":@"Monty"} statusCode:200];
+    [AXStubs method:@"GET" urlPath:@"/objects/users/user-id" response:@{@"sysObjectId":@"user-id",@"FullName":@"Monty"} statusCode:200];
     
     __block AXUser *signupUser;
     [AXUser signupWithUsername:@"monty" password:@"money" completion:^(AXUser *user, NSError *error) {
@@ -549,7 +549,7 @@
 - (void)testShouldRefreshUserObjectWhenRestoringSession {
     __block XCTestExpectation *exp1 = [self expectationWithDescription:@"async1"];
     
-    [AXStubs method:@"GET" urlPath:@"/objects/Users/TheUserObjectID" response:@{@"sysObjectId":@"TheUserObjectID",@"FullName":@"Kimberly Royal"} statusCode:200];
+    [AXStubs method:@"GET" urlPath:@"/objects/users/TheUserObjectID" response:@{@"sysObjectId":@"TheUserObjectID",@"FullName":@"Kimberly Royal"} statusCode:200];
     
     _keychain[@"SessionID"] = @"previous-session-id";
     _keychain[@"Username"] = @"kilroy";
