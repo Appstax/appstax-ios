@@ -158,7 +158,6 @@ import Foundation
     
     public func find(collectionName: String, withId id: String, options: [String:AnyObject]?, completion: ((AXObject?, NSError?) -> ())?) {
         let url = urlForObject(collectionName, withId: id, queryParameters: queryParametersFromQueryOptions(options))
-        NSLog("Find with id: %@", url.absoluteString!)
         apiClient.dictionaryFromUrl(url) {
             dictionary, error in
             if let properties = dictionary {
