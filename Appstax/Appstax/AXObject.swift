@@ -352,7 +352,10 @@ internal struct Relation {
         let objects = getObjectGraph()
         let unsavedInbound = objects["inbound"]!.filter({ $0.isUnsaved })
         let outbound = objects["outbound"]!
-        let remaining = objects["inbound"]!.filter({ !$0.isUnsaved })
+        let remaining = objects["inbound"]!.filter({
+            !contains(unsavedInbound, $0) &&
+            !contains(outbound, $0)
+        })
         
         if 0 == outbound.count + unsavedInbound.count + remaining.count {
             save(completion)

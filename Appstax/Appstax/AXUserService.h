@@ -1,8 +1,9 @@
 
 #import <Foundation/Foundation.h>
-#import "AXUser.h"
 
 @class AXApiClient;
+@class AXUser;
+@class AXLoginViews;
 
 @interface AXUserService : NSObject
 

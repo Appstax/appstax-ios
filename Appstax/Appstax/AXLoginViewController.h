@@ -1,6 +1,5 @@
 
 #import <UIKit/UIKit.h>
-#import "AXUser.h"
 #import "AXLoginUIManager.h"
 
 @interface AXLoginViewController : UIViewController

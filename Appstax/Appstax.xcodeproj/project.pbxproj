@@ -22,6 +22,7 @@
 
 /* Begin PBXBuildFile section */
 		543A27CC1B4687A7001F2BC2 /* AXObjectAccessorsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 543A27CB1B4687A7001F2BC2 /* AXObjectAccessorsTests.swift */; };
+		543A27CE1B46C7EC001F2BC2 /* AXUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 543A27CD1B46C7EC001F2BC2 /* AXUser.swift */; };
 		544F7D591B2624A900510DA2 /* AXUserServiceTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 54F985301AB22E7E000096ED /* AXUserServiceTest.m */; };
 		544F7D5A1B2624AD00510DA2 /* AXStubs.m in Sources */ = {isa = PBXBuildFile; fileRef = 54F9852F1AB22E7E000096ED /* AXStubs.m */; };
 		544F7D5C1B2762AE00510DA2 /* AXObjectService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544F7D5B1B2762AE00510DA2 /* AXObjectService.swift */; };
@@ -53,8 +54,6 @@
 		54F9850E1AB22801000096ED /* AXPermissionsService.m in Sources */ = {isa = PBXBuildFile; fileRef = 54F984E31AB22801000096ED /* AXPermissionsService.m */; };
 		54F985101AB22801000096ED /* AXQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 54F984E41AB22801000096ED /* AXQuery.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		54F985111AB22801000096ED /* AXQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 54F984E51AB22801000096ED /* AXQuery.m */; };
-		54F985131AB22801000096ED /* AXUser.h in Headers */ = {isa = PBXBuildFile; fileRef = 54F984E61AB22801000096ED /* AXUser.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		54F985141AB22801000096ED /* AXUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 54F984E71AB22801000096ED /* AXUser.m */; };
 		54F985161AB22801000096ED /* AXUserService.h in Headers */ = {isa = PBXBuildFile; fileRef = 54F984E81AB22801000096ED /* AXUserService.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		54F985171AB22801000096ED /* AXUserService.m in Sources */ = {isa = PBXBuildFile; fileRef = 54F984E91AB22801000096ED /* AXUserService.m */; };
 		54F985341AB22E7E000096ED /* AppstaxTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 54F985251AB22E7E000096ED /* AppstaxTests.m */; };
@@ -88,6 +87,7 @@
 
 /* Begin PBXFileReference section */
 		543A27CB1B4687A7001F2BC2 /* AXObjectAccessorsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AXObjectAccessorsTests.swift; sourceTree = "<group>"; };
+		543A27CD1B46C7EC001F2BC2 /* AXUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AXUser.swift; sourceTree = "<group>"; };
 		544F7D5B1B2762AE00510DA2 /* AXObjectService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AXObjectService.swift; sourceTree = "<group>"; };
 		544F7D5D1B2765F900510DA2 /* AXObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AXObject.swift; sourceTree = "<group>"; };
 		544F7D5F1B28CEF400510DA2 /* ObjectRelationsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObjectRelationsTests.swift; sourceTree = "<group>"; };
@@ -120,8 +120,6 @@
 		54F984E31AB22801000096ED /* AXPermissionsService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AXPermissionsService.m; sourceTree = "<group>"; };
 		54F984E41AB22801000096ED /* AXQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AXQuery.h; sourceTree = "<group>"; };
 		54F984E51AB22801000096ED /* AXQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AXQuery.m; sourceTree = "<group>"; };
-		54F984E61AB22801000096ED /* AXUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AXUser.h; sourceTree = "<group>"; };
-		54F984E71AB22801000096ED /* AXUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AXUser.m; sourceTree = "<group>"; };
 		54F984E81AB22801000096ED /* AXUserService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AXUserService.h; sourceTree = "<group>"; };
 		54F984E91AB22801000096ED /* AXUserService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AXUserService.m; sourceTree = "<group>"; };
 		54F985251AB22E7E000096ED /* AppstaxTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppstaxTests.m; sourceTree = "<group>"; };
@@ -207,7 +205,7 @@
 				544F7D5B1B2762AE00510DA2 /* AXObjectService.swift */,
 				54F984E31AB22801000096ED /* AXPermissionsService.m */,
 				54F984E51AB22801000096ED /* AXQuery.m */,
-				54F984E71AB22801000096ED /* AXUser.m */,
+				543A27CD1B46C7EC001F2BC2 /* AXUser.swift */,
 				54F984E91AB22801000096ED /* AXUserService.m */,
 				54F984B21AB22755000096ED /* Supporting Files */,
 			);
@@ -272,7 +270,6 @@
 				54F984DE1AB22801000096ED /* AXLoginViews.h */,
 				54F984E21AB22801000096ED /* AXPermissionsService.h */,
 				54F984E41AB22801000096ED /* AXQuery.h */,
-				54F984E61AB22801000096ED /* AXUser.h */,
 				54F984E81AB22801000096ED /* AXUserService.h */,
 			);
 			name = Headers;
@@ -304,7 +301,6 @@
 				54F985071AB22801000096ED /* AXLoginViews.h in Headers */,
 				54F985021AB22801000096ED /* AXLoginViewController.h in Headers */,
 				54F985101AB22801000096ED /* AXQuery.h in Headers */,
-				54F985131AB22801000096ED /* AXUser.h in Headers */,
 				54F984F01AB22801000096ED /* AXFile.h in Headers */,
 				54F984F61AB22801000096ED /* AXImageView.h in Headers */,
 				54F984B51AB22755000096ED /* Appstax.h in Headers */,
@@ -440,6 +436,7 @@
 			files = (
 				54F985001AB22801000096ED /* AXLoginUIManager.m in Sources */,
 				54FD6EB61B343B89000E89B6 /* AXLog.swift in Sources */,
+				543A27CE1B46C7EC001F2BC2 /* AXUser.swift in Sources */,
 				544F7D5C1B2762AE00510DA2 /* AXObjectService.swift in Sources */,
 				54F984F71AB22801000096ED /* AXImageView.m in Sources */,
 				54F984F41AB22801000096ED /* AXFileService.m in Sources */,
@@ -453,7 +450,6 @@
 				54F9850E1AB22801000096ED /* AXPermissionsService.m in Sources */,
 				5484DD741B208FBE00D0FAFD /* AXApiClient.swift in Sources */,
 				544F7D5E1B2765F900510DA2 /* AXObject.swift in Sources */,
-				54F985141AB22801000096ED /* AXUser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

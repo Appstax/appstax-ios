@@ -188,6 +188,46 @@ import Appstax
         }
     }
     
+    func testShouldHandleUsersInRelations() {
+        let async = expectationWithDescription("async")
+        
+        var httpBody: [[String:AnyObject]?] = []
+        AXStubs.method("PUT", urlPath: "/objects/users/user1") { request in
+            httpBody.append(self.dictionaryFromRequestBody(request))
+            return OHHTTPStubsResponse(JSONObject: [:], statusCode: 200, headers: [:])
+        }
+        AXStubs.method("PUT", urlPath: "/objects/posts/post1") { request in
+            httpBody.append(self.dictionaryFromRequestBody(request))
+            return OHHTTPStubsResponse(JSONObject: [:], statusCode: 200, headers: [:])
+        }
+        
+        var user = AXUser(username: "homer", properties: ["sysObjectId": "user1"])
+        var post = AXObject.create("posts", properties: ["sysObjectId": "post1"])
+        user["posts"] = [post]
+        post["author"] = user
+        
+        post.saveAll() { error in
+            AXAssertNil(error)
+            async.fulfill()
+        }
+        
+        waitForExpectationsWithTimeout(3) { error in
+            AXAssertEqual(2, httpBody.count)
+            AXAssertNotNil(httpBody[0])
+            AXAssertNotNil(httpBody[1])
+            let changes0 = self.relationChangesFromBody(httpBody[0], property: "author")
+            let changes1 = self.relationChangesFromBody(httpBody[1], property: "posts")
+            AXAssertNotNil(changes0)
+            AXAssertEqual(changes0?["removals"]?.count, 0)
+            AXAssertEqual(changes0?["additions"]?.count, 1)
+            AXAssertContains(changes0?["additions"], "user1")
+            AXAssertNotNil(changes1)
+            AXAssertEqual(changes1?["removals"]?.count, 0)
+            AXAssertEqual(changes1?["additions"]?.count, 1)
+            AXAssertContains(changes1?["additions"], "post1")
+        }
+    }
+    
     func testShouldHandleRemovingSingleRelation() {
         let async = expectationWithDescription("async")
         

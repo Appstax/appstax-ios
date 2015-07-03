@@ -7,7 +7,7 @@
 
 @interface AXUserService ()
 @property AXApiClient *apiClient;
-@property AXUser *currentUser;
+@property AXUser * __nullable currentUser;
 @property AXLoginUIManager *loginManager;
 @property AXKeychain *keychain;
 @end

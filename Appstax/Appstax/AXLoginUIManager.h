@@ -3,6 +3,7 @@
 #import <UIKit/UIKit.h>
 
 @class AXUserService;
+@class AXLoginViews;
 
 @interface AXLoginUIManager : NSObject
 
