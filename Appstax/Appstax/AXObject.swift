@@ -106,6 +106,42 @@ internal struct Relation {
         }
     }
     
+    public func string(path: String) -> String? {
+        return value(path) as? String
+    }
+    
+    public func number(path: String) -> NSNumber? {
+        return value(path) as? NSNumber
+    }
+    
+    public func file(path: String) -> AXFile? {
+        return value(path) as? AXFile
+    }
+    
+    public func array(path: String) -> [AnyObject]? {
+        return value(path) as? [AnyObject]
+    }
+
+    public func object(path: String) -> AXObject? {
+        return value(path) as? AXObject
+    }
+    
+    public func objects(path: String) -> [AXObject]? {
+        return value(path) as? [AXObject]
+    }
+    
+    private func value(path: String) -> AnyObject? {
+        var current = self
+        for key in (split(path) { $0 == "." }) {
+            if let next = current[key] as? AXObject {
+                current = next
+            } else {
+                return current[key]
+            }
+        }
+        return current != self ? current : nil
+    }
+    
     public internal(set) var objectID: String? {
         set(id) {
             self.properties["sysObjectId"] = id

@@ -21,6 +21,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		543A27CC1B4687A7001F2BC2 /* AXObjectAccessorsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 543A27CB1B4687A7001F2BC2 /* AXObjectAccessorsTests.swift */; };
 		544F7D591B2624A900510DA2 /* AXUserServiceTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 54F985301AB22E7E000096ED /* AXUserServiceTest.m */; };
 		544F7D5A1B2624AD00510DA2 /* AXStubs.m in Sources */ = {isa = PBXBuildFile; fileRef = 54F9852F1AB22E7E000096ED /* AXStubs.m */; };
 		544F7D5C1B2762AE00510DA2 /* AXObjectService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544F7D5B1B2762AE00510DA2 /* AXObjectService.swift */; };
@@ -86,6 +87,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		543A27CB1B4687A7001F2BC2 /* AXObjectAccessorsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AXObjectAccessorsTests.swift; sourceTree = "<group>"; };
 		544F7D5B1B2762AE00510DA2 /* AXObjectService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AXObjectService.swift; sourceTree = "<group>"; };
 		544F7D5D1B2765F900510DA2 /* AXObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AXObject.swift; sourceTree = "<group>"; };
 		544F7D5F1B28CEF400510DA2 /* ObjectRelationsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObjectRelationsTests.swift; sourceTree = "<group>"; };
@@ -225,6 +227,7 @@
 			children = (
 				54F985251AB22E7E000096ED /* AppstaxTests.m */,
 				54F985271AB22E7E000096ED /* AXObjectServiceTests.m */,
+				543A27CB1B4687A7001F2BC2 /* AXObjectAccessorsTests.swift */,
 				544F7D5F1B28CEF400510DA2 /* ObjectRelationsTests.swift */,
 				54F985281AB22E7E000096ED /* AXFileTests.m */,
 				54F985291AB22E7E000096ED /* AXImageViewTests.m */,
@@ -475,6 +478,7 @@
 				54F9854E1AB23B7A000096ED /* OHHTTPStubsResponse+JSON.m in Sources */,
 				54F985361AB22E7E000096ED /* AXFileTests.m in Sources */,
 				544F7D591B2624A900510DA2 /* AXUserServiceTest.m in Sources */,
+				543A27CC1B4687A7001F2BC2 /* AXObjectAccessorsTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

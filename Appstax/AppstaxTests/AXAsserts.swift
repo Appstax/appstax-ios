@@ -48,7 +48,7 @@ func AXAssertEqual(o1: AnyObject?, o2: AnyObject?, file: String = __FILE__, line
             return
         }
     }
-    XCTFail("Error comparing objects", file: file, line: line)
+    XCTFail("\(o1) is not equal to \(o2)", file: file, line: line)
 }
 
 func AXAssertContains(haystack: [String]?, needle: String?, file: String = __FILE__, line: UInt = __LINE__, handler: (() -> ())? = nil) {
