@@ -76,6 +76,7 @@
 - (void)signupViewControllerPressedSubmitButton {
     [_userService signupWithUsername:_signupViewController.username
                             password:_signupViewController.password
+                          properties: [NSDictionary dictionary]
                           completion:^(AXUser *user, NSError *error) {
                               if(!error) {
                                   [self finish];

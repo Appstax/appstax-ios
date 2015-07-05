@@ -87,6 +87,38 @@
     }];
 }
 
+- (void)testSignupShouldPostCustomProperties {
+    __block XCTestExpectation *exp1 = [self expectationWithDescription:@"async1"];
+    __block NSDictionary *postData;
+    __block NSURL *postUrl;
+    
+    [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+        return [[request.URL path] isEqualToString:@"/users"] &&
+        [request.HTTPMethod isEqualToString:@"POST"];
+    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+        NSData *httpBody = [NSURLProtocol propertyForKey:@"HTTPBody" inRequest:request];
+        postData = [NSJSONSerialization JSONObjectWithData:httpBody options:0 error:nil];
+        postUrl = request.URL;
+        [exp1 fulfill];
+        return [OHHTTPStubsResponse responseWithJSONObject:@{}
+                                                statusCode:200 headers:nil];
+    }];
+    
+    [AXUser signupWithUsername:@"foo2"
+                      password:@"bar2"
+                    properties:@{@"text": @"something",
+                                 @"value": @1234 }
+                    completion:nil];
+    
+    [self waitForExpectationsWithTimeout:3 handler:^(NSError *error) {
+        AXAssertContains(postUrl.absoluteString, @"/users");
+        XCTAssertEqualObjects(postData[@"sysUsername"], @"foo2");
+        XCTAssertEqualObjects(postData[@"sysPassword"], @"bar2");
+        XCTAssertEqualObjects(postData[@"text"], @"something");
+        XCTAssertEqualObjects(postData[@"value"], @1234);
+    }];
+}
+
 - (void)testShouldUseUserObjectIdFromServerWhenSignupSucceeds {
     __block XCTestExpectation *exp1 = [self expectationWithDescription:@"async1"];
     __block AXUser *signupUser;

@@ -24,10 +24,13 @@
     return self;
 }
 
-- (void)signupWithUsername:(NSString *)username password:(NSString *)password completion:(void(^)(AXUser *, NSError *))completion {
+- (void)signupWithUsername:(NSString *)username password:(NSString *)password properties:(NSDictionary *)properties completion:(void(^)(AXUser *, NSError *))completion {
     
     NSURL *url = [_apiClient urlByConcatenatingStrings:@[@"users"]];
-    [_apiClient postDictionary:@{@"sysUsername":username,@"sysPassword":password}
+    NSMutableDictionary *data = [NSMutableDictionary dictionaryWithDictionary:properties];
+    data[@"sysUsername"] = username;
+    data[@"sysPassword"] = password;
+    [_apiClient postDictionary:data
                          toUrl:url
                     completion:^(NSDictionary *dictionary, NSError *error) {
                         if(completion != nil) {
