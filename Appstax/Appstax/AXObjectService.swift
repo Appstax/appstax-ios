@@ -18,7 +18,11 @@ import Foundation
     }
     
     public func create(collectionName: String, properties: [String:AnyObject], status:AXObjectStatus) -> AXObject {
-        return AXObject(collectionName:collectionName, properties: properties, status: status)
+        if collectionName == "users" {
+            return AXUser(properties: properties)
+        } else {
+            return AXObject(collectionName:collectionName, properties: properties, status: status)
+        }
     }
     
     public func createObjects(collectionName: String, properties: [[String:AnyObject]], status: AXObjectStatus) -> [AXObject] {

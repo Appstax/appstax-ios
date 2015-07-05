@@ -565,5 +565,38 @@
     }];
 }
 
+- (void)testLoadingUsersFromCollectionShouldReturnAXUserObjects {
+    __block XCTestExpectation *exp1 = [self expectationWithDescription:@"async1"];
+    
+    [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+        return [[request.URL path] isEqualToString:@"/objects/users"] &&
+        [request.HTTPMethod isEqualToString:@"GET"];
+    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+        NSDictionary *response = @{@"objects":@[@{@"sysObjectId":@"1234",@"sysUsername":@"homer"},@{@"sysObjectId":@"5678",@"sysUsername":@"bart"}]};
+        return [OHHTTPStubsResponse responseWithJSONObject:response
+                                                statusCode:200 headers:nil];
+    }];
+    
+    [AXObject findAll:@"users" completion:^(NSArray *objects, NSError *error) {
+        XCTAssertEqual(2, objects.count);
+        AXObject *object1 = objects[0];
+        AXObject *object2 = objects[1];
+        XCTAssertTrue([object1 isKindOfClass:[AXUser class]]);
+        XCTAssertTrue([object2 isKindOfClass:[AXUser class]]);
+        AXUser *user1 = objects[0];
+        AXUser *user2 = objects[1];
+        XCTAssertEqualObjects(object1.collectionName, @"users");
+        XCTAssertEqualObjects(object1.collectionName, @"users");
+        XCTAssertEqualObjects(user1.username, @"homer");
+        XCTAssertEqualObjects(user2.username, @"bart");
+        XCTAssertEqualObjects(user1.objectID, @"1234");
+        XCTAssertEqualObjects(user2.objectID, @"5678");
+        XCTAssertEqual(user1.status, AXObjectStatusSaved);
+        XCTAssertEqual(user2.status, AXObjectStatusSaved);
+        [exp1 fulfill];
+    }];
+    [self waitForExpectationsWithTimeout:3 handler:^(NSError *error) {}];
+}
+
 
 @end

@@ -3,10 +3,18 @@ import Foundation
 
 @objc public class AXUser: AXObject {
  
-    public init(username: String, properties: [String:AnyObject]) {
-        var p = properties
+    public convenience init(username: String) {
+        self.init(username: username)
+    }
+    
+    public convenience init(username: String, properties: [String:AnyObject]?) {
+        var p = properties ?? [:]
         p["sysUsername"] = username
-        super.init(collectionName: "users", properties: p, status: .New)
+        self.init(properties: p)
+    }
+    
+    public init(properties: [String:AnyObject]) {
+        super.init(collectionName: "users", properties: properties, status: .New)
     }
     
     public var username: String {
