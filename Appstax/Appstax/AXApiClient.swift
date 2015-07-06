@@ -176,9 +176,9 @@ import Foundation
     
     private func sendHttpBody(httpBody: NSData, toUrl url: NSURL, method: String, headers: [String:String], completion: (NSData?, NSError?) -> ()) {
         let request = makeRequestWithMethod(method, url: url, headers: headers)
-        logRequest(request)
         request.HTTPBody = httpBody
         NSURLProtocol.setProperty(request.HTTPBody!, forKey: "HTTPBody", inRequest: request)
+        logRequest(request)
         urlSession.uploadTaskWithRequest(request, fromData: nil) {
             var data = $0
             var response = $1
@@ -212,6 +212,11 @@ import Foundation
     
     func logRequest(request: NSURLRequest) {
         AXLog.debug("HTTP Request: \(request.HTTPMethod!) \(request.URL!)")
+        if let body = NSString(data: request.HTTPBody ?? NSData(), encoding: NSUTF8StringEncoding) {
+            AXLog.trace("HTTP Request Body: \(body)")
+        } else {
+            AXLog.trace("No HTTP Request Body")
+        }
     }
     
     func logResponse(response: NSURLResponse?, data: NSData?, var error: NSError?) {
@@ -226,6 +231,11 @@ import Foundation
                 if let message = error?.localizedDescription {
                     AXLog.error(message)
                 }
+            }
+            if let body = NSString(data: data ?? NSData(), encoding: NSUTF8StringEncoding) {
+                AXLog.trace("HTTP Response Body: \(body)")
+            } else {
+                AXLog.trace("No HTTP Response Body")
             }
         } else if let message = error?.localizedDescription {
             AXLog.error(message)
