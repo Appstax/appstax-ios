@@ -21,6 +21,10 @@ internal class AXLog {
         }
     }
     
+    internal static func trace(message: String) {
+        log(.Trace, message)
+    }
+    
     internal static func debug(message: String) {
         log(.Debug, message)
     }
@@ -29,8 +33,16 @@ internal class AXLog {
         log(.Info, message)
     }
     
+    internal static func warn(message: String) {
+        log(.Warn, message)
+    }
+    
     internal static func error(message: String) {
         log(.Error, message)
+    }
+    
+    internal static func fatal(message: String) {
+        log(.Fatal, message)
     }
     
     internal static func label(level: AXLogLevel) -> String {
