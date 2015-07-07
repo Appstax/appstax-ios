@@ -43,7 +43,7 @@ import Foundation
         })
     }
     
-    public static func requireLogin(completion: ((AXUser) -> ())?, withCustomWiews views: ((AXLoginViews) -> ())?) {
+    public static func requireLogin(completion: ((AXUser) -> ())?, withCustomViews views: ((AXLoginViews) -> ())?) {
         Appstax.defaultContext.userService.requireLogin({
                 completion?($0)
             }, withCustomViews: {
