@@ -61,6 +61,36 @@
     }];
 }
 
+- (void)testShouldNotSetCurrentUserWhenSigningUpWithoutLogin {
+    __block XCTestExpectation *exp1 = [self expectationWithDescription:@"async1"];
+    __block AXUser *signupUser;
+    
+    [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+        NSLog(@"Request: %@", request.URL.absoluteString);
+        return [[request.URL path] isEqualToString:@"/users"] &&
+        [request.HTTPMethod isEqualToString:@"POST"] &&
+        [request.URL.query isEqualToString:@"login=false"];
+    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+        return [OHHTTPStubsResponse responseWithJSONObject:@{}
+                                                statusCode:200 headers:nil];
+    }];
+    
+    __block NSError *signupError;
+    [AXUser signupWithUsername:@"homer"
+                      password:@"springfield"
+                         login:NO
+                    completion:^(AXUser *user, NSError *error) {
+                        signupUser = user;
+                        signupError = error;
+                        [exp1 fulfill];
+                    }];
+    
+    [self waitForExpectationsWithTimeout:3 handler:^(NSError *error) {
+        XCTAssertNil(signupError);
+        XCTAssertNil([AXUser currentUser]);
+    }];
+}
+
 - (void)testSignupShouldPostToApi {
     __block XCTestExpectation *exp1 = [self expectationWithDescription:@"async1"];
     __block NSDictionary *postData;
@@ -106,6 +136,40 @@
     
     [AXUser signupWithUsername:@"foo2"
                       password:@"bar2"
+                    properties:@{@"text": @"something",
+                                 @"value": @1234 }
+                    completion:nil];
+    
+    [self waitForExpectationsWithTimeout:3 handler:^(NSError *error) {
+        AXAssertContains(postUrl.absoluteString, @"/users");
+        XCTAssertEqualObjects(postData[@"sysUsername"], @"foo2");
+        XCTAssertEqualObjects(postData[@"sysPassword"], @"bar2");
+        XCTAssertEqualObjects(postData[@"text"], @"something");
+        XCTAssertEqualObjects(postData[@"value"], @1234);
+    }];
+}
+
+- (void)testSignupShouldPostCustomPropertiesWithoutLogin {
+    __block XCTestExpectation *exp1 = [self expectationWithDescription:@"async1"];
+    __block NSDictionary *postData;
+    __block NSURL *postUrl;
+    
+    [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+        return [[request.URL path] isEqualToString:@"/users"] &&
+        [request.HTTPMethod isEqualToString:@"POST"] &&
+        [request.URL.query isEqualToString:@"login=false"];
+    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+        NSData *httpBody = [NSURLProtocol propertyForKey:@"HTTPBody" inRequest:request];
+        postData = [NSJSONSerialization JSONObjectWithData:httpBody options:0 error:nil];
+        postUrl = request.URL;
+        [exp1 fulfill];
+        return [OHHTTPStubsResponse responseWithJSONObject:@{}
+                                                statusCode:200 headers:nil];
+    }];
+    
+    [AXUser signupWithUsername:@"foo2"
+                      password:@"bar2"
+                         login:NO
                     properties:@{@"text": @"something",
                                  @"value": @1234 }
                     completion:nil];
@@ -185,6 +249,29 @@
         XCTAssertEqualObjects(@"mysession", keychain[@"SessionID"]);
         XCTAssertEqualObjects(@"the-user-id", keychain[@"UserObjectID"]);
         XCTAssertEqualObjects(@"moi", keychain[@"Username"]);
+    }];
+}
+
+- (void)testShouldNotStoreSessionIdUserObjectIdAndUsernameOnKeychainWhenSigningUpWithoutLogin {
+    __block XCTestExpectation *exp1 = [self expectationWithDescription:@"async1"];
+    AXKeychain *keychain = [[[Appstax defaultContext] userService] keychain];
+    [keychain clear];
+    
+    [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+        return [[request.URL path] isEqualToString:@"/users"] &&
+        [request.HTTPMethod isEqualToString:@"POST"];
+    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+        return [OHHTTPStubsResponse responseWithJSONObject:@{@"sysSessionId":@"mysession",@"user":@{@"sysObjectId":@"the-user-id"}}
+                                                statusCode:200 headers:nil];
+    }];
+    
+    [AXUser signupWithUsername:@"moi" password:@"secret" login:NO completion:^(AXUser *user, NSError *error) {
+        [exp1 fulfill];
+    }];
+    [self waitForExpectationsWithTimeout:3 handler:^(NSError *error) {
+        XCTAssertNil(keychain[@"SessionID"]);
+        XCTAssertNil(keychain[@"UserObjectID"]);
+        XCTAssertNil(keychain[@"Username"]);
     }];
 }
 

@@ -24,11 +24,19 @@ import Foundation
     }
     
     public static func signup(username username: String, password: String, completion: ((AXUser?, NSError?) -> ())?) {
-        Appstax.defaultContext.userService.signupWithUsername(username, password: password, properties: [:], completion: completion)
+        Appstax.defaultContext.userService.signupWithUsername(username, password: password, login: true, properties: [:], completion: completion)
+    }
+    
+    public static func signup(username username: String, password: String, login: Bool, completion: ((AXUser?, NSError?) -> ())?) {
+        Appstax.defaultContext.userService.signupWithUsername(username, password: password, login: login, properties: [:], completion: completion)
     }
     
     public static func signup(username username: String, password: String, properties: [String:AnyObject], completion: ((AXUser?, NSError?) -> ())?) {
-        Appstax.defaultContext.userService.signupWithUsername(username, password: password, properties: properties, completion: completion)
+        Appstax.defaultContext.userService.signupWithUsername(username, password: password, login: true, properties: properties, completion: completion)
+    }
+    
+    public static func signup(username username: String, password: String, login: Bool, properties: [String:AnyObject], completion: ((AXUser?, NSError?) -> ())?) {
+        Appstax.defaultContext.userService.signupWithUsername(username, password: password, login: login, properties: properties, completion: completion)
     }
     
     public static func login(username username: String, password: String, completion: ((AXUser?, NSError?) -> ())?) {

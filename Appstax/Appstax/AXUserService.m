@@ -24,9 +24,12 @@
     return self;
 }
 
-- (void)signupWithUsername:(NSString *)username password:(NSString *)password properties:(NSDictionary *)properties completion:(void(^)(AXUser *, NSError *))completion {
+- (void)signupWithUsername:(NSString *)username password:(NSString *)password login:(BOOL)login properties:(NSDictionary *)properties completion:(void(^)(AXUser *, NSError *))completion {
     
     NSURL *url = [_apiClient urlByConcatenatingStrings:@[@"users"]];
+    if(!login) {
+        url = [_apiClient urlByConcatenatingStrings:@[@"users?login=false"]];
+    }
     NSMutableDictionary *data = [NSMutableDictionary dictionaryWithDictionary:properties];
     data[@"sysUsername"] = username;
     data[@"sysPassword"] = password;
@@ -37,11 +40,14 @@
                             [self setSessionID:dictionary[@"sysSessionId"]];
                             if(!error) {
                                 NSString *objectID = [dictionary valueForKeyPath:@"user.sysObjectId"];
-                                _keychain[@"SessionID"] = dictionary[@"sysSessionId"];
-                                _keychain[@"Username"] = username;
-                                _keychain[@"UserObjectID"] = objectID;
-                                _currentUser = [[AXUser alloc] initWithUsername:username properties:dictionary[@"user"]];
-                                completion(_currentUser, nil);
+                                AXUser *user = [[AXUser alloc] initWithUsername:username properties:dictionary[@"user"]];
+                                if(login) {
+                                    _currentUser = user;
+                                    _keychain[@"SessionID"] = dictionary[@"sysSessionId"];
+                                    _keychain[@"Username"] = username;
+                                    _keychain[@"UserObjectID"] = objectID;
+                                }
+                                completion(user, nil);
                             } else {
                                 completion(nil, error);
                             }
