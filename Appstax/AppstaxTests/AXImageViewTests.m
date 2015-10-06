@@ -1,7 +1,6 @@
 
 #import <XCTest/XCTest.h>
 @import Appstax;
-#import "AppstaxInternals.h"
 #import "AXAsssertions.h"
 #import "OHHTTPStubs.h"
 #import "OHHTTPStubsResponse+JSON.h"
