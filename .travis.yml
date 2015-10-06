@@ -7,10 +7,10 @@ git:
   depth: 1
 env:
   global:
-  - secure: CMIkvacdAxHwNi16VKK8p5Bc8OJuFGZ/fFwrrpwzHKgUtVTsEQPlnsCo4R6CloWnmyEJYRs/UmlGwPJbRXS0sI50srk4kX3LUPkTaRkAFsOLpyZs1kpYy6YNm/V8j7F+p5iOvuDkzkOSD3QTMzM7Y0V8bTVqOZLFU8R0nizZgSY=
-  - secure: rfhzlf6vFWa8X3BGaHumE+w6LYebNffWwkN6UBdQY4p1K/VbRoVaEMwAUh1pUysjmJW1Ch0DGjFshj8oS0PiYtm4DkPRollXSH53FnhtMb5R5q8HYTEoN4C1ZeN73bBnySwviwit2zWLEFFq21qa/PaJpeKHSVAEuahB4hS69hQ=
   - CODE_SIGN_IDENTITY="iPhone Distribution: Appstax Technologies AS (L8V2M7RADW)"
   - PROFILE_NAME="Travis_Ad_Hoc_Distribution_Profile"
+  - secure: ZHMwCd9X1c5c3fzB5QlNRqvj7TA6TobGspECBWhiG1huKMH0n0yJpwb5EeUC+iHJzXY32Fgx6080muUT8V4eyxY8lx0vepf7S4MGjd1y7iKjvL3lWicd1IWn6g1S+w9EiGd0mV2g8djAvP7yF+LIRa2NevIuodd7YxwiLPp3P/g=
+  - secure: wfAQgOJ8ylQFKoJ1VY6BqmUYXjZFtqP1wDufENN0RcPjdfHoRdr5Or8Xlmn4H1uFhk4KvyVa3ik3gr/C0LOtXRF1ebdVCR6FUQDw0BffXMhjC/y8ITtzYaOe9Dsi8voYrzfMRSS4+LCcKIjwN3ETCappNBnHaXteJBb60YyzSMk=
 deploy:
 - provider: releases
   api_key:
