@@ -1,7 +1,7 @@
 
 import Foundation
 
-@objc public class AXObjectService {
+public class AXObjectService {
     
     private var apiClient: AXApiClient
     
@@ -61,7 +61,7 @@ import Foundation
     }
     
     private func updateObject(object: AXObject, completion: ((AXObject, NSError?) -> ())?) {
-        var url = urlForObject(object)
+        let url = urlForObject(object)
         apiClient.putDictionary(object.allPropertiesForSaving, toUrl: url) {
             dictionary, error in
             if error == nil {
@@ -78,7 +78,7 @@ import Foundation
     }
     
     private func saveNewObjectWithoutFiles(object: AXObject, completion: ((AXObject, NSError?) -> ())?) {
-        var url = urlForCollection(object.collectionName)
+        let url = urlForCollection(object.collectionName)
         apiClient.postDictionary(object.allPropertiesForSaving, toUrl: url) {
             dictionary, error in
             object.status = error != nil ? .Modified : .Saved
@@ -173,9 +173,9 @@ import Foundation
     }
     
     public func find(collectionName: String, with propertyValues:[String:AnyObject], options: [String:AnyObject]?, completion: (([AXObject]?, NSError?) -> ())?) {
-        var query = AXQuery()
-        var keys = propertyValues.keys.array
-        keys.sort({ $0 < $1 })
+        let query = AXQuery()
+        var keys = Array(propertyValues.keys)
+        keys.sortInPlace({ $0 < $1 })
         for key in keys {
             if let stringValue = propertyValues[key] as? String {
                 query.string(key, equals: stringValue)
@@ -188,9 +188,9 @@ import Foundation
     }
     
     public func find(collectionName: String, search propertyValues: [String:String], options: [String:AnyObject]?, completion: (([AXObject]?, NSError?) -> ())?) {
-        var query = AXQuery()
+        let query = AXQuery()
         query.logicalOperator = "or"
-        for (key, value) in propertyValues {
+        for (key, _) in propertyValues {
             query.string(key, contains: propertyValues[key])
         }
         find(collectionName, queryString:query.queryString, options: options, completion: completion)

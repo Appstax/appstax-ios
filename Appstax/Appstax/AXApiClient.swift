@@ -33,14 +33,14 @@ import Foundation
     }
     
     public func sendMultipartFormData(dataParts: [String:AnyObject], toUrl: NSURL, method: String, completion: (([String:AnyObject]?, NSError?) -> ())?) {
-        var boundary = "Boundary-\(NSUUID().UUIDString)"
-        var contentType = "multipart/form-data; boundary=\(boundary)"
-        var body = NSMutableData()
+        let boundary = "Boundary-\(NSUUID().UUIDString)"
+        let contentType = "multipart/form-data; boundary=\(boundary)"
+        let body = NSMutableData()
         
         for (partName, part) in dataParts {
-            var filename = part["filename"] as! String? ?? ""
-            var mimeType = part["mimeType"] as! String? ?? ""
-            var data = part["data"] as! NSData
+            let filename = part["filename"] as! String? ?? ""
+            let mimeType = part["mimeType"] as! String? ?? ""
+            let data = part["data"] as! NSData
             body.appendData(stringData("--\(boundary)\r\n"))
             if filename != "" {
                 body.appendData(stringData("Content-Disposition: form-data; name=\"\(partName)\"; filename=\"\(filename)\"\r\n"))
@@ -78,7 +78,7 @@ import Foundation
         logRequest(request)
         urlSession.dataTaskWithRequest(request) {
             var data = $0
-            var response = $1
+            let response = $1
             var error = $2
             
             self.logResponse(response, data: data, error: error)
@@ -101,7 +101,7 @@ import Foundation
     }
     
     public func urlByConcatenatingStrings(strings: [String]) -> NSURL? {
-        let full = baseUrl.stringByAppendingString("".join(strings))
+        let full = baseUrl.stringByAppendingString(strings.joinWithSeparator(""))
         return NSURL(string: full)
     }
     
@@ -117,14 +117,14 @@ import Foundation
         
         var queryString = ""
         if queryParameters.count > 0 {
-            queryString = "&".join(queryParameters.keys.array.map({
+            queryString = Array(queryParameters.keys).map({
                 key in
                 if let value = queryParameters[key] {
                     return "\(key)=\(self.urlEncode(value))"
                 }
                 return ""
-            }))
-            var queryStringPrefix = (url.rangeOfString("?").toRange() == nil) ? "?" : "&"
+            }).joinWithSeparator("&")
+            let queryStringPrefix = (url.rangeOfString("?").toRange() == nil) ? "?" : "&"
             queryString = "\(queryStringPrefix)\(queryString)"
         }
         
@@ -136,21 +136,21 @@ import Foundation
         if data == nil {
             return nil
         }
-        return NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions(0), error: nil) as? [String:AnyObject]
+        return (try? NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions(rawValue: 0))) as? [String:AnyObject]
     }
     
     public func deserializeArray(data: NSData?) -> [AnyObject]? {
         if data == nil {
             return nil
         }
-        return NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions(0), error: nil) as? [AnyObject]
+        return (try? NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions(rawValue: 0))) as? [AnyObject]
     }
     
     public func serializeDictionary(dictionary: [String:AnyObject]?) -> NSData {
         if dictionary == nil {
             return NSData()
         }
-        let data = NSJSONSerialization.dataWithJSONObject(dictionary!, options: NSJSONWritingOptions(0), error: nil)
+        let data = try? NSJSONSerialization.dataWithJSONObject(dictionary!, options: NSJSONWritingOptions(rawValue: 0))
         if data == nil {
             return NSData()
         }
@@ -181,7 +181,7 @@ import Foundation
         logRequest(request)
         urlSession.uploadTaskWithRequest(request, fromData: nil) {
             var data = $0
-            var response = $1
+            let response = $1
             var error = $2
             
             self.logResponse(response, data: data, error: error)
@@ -242,7 +242,7 @@ import Foundation
         }
     }
     
-    func errorFromResponse(response: NSURLResponse, data: NSData?) -> NSError? {
+    func errorFromResponse(response: NSURLResponse?, data: NSData?) -> NSError? {
         var error: NSError?
         if let httpResponse = response as? NSHTTPURLResponse {
             if httpResponse.statusCode / 100 != 2 {

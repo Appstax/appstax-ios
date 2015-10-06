@@ -56,8 +56,8 @@ internal struct Relation {
         for (key, value) in properties {
             if let details = value as? [String:AnyObject] {
                 if details["sysDatatype"] as! String == "file" {
-                    var filename = details["filename"] as! String
-                    var url = fileService.urlForFileName(filename, objectID: objectID, propertyName: key, collectionName: collectionName)
+                    let filename = details["filename"] as! String
+                    let url = fileService.urlForFileName(filename, objectID: objectID, propertyName: key, collectionName: collectionName)
                     files[key] = AXFile(url: url, name: filename, status: AXFileStatusSaved)
                 }
             }
@@ -79,7 +79,7 @@ internal struct Relation {
     }
     
     internal func setupRelationBacking(key: String, _ details: [String:AnyObject]) {
-        var type = details["sysRelationType"] as! String
+        let type = details["sysRelationType"] as! String
         relations[key] = Relation(
             type: type,
             ids: (details["sysObjects"] as? [AnyObject] ?? []).map({
@@ -89,7 +89,7 @@ internal struct Relation {
     }
     
     internal func setupRelationProperty(key: String, _ details: [String:AnyObject]) {
-        var type = details["sysRelationType"] as! String
+        let type = details["sysRelationType"] as! String
         var values: [AnyObject] = (details["sysObjects"] as? [AnyObject] ?? []).map({
             if let id = $0 as? String {
                 return id
@@ -132,7 +132,7 @@ internal struct Relation {
     
     private func value(path: String) -> AnyObject? {
         var current = self
-        for key in (split(path) { $0 == "." }) {
+        for key in (path.characters.split { $0 == "." }.map { String($0) }) {
             if let next = current[key] as? AXObject {
                 current = next
             } else {
@@ -182,7 +182,7 @@ internal struct Relation {
                         "sysDatatype": "file",
                         "filename": file.filename
                     ]
-                } else if let relation = relations[key] {
+                } else if let _ = relations[key] {
                     let changes = getRelationChanges(key)
                     result[key] = ["sysRelationChanges": changes]
                 } else {
@@ -206,13 +206,13 @@ internal struct Relation {
     }
     
     internal func detectUndeclaredRelations() {
-        for (key, value) in properties {
+        for (key, _) in properties {
             if relations[key] != nil {
                 continue
             }
-            if let object = properties[key] as? AXObject {
+            if let _ = properties[key] as? AXObject {
                 relations[key] = Relation(type: "single", ids: [])
-            } else if let objects = properties[key] as? [AXObject] {
+            } else if let _ = properties[key] as? [AXObject] {
                 relations[key] = Relation(type: "array", ids: [])
             }
         }
@@ -225,10 +225,10 @@ internal struct Relation {
             if let property: AnyObject = properties[key] {
                 items = relation.type == "array" ? property as? [AnyObject] ?? [] : [property]
             }
-            var currentIds = items.map({ ($0 as? AXObject)?.objectID ?? $0 as? String ?? "" })
+            let currentIds = items.map({ ($0 as? AXObject)?.objectID ?? $0 as? String ?? "" })
                                   .filter({ $0 != "" })
-            changes["additions"] = currentIds.filter({ !contains(relation.ids, $0) })
-            changes["removals"] = relation.ids.filter({ !contains(currentIds, $0) })
+            changes["additions"] = currentIds.filter({ !relation.ids.contains($0) })
+            changes["removals"] = relation.ids.filter({ !currentIds.contains($0) })
         }
         return changes
     }
@@ -238,7 +238,7 @@ internal struct Relation {
         for (key, var relation) in relations {
             if let changes = savedProperties[key]?["sysRelationChanges"] as? [String:[String]] {
                 relation.ids += changes["additions"] ?? []
-                relation.ids = relation.ids.filter({ !contains(changes["removals"] ?? [], $0) })
+                relation.ids = relation.ids.filter({ !(changes["removals"] ?? []).contains($0) })
                 relations[key] = relation
             }
         }
@@ -246,8 +246,8 @@ internal struct Relation {
     
     internal var hasUnsavedFiles: Bool {
         get {
-            for (key, file) in allFileProperties {
-                if file.status.value != AXFileStatusSaved.value {
+            for (_, file) in allFileProperties {
+                if file.status.rawValue != AXFileStatusSaved.rawValue {
                     return true
                 }
             }
@@ -353,8 +353,8 @@ internal struct Relation {
         let unsavedInbound = objects["inbound"]!.filter({ $0.isUnsaved })
         let outbound = objects["outbound"]!
         let remaining = objects["inbound"]!.filter({
-            !contains(unsavedInbound, $0) &&
-            !contains(outbound, $0)
+            !unsavedInbound.contains($0) &&
+            !outbound.contains($0)
         })
         
         if 0 == outbound.count + unsavedInbound.count + remaining.count {
@@ -389,7 +389,7 @@ internal struct Relation {
         var outboundOrdered: [AXObject] = []
         
         while queue.count > 0 {
-            var object = queue.removeAtIndex(0)
+            let object = queue.removeAtIndex(0)
             if all[object.internalID] == nil {
                 all[object.internalID] = object
                 allOrdered.append(object)
@@ -420,7 +420,7 @@ internal struct Relation {
     internal func getRelatedObjects() -> [AXObject] {
         detectUndeclaredRelations()
         var related: [AXObject] = []
-        for (key, relation) in relations {
+        for (key, _) in relations {
             if let property = properties[key] as? [AXObject] {
                 related += property
             } else if let property = properties[key] as? AXObject {

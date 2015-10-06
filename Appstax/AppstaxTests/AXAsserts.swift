@@ -14,7 +14,7 @@ func AXAssertAllNotNil(optionals: [AnyObject?], file: String = __FILE__, line: U
     
     var ok = true
     for optional in optionals {
-        if let o: AnyObject = optional {
+        if let _: AnyObject = optional {
             //
         } else {
             ok = false
@@ -40,7 +40,7 @@ func AXAssertAllNil(optionals: [AnyObject?], file: String = __FILE__, line: UInt
     }
 }
 
-func AXAssertEqual(o1: AnyObject?, o2: AnyObject?, file: String = __FILE__, line: UInt = __LINE__, handler: (() -> ())? = nil) {
+func AXAssertEqual(o1: AnyObject?, _ o2: AnyObject?, file: String = __FILE__, line: UInt = __LINE__, handler: (() -> ())? = nil) {
     
     if let a1 = o1 as? NSObject {
         if let a2 = o2 as? NSObject {

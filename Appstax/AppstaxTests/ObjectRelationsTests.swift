@@ -20,11 +20,12 @@ import Appstax
     
     func dictionaryFromRequestBody(request: NSURLRequest) -> [String:AnyObject]? {
         let httpBody = NSURLProtocol.propertyForKey("HTTPBody", inRequest: request) as? NSData
-        return NSJSONSerialization.JSONObjectWithData(httpBody!, options: NSJSONReadingOptions(0), error: nil) as? [String:AnyObject]
+        return (try? NSJSONSerialization.JSONObjectWithData(httpBody!, options: NSJSONReadingOptions(rawValue: 0))) as? [String:AnyObject]
     }
     
     func relationChangesFromBody(body: [String:AnyObject]?, property: String) -> [String:[String]]? {
-        return body?[property]?["sysRelationChanges"] as? [String:[String]]
+        let value = body?[property] as! [String:AnyObject]
+        return value["sysRelationChanges"] as? [String:[String]]
     }
 
     func testShouldHaveObjectIDsAsValuesForUnexpandedProperties() {
@@ -89,7 +90,7 @@ import Appstax
         XCTAssertTrue(object["prop1"] is AXObject)
         XCTAssertTrue(object["prop2"] is [AXObject])
         
-        var prop1 = object["prop1"] as! AXObject
+        let prop1 = object["prop1"] as! AXObject
         var prop2 = object["prop2"] as! [AXObject]
         AXAssertEqual(prop1.objectID, "id1")
         AXAssertEqual(prop1.collectionName, "collection2")
@@ -153,7 +154,7 @@ import Appstax
             let changes = self.relationChangesFromBody(postBody2, property: "customer")
             AXAssertNotNil(changes)
             AXAssertEqual(changes?["additions"]?.count, 1)
-            AXAssertContains(changes?["additions"], "customer-id-1")
+            AXAssertContains(changes?["additions"], needle: "customer-id-1")
         }
     }
     
@@ -184,7 +185,7 @@ import Appstax
             let changes = self.relationChangesFromBody(postBody, property: "customer")
             AXAssertNotNil(changes)
             AXAssertEqual(changes?["additions"]?.count, 1)
-            AXAssertContains(changes?["additions"], "customer-id-1001")
+            AXAssertContains(changes?["additions"], needle: "customer-id-1001")
         }
     }
     
@@ -201,8 +202,8 @@ import Appstax
             return OHHTTPStubsResponse(JSONObject: [:], statusCode: 200, headers: [:])
         }
         
-        var user = AXUser(username: "homer", properties: ["sysObjectId": "user1"])
-        var post = AXObject.create("posts", properties: ["sysObjectId": "post1"])
+        let user = AXUser(username: "homer", properties: ["sysObjectId": "user1"])
+        let post = AXObject.create("posts", properties: ["sysObjectId": "post1"])
         user["posts"] = [post]
         post["author"] = user
         
@@ -220,11 +221,11 @@ import Appstax
             AXAssertNotNil(changes0)
             AXAssertEqual(changes0?["removals"]?.count, 0)
             AXAssertEqual(changes0?["additions"]?.count, 1)
-            AXAssertContains(changes0?["additions"], "user1")
+            AXAssertContains(changes0?["additions"], needle: "user1")
             AXAssertNotNil(changes1)
             AXAssertEqual(changes1?["removals"]?.count, 0)
             AXAssertEqual(changes1?["additions"]?.count, 1)
-            AXAssertContains(changes1?["additions"], "post1")
+            AXAssertContains(changes1?["additions"], needle: "post1")
         }
     }
     
@@ -259,7 +260,7 @@ import Appstax
             AXAssertNotNil(changes)
             AXAssertEqual(changes?["additions"]?.count, 0)
             AXAssertEqual(changes?["removals"]?.count, 1)
-            AXAssertContains(changes?["removals"], "customer-1")
+            AXAssertContains(changes?["removals"], needle: "customer-1")
         }
     }
     
@@ -293,9 +294,9 @@ import Appstax
             let changes = self.relationChangesFromBody(putBody, property: "customer")
             AXAssertNotNil(changes)
             AXAssertEqual(changes?["additions"]?.count, 1)
-            AXAssertContains(changes?["additions"], "customer-2")
+            AXAssertContains(changes?["additions"], needle: "customer-2")
             AXAssertEqual(changes?["removals"]?.count, 1)
-            AXAssertContains(changes?["removals"], "customer-1")
+            AXAssertContains(changes?["removals"], needle: "customer-1")
         }
     }
     
@@ -334,9 +335,9 @@ import Appstax
             let changes = self.relationChangesFromBody(putBody, property: "customer")
             AXAssertNotNil(changes)
             AXAssertEqual(changes?["additions"]?.count, 1)
-            AXAssertContains(changes?["additions"], "customer-3")
+            AXAssertContains(changes?["additions"], needle: "customer-3")
             AXAssertEqual(changes?["removals"]?.count, 1)
-            AXAssertContains(changes?["removals"], "customer-2")
+            AXAssertContains(changes?["removals"], needle: "customer-2")
         }
     }
     
@@ -380,7 +381,6 @@ import Appstax
         
         blog["posts"] = [post1, post2]
         
-        var saveError: NSError?
         blog.saveAll() { error in
             AXAssertNil(error)
             async.fulfill()
@@ -396,8 +396,8 @@ import Appstax
             let changes = self.relationChangesFromBody(postBody[2], property: "posts")
             AXAssertNotNil(changes)
             AXAssertEqual(changes?["additions"]?.count, 2)
-            AXAssertContains(changes?["additions"], "post-id-1")
-            AXAssertContains(changes?["additions"], "post-id-2")
+            AXAssertContains(changes?["additions"], needle: "post-id-1")
+            AXAssertContains(changes?["additions"], needle: "post-id-2")
         }
     }
     
@@ -439,8 +439,8 @@ import Appstax
             let changes = self.relationChangesFromBody(httpBody[2], property: "posts")
             AXAssertNotNil(changes)
             AXAssertEqual(changes?["additions"]?.count, 2)
-            AXAssertContains(changes?["additions"], "post-id-1")
-            AXAssertContains(changes?["additions"], "post-id-2")
+            AXAssertContains(changes?["additions"], needle: "post-id-1")
+            AXAssertContains(changes?["additions"], needle: "post-id-2")
         }
     }
     
@@ -506,9 +506,9 @@ import Appstax
             let changes = self.relationChangesFromBody(httpBody[0], property: "posts")
             AXAssertNotNil(changes)
             AXAssertEqual(changes?["additions"]?.count, 1)
-            AXAssertContains(changes?["additions"], "post-3")
+            AXAssertContains(changes?["additions"], needle: "post-3")
             AXAssertEqual(changes?["removals"]?.count, 1)
-            AXAssertContains(changes?["removals"], "post-1")
+            AXAssertContains(changes?["removals"], needle: "post-1")
         }
     }
     
@@ -550,9 +550,9 @@ import Appstax
             let changes = self.relationChangesFromBody(httpBody[1], property: "posts")
             AXAssertNotNil(changes)
             AXAssertEqual(changes?["additions"]?.count, 1)
-            AXAssertContains(changes?["additions"], "post-4")
+            AXAssertContains(changes?["additions"], needle: "post-4")
             AXAssertEqual(changes?["removals"]?.count, 1)
-            AXAssertContains(changes?["removals"], "post-3")
+            AXAssertContains(changes?["removals"], needle: "post-3")
         }
     }
     
@@ -578,8 +578,8 @@ import Appstax
             return OHHTTPStubsResponse(JSONObject: [:], statusCode: 200, headers: [:])
         }
         
-        var object1 = AXObject.create("collection1")
-        var object2 = AXObject.create("collection2")
+        let object1 = AXObject.create("collection1")
+        let object2 = AXObject.create("collection2")
         object1["property1"] = object2;
         object2["property2"] = object1;
         
@@ -608,13 +608,13 @@ import Appstax
             AXAssertNotNil(changes1b)
             AXAssertEqual(changes1b?["additions"]?.count, 1)
             AXAssertEqual(changes1b?["removals"]?.count, 0)
-            AXAssertContains(changes1b?["additions"], "id2")
+            AXAssertContains(changes1b?["additions"], needle: "id2")
             
             let changes2b = self.relationChangesFromBody(object2Body[1], property: "property2")
             AXAssertNotNil(changes2b)
             AXAssertEqual(changes2b?["additions"]?.count, 1)
             AXAssertEqual(changes2b?["removals"]?.count, 0)
-            AXAssertContains(changes2b?["additions"], "id1")
+            AXAssertContains(changes2b?["additions"], needle: "id1")
         }
     }
     
@@ -651,7 +651,7 @@ import Appstax
             AXAssertNotNil(changes)
             AXAssertEqual(changes?["additions"]?.count, 1)
             AXAssertEqual(changes?["removals"]?.count, 0)
-            AXAssertContains(changes?["additions"], "customer-id-1001")
+            AXAssertContains(changes?["additions"], needle: "customer-id-1001")
             
             AXAssertEqual(httpBody[1]?["name"], "Bill N. Buyer")
         }
@@ -707,14 +707,14 @@ import Appstax
                
         waitForExpectationsWithTimeout(3) { error in
             AXAssertEqual(urls.count, 8)
-            AXAssertStringNotContains(urls[0]?.absoluteString, "expanddepth=")
-            AXAssertStringContains(urls[1]?.absoluteString, "expanddepth=1")
-            AXAssertStringContains(urls[2]?.absoluteString, "expanddepth=2")
-            AXAssertStringContains(urls[3]?.absoluteString, "expanddepth=1")
-            AXAssertStringContains(urls[4]?.absoluteString, "expanddepth=2")
-            AXAssertStringContains(urls[5]?.absoluteString, "expanddepth=3")
-            AXAssertStringContains(urls[6]?.absoluteString, "expanddepth=4")
-            AXAssertStringContains(urls[7]?.absoluteString, "expanddepth=5")
+            AXAssertStringNotContains(urls[0]?.absoluteString, needle: "expanddepth=")
+            AXAssertStringContains(urls[1]?.absoluteString, needle: "expanddepth=1")
+            AXAssertStringContains(urls[2]?.absoluteString, needle: "expanddepth=2")
+            AXAssertStringContains(urls[3]?.absoluteString, needle: "expanddepth=1")
+            AXAssertStringContains(urls[4]?.absoluteString, needle: "expanddepth=2")
+            AXAssertStringContains(urls[5]?.absoluteString, needle: "expanddepth=3")
+            AXAssertStringContains(urls[6]?.absoluteString, needle: "expanddepth=4")
+            AXAssertStringContains(urls[7]?.absoluteString, needle: "expanddepth=5")
         }
         
     }
