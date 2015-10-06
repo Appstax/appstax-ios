@@ -20,7 +20,7 @@ mkdir -p Build/appstax-ios
 ## Build framework
 
 cd Appstax
-xcodebuild test -scheme Appstax -sdk iphonesimulator "$CODE_SIGN_IDENTITY_PARAM"
+xcodebuild test -configuration Debug -scheme Appstax -sdk iphonesimulator -destination "platform=iOS Simulator,name=iPhone 6" "$CODE_SIGN_IDENTITY_PARAM"
 xcodebuild build -configuration Release -scheme AppstaxUniversal SYMROOT="../Build/xcodebuild" "$CODE_SIGN_IDENTITY_PARAM"
 cd -
 

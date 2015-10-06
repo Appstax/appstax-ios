@@ -24,8 +24,10 @@ import Appstax
     }
     
     func relationChangesFromBody(body: [String:AnyObject]?, property: String) -> [String:[String]]? {
-        let value = body?[property] as! [String:AnyObject]
-        return value["sysRelationChanges"] as? [String:[String]]
+        if let value = body?[property] as? [String:AnyObject] {
+            return value["sysRelationChanges"] as? [String:[String]]
+        }
+        return [:]
     }
 
     func testShouldHaveObjectIDsAsValuesForUnexpandedProperties() {
