@@ -31,6 +31,7 @@
 		544F7D621B28D2AD00510DA2 /* AXAsserts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544F7D611B28D2AD00510DA2 /* AXAsserts.swift */; };
 		5484DD741B208FBE00D0FAFD /* AXApiClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5484DD731B208FBE00D0FAFD /* AXApiClient.swift */; };
 		5484DDF01B21D0DA00D0FAFD /* Appstax.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5484DDEF1B21D0DA00D0FAFD /* Appstax.swift */; };
+		54B51E5B1BD0D7B60063A209 /* Starscream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54B51E5A1BD0D7B60063A209 /* Starscream.framework */; };
 		54F984B51AB22755000096ED /* Appstax.h in Headers */ = {isa = PBXBuildFile; fileRef = 54F984B41AB22755000096ED /* Appstax.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		54F984BB1AB22755000096ED /* Appstax.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54F984AF1AB22755000096ED /* Appstax.framework */; };
 		54F984EC1AB22801000096ED /* AppstaxInternals.h in Headers */ = {isa = PBXBuildFile; fileRef = 54F984CC1AB22801000096ED /* AppstaxInternals.h */; };
@@ -95,6 +96,7 @@
 		5484DD731B208FBE00D0FAFD /* AXApiClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AXApiClient.swift; sourceTree = "<group>"; };
 		5484DDEE1B21D0D900D0FAFD /* AppstaxTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "AppstaxTests-Bridging-Header.h"; path = "../Appstax/AppstaxTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		5484DDEF1B21D0DA00D0FAFD /* Appstax.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Appstax.swift; sourceTree = "<group>"; };
+		54B51E5A1BD0D7B60063A209 /* Starscream.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Starscream.framework; path = ../Carthage/Build/iOS/Starscream.framework; sourceTree = "<group>"; };
 		54F984AF1AB22755000096ED /* Appstax.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Appstax.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		54F984B31AB22755000096ED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		54F984B41AB22755000096ED /* Appstax.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Appstax.h; sourceTree = "<group>"; };
@@ -154,6 +156,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				54B51E5B1BD0D7B60063A209 /* Starscream.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -168,11 +171,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		54B51E5D1BD0DAAC0063A209 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				54B51E5A1BD0D7B60063A209 /* Starscream.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		54F984A51AB22755000096ED = {
 			isa = PBXGroup;
 			children = (
 				54F984B11AB22755000096ED /* Appstax */,
 				54F984BE1AB22755000096ED /* AppstaxTests */,
+				54B51E5D1BD0DAAC0063A209 /* Frameworks */,
 				54F984B01AB22755000096ED /* Products */,
 			);
 			sourceTree = "<group>";
@@ -321,6 +333,7 @@
 			buildConfigurationList = 54F984C51AB22755000096ED /* Build configuration list for PBXNativeTarget "Appstax" */;
 			buildPhases = (
 				54F984AA1AB22755000096ED /* Sources */,
+				54B51E5C1BD0D8170063A209 /* Carthage */,
 				54F984AB1AB22755000096ED /* Frameworks */,
 				54F984AC1AB22755000096ED /* Headers */,
 				54F984AD1AB22755000096ED /* Resources */,
@@ -416,6 +429,21 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		54B51E5C1BD0D8170063A209 /* Carthage */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/../Carthage/Build/iOS/Starscream.framework",
+			);
+			name = Carthage;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/carthage copy-frameworks";
+		};
 		54F985561AB24D91000096ED /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -514,6 +542,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/../Carthage/Build/iOS/";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -562,6 +591,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/../Carthage/Build/iOS/";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
