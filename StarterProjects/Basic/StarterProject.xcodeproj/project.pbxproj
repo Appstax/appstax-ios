@@ -23,7 +23,8 @@
 		548F3CE3194AF37900F8B173 /* StarterProjectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 548F3CE2194AF37900F8B173 /* StarterProjectTests.m */; };
 		5499462C197E6F9D00AF806A /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5499462B197E6F9D00AF806A /* Security.framework */; };
 		5499462D197E6FAC00AF806A /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5499462B197E6F9D00AF806A /* Security.framework */; };
-		54B51E6A1BD1261F0063A209 /* Starscream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54B51E691BD1261F0063A209 /* Starscream.framework */; settings = {ASSET_TAGS = (); }; };
+		54B51E6B1BD127B00063A209 /* Starscream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54B51E691BD1261F0063A209 /* Starscream.framework */; };
+		54B51E6C1BD127B00063A209 /* Starscream.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 54B51E691BD1261F0063A209 /* Starscream.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		54F9856A1AB25981000096ED /* Appstax.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54F985681AB25981000096ED /* Appstax.framework */; };
 		54F9856D1AB25A95000096ED /* Appstax.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54F985681AB25981000096ED /* Appstax.framework */; };
 		54F9856E1AB25A95000096ED /* Appstax.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 54F985681AB25981000096ED /* Appstax.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -47,6 +48,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				54F9856E1AB25A95000096ED /* Appstax.framework in Embed Frameworks */,
+				54B51E6C1BD127B00063A209 /* Starscream.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -84,11 +86,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				5499462C197E6F9D00AF806A /* Security.framework in Frameworks */,
-				54B51E6A1BD1261F0063A209 /* Starscream.framework in Frameworks */,
 				548F3CBA194AF37900F8B173 /* CoreGraphics.framework in Frameworks */,
 				548F3CBC194AF37900F8B173 /* UIKit.framework in Frameworks */,
 				548F3CB8194AF37900F8B173 /* Foundation.framework in Frameworks */,
 				54F9856D1AB25A95000096ED /* Appstax.framework in Frameworks */,
+				54B51E6B1BD127B00063A209 /* Starscream.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
