@@ -120,6 +120,7 @@ class AXRealtimeService: NSObject {
     }
     
     func webSocketDidDisconnect(error: NSError?) {
+        webSocket = nil
         eventHub.dispatch(AXEvent(type: "error"))
     }
     

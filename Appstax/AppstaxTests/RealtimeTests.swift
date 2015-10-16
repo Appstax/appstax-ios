@@ -66,6 +66,31 @@ import XCTest
         }
     }
     
+    func testShouldReconnectIfDisconnected() {
+        let async = expectationWithDescription("async")
+        
+        let channel = AXChannel("public/chat")
+        var channelOpen = 0
+        channel.on("open") { _ in
+            channelOpen++
+        }
+        
+        delay(2) {
+            self.realtimeService.webSocketDidDisconnect(nil)
+            delay(2) {
+                channel.send("Message!")
+                delay(2, async.fulfill)
+            }
+        }
+        waitForExpectationsWithTimeout(10) { error in
+            AXAssertEqual(channelOpen, 2)
+            AXAssertEqual(self.serverReceived.count, 2)
+            AXAssertEqual(self.serverReceived[0]["command"], "subscribe")
+            AXAssertEqual(self.serverReceived[1]["command"], "publish")
+            AXAssertEqual(self.serverReceived[1]["message"], "Message!")
+        }
+    }
+    
     func testShouldSendSubscribeCommandToServerAndOpenEventToClient() {
         let async = expectationWithDescription("async")
         
