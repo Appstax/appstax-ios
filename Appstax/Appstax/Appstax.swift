@@ -9,6 +9,7 @@ import Foundation
     private(set) public var objectService: AXObjectService!
     private(set) public var userService: AXUserService!
     private(set) public var permissionsService: AXPermissionsService!
+    private(set) var realtimeService: AXRealtimeService!
     
     public static func setAppKey(appKey: String) {
         Appstax.defaultContext.setupServicesWithAppKey(appKey)
@@ -36,6 +37,7 @@ import Foundation
         self.userService = AXUserService(apiClient: apiClient)
         self.permissionsService = AXPermissionsService(apiClient: apiClient)
         self.fileService = AXFileService(apiClient: apiClient)
+        self.realtimeService = AXRealtimeService(apiClient: apiClient)
         AXLog.info("Initialized Appstax with app key \(appKey) and base url \(apiClient.baseUrl)")
     }
     

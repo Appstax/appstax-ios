@@ -32,6 +32,11 @@
 		5484DD741B208FBE00D0FAFD /* AXApiClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5484DD731B208FBE00D0FAFD /* AXApiClient.swift */; };
 		5484DDF01B21D0DA00D0FAFD /* Appstax.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5484DDEF1B21D0DA00D0FAFD /* Appstax.swift */; };
 		54B51E5B1BD0D7B60063A209 /* Starscream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54B51E5A1BD0D7B60063A209 /* Starscream.framework */; };
+		54B51E611BD0E1F60063A209 /* AXChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B51E5E1BD0E1F60063A209 /* AXChannel.swift */; settings = {ASSET_TAGS = (); }; };
+		54B51E621BD0E1F60063A209 /* AXEventHub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B51E5F1BD0E1F60063A209 /* AXEventHub.swift */; settings = {ASSET_TAGS = (); }; };
+		54B51E631BD0E1F60063A209 /* AXRealtimeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B51E601BD0E1F60063A209 /* AXRealtimeService.swift */; settings = {ASSET_TAGS = (); }; };
+		54B51E651BD0E4A30063A209 /* Delay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B51E641BD0E4A30063A209 /* Delay.swift */; settings = {ASSET_TAGS = (); }; };
+		54B51E681BD0E4DE0063A209 /* RealtimeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B51E671BD0E4DE0063A209 /* RealtimeTests.swift */; settings = {ASSET_TAGS = (); }; };
 		54F984B51AB22755000096ED /* Appstax.h in Headers */ = {isa = PBXBuildFile; fileRef = 54F984B41AB22755000096ED /* Appstax.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		54F984BB1AB22755000096ED /* Appstax.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54F984AF1AB22755000096ED /* Appstax.framework */; };
 		54F984EC1AB22801000096ED /* AppstaxInternals.h in Headers */ = {isa = PBXBuildFile; fileRef = 54F984CC1AB22801000096ED /* AppstaxInternals.h */; };
@@ -97,6 +102,11 @@
 		5484DDEE1B21D0D900D0FAFD /* AppstaxTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "AppstaxTests-Bridging-Header.h"; path = "../Appstax/AppstaxTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		5484DDEF1B21D0DA00D0FAFD /* Appstax.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Appstax.swift; sourceTree = "<group>"; };
 		54B51E5A1BD0D7B60063A209 /* Starscream.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Starscream.framework; path = ../Carthage/Build/iOS/Starscream.framework; sourceTree = "<group>"; };
+		54B51E5E1BD0E1F60063A209 /* AXChannel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AXChannel.swift; sourceTree = "<group>"; };
+		54B51E5F1BD0E1F60063A209 /* AXEventHub.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AXEventHub.swift; sourceTree = "<group>"; };
+		54B51E601BD0E1F60063A209 /* AXRealtimeService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AXRealtimeService.swift; sourceTree = "<group>"; };
+		54B51E641BD0E4A30063A209 /* Delay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Delay.swift; sourceTree = "<group>"; };
+		54B51E671BD0E4DE0063A209 /* RealtimeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealtimeTests.swift; sourceTree = "<group>"; };
 		54F984AF1AB22755000096ED /* Appstax.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Appstax.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		54F984B31AB22755000096ED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		54F984B41AB22755000096ED /* Appstax.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Appstax.h; sourceTree = "<group>"; };
@@ -179,6 +189,16 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		54B51E661BD0E4C60063A209 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				54F985311AB22E7E000096ED /* clouds.jpg */,
+				54F985321AB22E7E000096ED /* safari_green.png */,
+				54F985331AB22E7E000096ED /* safari.png */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
 		54F984A51AB22755000096ED = {
 			isa = PBXGroup;
 			children = (
@@ -203,6 +223,8 @@
 			children = (
 				54F985191AB22817000096ED /* Headers */,
 				5484DDEF1B21D0DA00D0FAFD /* Appstax.swift */,
+				54B51E5E1BD0E1F60063A209 /* AXChannel.swift */,
+				54B51E5F1BD0E1F60063A209 /* AXEventHub.swift */,
 				54F984D01AB22801000096ED /* AXFile.m */,
 				54F984D21AB22801000096ED /* AXFileService.m */,
 				54F984D41AB22801000096ED /* AXImageView.m */,
@@ -216,6 +238,7 @@
 				544F7D5D1B2765F900510DA2 /* AXObject.swift */,
 				544F7D5B1B2762AE00510DA2 /* AXObjectService.swift */,
 				54F984E31AB22801000096ED /* AXPermissionsService.m */,
+				54B51E601BD0E1F60063A209 /* AXRealtimeService.swift */,
 				54F984E51AB22801000096ED /* AXQuery.m */,
 				543A27CD1B46C7EC001F2BC2 /* AXUser.swift */,
 				54F984E91AB22801000096ED /* AXUserService.m */,
@@ -238,7 +261,6 @@
 				54F985251AB22E7E000096ED /* AppstaxTests.m */,
 				54F985271AB22E7E000096ED /* AXObjectServiceTests.m */,
 				543A27CB1B4687A7001F2BC2 /* AXObjectAccessorsTests.swift */,
-				544F7D5F1B28CEF400510DA2 /* ObjectRelationsTests.swift */,
 				54F985281AB22E7E000096ED /* AXFileTests.m */,
 				54F985291AB22E7E000096ED /* AXImageViewTests.m */,
 				54F9852A1AB22E7E000096ED /* AXJsonApiClientTests.m */,
@@ -246,9 +268,9 @@
 				54F9852C1AB22E7E000096ED /* AXPermissionsTests.m */,
 				54F9852D1AB22E7E000096ED /* AXQueryTests.m */,
 				54F985301AB22E7E000096ED /* AXUserServiceTest.m */,
-				54F985311AB22E7E000096ED /* clouds.jpg */,
-				54F985321AB22E7E000096ED /* safari_green.png */,
-				54F985331AB22E7E000096ED /* safari.png */,
+				544F7D5F1B28CEF400510DA2 /* ObjectRelationsTests.swift */,
+				54B51E671BD0E4DE0063A209 /* RealtimeTests.swift */,
+				54B51E661BD0E4C60063A209 /* Resources */,
 				54F984BF1AB22755000096ED /* Supporting Files */,
 			);
 			path = AppstaxTests;
@@ -262,6 +284,7 @@
 				544F7D611B28D2AD00510DA2 /* AXAsserts.swift */,
 				54F9852E1AB22E7E000096ED /* AXStubs.h */,
 				54F9852F1AB22E7E000096ED /* AXStubs.m */,
+				54B51E641BD0E4A30063A209 /* Delay.swift */,
 				54F985411AB23B7A000096ED /* OHHTTPStubs */,
 				54F984C01AB22755000096ED /* Info.plist */,
 			);
@@ -465,6 +488,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				54F985001AB22801000096ED /* AXLoginUIManager.m in Sources */,
+				54B51E621BD0E1F60063A209 /* AXEventHub.swift in Sources */,
 				54FD6EB61B343B89000E89B6 /* AXLog.swift in Sources */,
 				543A27CE1B46C7EC001F2BC2 /* AXUser.swift in Sources */,
 				544F7D5C1B2762AE00510DA2 /* AXObjectService.swift in Sources */,
@@ -472,9 +496,11 @@
 				54F984F41AB22801000096ED /* AXFileService.m in Sources */,
 				54F985171AB22801000096ED /* AXUserService.m in Sources */,
 				54F984F11AB22801000096ED /* AXFile.m in Sources */,
+				54B51E631BD0E1F60063A209 /* AXRealtimeService.swift in Sources */,
 				54F985031AB22801000096ED /* AXLoginViewController.m in Sources */,
 				54F985081AB22801000096ED /* AXLoginViews.m in Sources */,
 				54F985111AB22801000096ED /* AXQuery.m in Sources */,
+				54B51E611BD0E1F60063A209 /* AXChannel.swift in Sources */,
 				54F984FD1AB22801000096ED /* AXKeychain.m in Sources */,
 				5484DDF01B21D0DA00D0FAFD /* Appstax.swift in Sources */,
 				54F9850E1AB22801000096ED /* AXPermissionsService.m in Sources */,
@@ -491,9 +517,11 @@
 				54F985341AB22E7E000096ED /* AppstaxTests.m in Sources */,
 				54F9854D1AB23B7A000096ED /* OHHTTPStubsResponse+HTTPMessage.m in Sources */,
 				54F985391AB22E7E000096ED /* AXKeychainTests.m in Sources */,
+				54B51E681BD0E4DE0063A209 /* RealtimeTests.swift in Sources */,
 				544F7D5A1B2624AD00510DA2 /* AXStubs.m in Sources */,
 				54F9853B1AB22E7E000096ED /* AXQueryTests.m in Sources */,
 				54F9854B1AB23B7A000096ED /* OHHTTPStubs+NSURLSessionConfiguration.m in Sources */,
+				54B51E651BD0E4A30063A209 /* Delay.swift in Sources */,
 				54F9854F1AB23B7A000096ED /* OHHTTPStubsResponse.m in Sources */,
 				54F985381AB22E7E000096ED /* AXJsonApiClientTests.m in Sources */,
 				54F9854C1AB23B7A000096ED /* OHHTTPStubs.m in Sources */,
