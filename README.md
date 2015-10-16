@@ -35,5 +35,5 @@ License
 -------
 
 The Appstax iOS SDK is licensed under the [MIT License](LICENSE)  
-The Starscream framework is licesed under the [Apache License](https://github.com/daltoniam/Starscream/blob/master/LICENSE)
+The Starscream framework is licensed under the [Apache License](https://github.com/daltoniam/Starscream/blob/master/LICENSE)
 
