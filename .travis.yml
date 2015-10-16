@@ -5,7 +5,7 @@ before_script:
   - ./Scripts/addkey.sh
   - brew update
   - brew install carthage
-  - carthage update
+  - carthage bootstrap --verbose
 script: ./build.sh
 git:
   depth: 1
