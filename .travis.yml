@@ -1,7 +1,11 @@
 language: objective-c
 osx_image: xcode7
 install: ''
-before_script: ./Scripts/addkey.sh
+before_script: 
+  - ./Scripts/addkey.sh
+  - brew update
+  - brew install carthage
+  - carthage update
 script: ./build.sh
 git:
   depth: 1
