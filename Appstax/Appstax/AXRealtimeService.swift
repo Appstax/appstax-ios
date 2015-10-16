@@ -148,11 +148,9 @@ class StarscreamWrapper: AXWebSocketAdapter, WebSocketDelegate {
     
     func send(message:AnyObject) {
         if let str = message as? String {
-            NSLog("Sending string: " + str)
             webSocket.writeString(str)
         } else if let dict = message as? [String:AnyObject] {
             let str = serializeDictionary(dict)
-            NSLog("Sending dict: " + str)
             webSocket.writeString(str)
         }
     }
