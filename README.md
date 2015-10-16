@@ -34,6 +34,6 @@ Open `Appstax/Appstax.xcodeproj` in XCode and build the `AppstaxUniversal` targe
 License
 -------
 
-[MIT License](LICENSE)
-
+The Appstax iOS SDK is licensed under the [MIT License](LICENSE)  
+The Starscream framework is licesed under the [Apache License](https://github.com/daltoniam/Starscream/blob/master/LICENSE)
 

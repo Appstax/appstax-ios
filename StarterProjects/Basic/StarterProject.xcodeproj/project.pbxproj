@@ -23,6 +23,7 @@
 		548F3CE3194AF37900F8B173 /* StarterProjectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 548F3CE2194AF37900F8B173 /* StarterProjectTests.m */; };
 		5499462C197E6F9D00AF806A /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5499462B197E6F9D00AF806A /* Security.framework */; };
 		5499462D197E6FAC00AF806A /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5499462B197E6F9D00AF806A /* Security.framework */; };
+		54B51E6A1BD1261F0063A209 /* Starscream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54B51E691BD1261F0063A209 /* Starscream.framework */; settings = {ASSET_TAGS = (); }; };
 		54F9856A1AB25981000096ED /* Appstax.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54F985681AB25981000096ED /* Appstax.framework */; };
 		54F9856D1AB25A95000096ED /* Appstax.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54F985681AB25981000096ED /* Appstax.framework */; };
 		54F9856E1AB25A95000096ED /* Appstax.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 54F985681AB25981000096ED /* Appstax.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -73,6 +74,7 @@
 		548F3CE0194AF37900F8B173 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		548F3CE2194AF37900F8B173 /* StarterProjectTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StarterProjectTests.m; sourceTree = "<group>"; };
 		5499462B197E6F9D00AF806A /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		54B51E691BD1261F0063A209 /* Starscream.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Starscream.framework; sourceTree = "<group>"; };
 		54F985681AB25981000096ED /* Appstax.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Appstax.framework; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
@@ -82,6 +84,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5499462C197E6F9D00AF806A /* Security.framework in Frameworks */,
+				54B51E6A1BD1261F0063A209 /* Starscream.framework in Frameworks */,
 				548F3CBA194AF37900F8B173 /* CoreGraphics.framework in Frameworks */,
 				548F3CBC194AF37900F8B173 /* UIKit.framework in Frameworks */,
 				548F3CB8194AF37900F8B173 /* Foundation.framework in Frameworks */,
@@ -127,6 +130,7 @@
 			isa = PBXGroup;
 			children = (
 				54F985681AB25981000096ED /* Appstax.framework */,
+				54B51E691BD1261F0063A209 /* Starscream.framework */,
 				548F3CB7194AF37900F8B173 /* Foundation.framework */,
 				548F3CB9194AF37900F8B173 /* CoreGraphics.framework */,
 				5499462B197E6F9D00AF806A /* Security.framework */,

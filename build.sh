@@ -13,8 +13,8 @@ fi
 ## Clean
 
 rm -rf Build
-
 mkdir -p Build/appstax-ios
+mkdir -p Build/appstax-ios/Vendor
 
 
 ## Build framework
@@ -24,17 +24,21 @@ xcodebuild test -configuration Debug -scheme Appstax -sdk iphonesimulator -desti
 xcodebuild build -configuration Release -scheme AppstaxUniversal SYMROOT="../Build/xcodebuild" "$CODE_SIGN_IDENTITY_PARAM"
 cd -
 
-cp -a Build/xcodebuild/Release-universal/Appstax.framework Build/appstax-ios/Appstax.framework
-
-
 ## Copy to Build/appstax-ios
+
+cp -a Build/xcodebuild/Release-universal/Appstax.framework Build/appstax-ios/Appstax.framework
+cp -a Carthage/Build/iOS/Starscream.framework              Build/appstax-ios/Vendor/Starscream.framework
 
 cp -a StarterProjects Build/appstax-ios/StarterProjects
 cp -a Examples        Build/appstax-ios/Examples
+
 rm -rf Build/appstax-ios/Examples/Notes/Appstax.framework
 rm -rf Build/appstax-ios/StarterProjects/Basic/Appstax.framework
+rm -rf Build/appstax-ios/StarterProjects/Basic/Starscream.framework
+
 cp -a Build/appstax-ios/Appstax.framework Build/appstax-ios/Examples/Notes/Appstax.framework
 cp -a Build/appstax-ios/Appstax.framework Build/appstax-ios/StarterProjects/Basic/Appstax.framework
+cp -a Build/appstax-ios/Vendor/Starscream.framework Build/appstax-ios/StarterProjects/Basic/Starscream.framework
 
 
 ## ZIP
