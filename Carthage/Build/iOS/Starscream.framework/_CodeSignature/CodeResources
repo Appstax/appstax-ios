@@ -6,7 +6,7 @@
 	<dict>
 		<key>Headers/Starscream-Swift.h</key>
 		<data>
-		Ho+RknfGnsehp3u2/oIp4JHq6l0=
+		nLAntnI8LfeWiyuz2epvpUAiFzI=
 		</data>
 		<key>Headers/Starscream.h</key>
 		<data>
@@ -14,23 +14,23 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		9jrOZq1V/K+LgRtCPa2LOCY4Bgk=
+		A5hD/nBiIskGtw6dKGIryzCg1I0=
 		</data>
 		<key>Modules/Starscream.swiftmodule/arm.swiftdoc</key>
 		<data>
-		VysSHCDhjO+iQ8EwjRv0+4QTftQ=
+		BAZ6uRpHqoBwTPA8gh2w1v+vneY=
 		</data>
 		<key>Modules/Starscream.swiftmodule/arm.swiftmodule</key>
 		<data>
-		eFNdoKObbBGruJ7lSf2P4TFpkNs=
+		EtdDNYd2+75hNRr08sZ8g5qkayI=
 		</data>
 		<key>Modules/Starscream.swiftmodule/arm64.swiftdoc</key>
 		<data>
-		Tr4g9NKZaGw8ohTc+qKcpiYQheA=
+		S7O9/E8qJ/sCRmvB1ZYWhhGf7gg=
 		</data>
 		<key>Modules/Starscream.swiftmodule/arm64.swiftmodule</key>
 		<data>
-		W9uj/CZ9ps8Qs8vnITH4Zf1IK9I=
+		cO1C1B5LDAqPhbViV8EgK6e1L1Y=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -41,7 +41,7 @@
 	<dict>
 		<key>Headers/Starscream-Swift.h</key>
 		<data>
-		Ho+RknfGnsehp3u2/oIp4JHq6l0=
+		nLAntnI8LfeWiyuz2epvpUAiFzI=
 		</data>
 		<key>Headers/Starscream.h</key>
 		<data>
@@ -49,19 +49,19 @@
 		</data>
 		<key>Modules/Starscream.swiftmodule/arm.swiftdoc</key>
 		<data>
-		VysSHCDhjO+iQ8EwjRv0+4QTftQ=
+		BAZ6uRpHqoBwTPA8gh2w1v+vneY=
 		</data>
 		<key>Modules/Starscream.swiftmodule/arm.swiftmodule</key>
 		<data>
-		eFNdoKObbBGruJ7lSf2P4TFpkNs=
+		EtdDNYd2+75hNRr08sZ8g5qkayI=
 		</data>
 		<key>Modules/Starscream.swiftmodule/arm64.swiftdoc</key>
 		<data>
-		Tr4g9NKZaGw8ohTc+qKcpiYQheA=
+		S7O9/E8qJ/sCRmvB1ZYWhhGf7gg=
 		</data>
 		<key>Modules/Starscream.swiftmodule/arm64.swiftmodule</key>
 		<data>
-		W9uj/CZ9ps8Qs8vnITH4Zf1IK9I=
+		cO1C1B5LDAqPhbViV8EgK6e1L1Y=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
