@@ -128,8 +128,7 @@ import Foundation
             queryString = "\(queryStringPrefix)\(queryString)"
         }
         
-        let full: String = url.stringByAppendingString(queryString)
-        return NSURL(string: full)
+        return NSURL(string: url.stringByAppendingString(queryString))
     }
     
     public func deserializeDictionary(data: NSData?) -> [String:AnyObject]? {
@@ -158,17 +157,8 @@ import Foundation
     }
     
     public func urlEncode(string: String) -> String {
-        let encoded = NSMutableString()
-        encoded.setString(string.stringByAddingPercentEncodingWithAllowedCharacters(.URLHostAllowedCharacterSet())!)
-        
-        let pairs = ["'":"%27",
-            "=":"%3D"]
-        
-        for (key, value) in pairs {
-            encoded.replaceOccurrencesOfString(key, withString: value, options: .LiteralSearch, range: NSMakeRange(0, encoded.length))
-        }
-        
-        return encoded as String
+        let characterSet = NSCharacterSet(charactersInString: " ='\"#%/<>?@^`{|}").invertedSet
+        return string.stringByAddingPercentEncodingWithAllowedCharacters(characterSet) ?? string
     }
     
     
@@ -211,7 +201,9 @@ import Foundation
     }
     
     func logRequest(request: NSURLRequest) {
-        AXLog.debug("HTTP Request: \(request.HTTPMethod!) \(request.URL!)")
+        let method = request.HTTPMethod ?? "(no http method)"
+        let url = request.URL?.absoluteString ?? "(no url)"
+        AXLog.debug("HTTP Request: \(method) : \(url)")
         if let body = NSString(data: request.HTTPBody ?? NSData(), encoding: NSUTF8StringEncoding) {
             AXLog.trace("HTTP Request Body: \(body)")
         } else {

@@ -17,7 +17,7 @@ internal class AXLog {
     
     internal static func log(level: AXLogLevel, _ message: String) {
         if level.rawValue >= minLevel.rawValue {
-            NSLog("\(label(level)) \(message)")
+            NSLog("%@ %@", label(level), message)
         }
     }
     
