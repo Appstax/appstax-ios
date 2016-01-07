@@ -23,6 +23,8 @@
 		54B6297919AC778D00ADE316 /* MasterTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 54B6296E19AC778D00ADE316 /* MasterTableViewCell.m */; };
 		54B6297A19AC778D00ADE316 /* MasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 54B6297019AC778D00ADE316 /* MasterViewController.m */; };
 		54B860471AB3830200B618A4 /* Appstax.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54F985631AB2593D000096ED /* Appstax.framework */; };
+		54E398051C3D53D000D1CBCB /* Starscream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54E398031C3D53C400D1CBCB /* Starscream.framework */; };
+		54E398061C3D53D000D1CBCB /* Starscream.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 54E398031C3D53C400D1CBCB /* Starscream.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		54F06D2519B0603A005A97C2 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54F06D2419B0603A005A97C2 /* QuartzCore.framework */; };
 		54F06D2819B07011005A97C2 /* RootController.m in Sources */ = {isa = PBXBuildFile; fileRef = 54F06D2719B07011005A97C2 /* RootController.m */; };
 		54F06D2D19B07516005A97C2 /* LeftSidebarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 54F06D2C19B07516005A97C2 /* LeftSidebarView.m */; };
@@ -39,6 +41,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				54F985671AB25948000096ED /* Appstax.framework in Embed Frameworks */,
+				54E398061C3D53D000D1CBCB /* Starscream.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -71,6 +74,7 @@
 		54B6297019AC778D00ADE316 /* MasterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MasterViewController.m; sourceTree = "<group>"; };
 		54B6297119AC778D00ADE316 /* AXNotes-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "AXNotes-Info.plist"; sourceTree = "<group>"; };
 		54B6297219AC778D00ADE316 /* AXNotes-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AXNotes-Prefix.pch"; sourceTree = "<group>"; };
+		54E398031C3D53C400D1CBCB /* Starscream.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Starscream.framework; sourceTree = "<group>"; };
 		54F06D2419B0603A005A97C2 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		54F06D2619B07011005A97C2 /* RootController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootController.h; sourceTree = "<group>"; };
 		54F06D2719B07011005A97C2 /* RootController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootController.m; sourceTree = "<group>"; };
@@ -87,6 +91,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				54B860471AB3830200B618A4 /* Appstax.framework in Frameworks */,
+				54E398051C3D53D000D1CBCB /* Starscream.framework in Frameworks */,
 				54F06D2519B0603A005A97C2 /* QuartzCore.framework in Frameworks */,
 				54994629197E669700AF806A /* Security.framework in Frameworks */,
 				54800EC81941DA7200E79D83 /* CoreGraphics.framework in Frameworks */,
@@ -118,6 +123,7 @@
 		54800EC41941DA7200E79D83 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				54E398031C3D53C400D1CBCB /* Starscream.framework */,
 				54F985631AB2593D000096ED /* Appstax.framework */,
 				54F06D2419B0603A005A97C2 /* QuartzCore.framework */,
 				54800EC51941DA7200E79D83 /* Foundation.framework */,
