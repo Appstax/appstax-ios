@@ -20,4 +20,12 @@
     } withStubResponse:responseBlock];
 }
 
++ (void)method:(NSString *)method urlPath:(NSString *)urlPath query:(NSString *)query responding:(OHHTTPStubsResponseBlock)responseBlock {
+    [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+        return [[request.URL path] isEqualToString:urlPath] &&
+        [[request.URL query] isEqualToString:query] &&
+        [request.HTTPMethod isEqualToString:method];
+    } withStubResponse:responseBlock];
+}
+
 @end

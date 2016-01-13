@@ -453,9 +453,7 @@ internal struct Relation {
         if let id = objectID {
             AXObject.find(collectionName, withId: id) {
                 object, error in
-                for (key, value) in object?.allProperties ?? [:] {
-                    self.properties[key] = value
-                }
+                self.importValues(object)
                 completion?(error)
             }
         } else {
@@ -475,13 +473,17 @@ internal struct Relation {
         if let id = objectID {
             AXObject.find(collectionName, withId: id, options: ["expand": depth]) {
                 object, error in
-                for (key, value) in object?.allProperties ?? [:] {
-                    self.properties[key] = value
-                }
+                self.importValues(object)
                 completion?(error)
             }
         } else {
             completion?(NSError(domain: "AXObjectError", code: 0, userInfo: [NSLocalizedDescriptionKey:"Error calling expand() on unsaved object"]))
+        }
+    }
+    
+    internal func importValues(from: AXObject?) {
+        for (key, value) in from?.allProperties ?? [:] {
+            self.properties[key] = value
         }
     }
     

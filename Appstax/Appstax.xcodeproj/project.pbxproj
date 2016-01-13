@@ -37,6 +37,8 @@
 		54B51E631BD0E1F60063A209 /* AXRealtimeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B51E601BD0E1F60063A209 /* AXRealtimeService.swift */; };
 		54B51E651BD0E4A30063A209 /* Delay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B51E641BD0E4A30063A209 /* Delay.swift */; };
 		54B51E681BD0E4DE0063A209 /* RealtimeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B51E671BD0E4DE0063A209 /* RealtimeTests.swift */; };
+		54E4E95A1C43D6ED000D5F30 /* AXModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54E4E9591C43D6ED000D5F30 /* AXModelTests.swift */; };
+		54E4E95C1C43D8E3000D5F30 /* AXModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54E4E95B1C43D8E3000D5F30 /* AXModel.swift */; };
 		54F984B51AB22755000096ED /* Appstax.h in Headers */ = {isa = PBXBuildFile; fileRef = 54F984B41AB22755000096ED /* Appstax.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		54F984BB1AB22755000096ED /* Appstax.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54F984AF1AB22755000096ED /* Appstax.framework */; };
 		54F984EC1AB22801000096ED /* AppstaxInternals.h in Headers */ = {isa = PBXBuildFile; fileRef = 54F984CC1AB22801000096ED /* AppstaxInternals.h */; };
@@ -107,6 +109,8 @@
 		54B51E601BD0E1F60063A209 /* AXRealtimeService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AXRealtimeService.swift; sourceTree = "<group>"; };
 		54B51E641BD0E4A30063A209 /* Delay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Delay.swift; sourceTree = "<group>"; };
 		54B51E671BD0E4DE0063A209 /* RealtimeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealtimeTests.swift; sourceTree = "<group>"; };
+		54E4E9591C43D6ED000D5F30 /* AXModelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AXModelTests.swift; sourceTree = "<group>"; };
+		54E4E95B1C43D8E3000D5F30 /* AXModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AXModel.swift; sourceTree = "<group>"; };
 		54F984AF1AB22755000096ED /* Appstax.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Appstax.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		54F984B31AB22755000096ED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		54F984B41AB22755000096ED /* Appstax.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Appstax.h; sourceTree = "<group>"; };
@@ -235,6 +239,7 @@
 				54F984DC1AB22801000096ED /* AXLoginViewController.m */,
 				54F984DD1AB22801000096ED /* AXLoginViewController.xib */,
 				54F984DF1AB22801000096ED /* AXLoginViews.m */,
+				54E4E95B1C43D8E3000D5F30 /* AXModel.swift */,
 				544F7D5D1B2765F900510DA2 /* AXObject.swift */,
 				544F7D5B1B2762AE00510DA2 /* AXObjectService.swift */,
 				54F984E31AB22801000096ED /* AXPermissionsService.m */,
@@ -265,6 +270,7 @@
 				54F985291AB22E7E000096ED /* AXImageViewTests.m */,
 				54F9852A1AB22E7E000096ED /* AXJsonApiClientTests.m */,
 				54F9852B1AB22E7E000096ED /* AXKeychainTests.m */,
+				54E4E9591C43D6ED000D5F30 /* AXModelTests.swift */,
 				54F9852C1AB22E7E000096ED /* AXPermissionsTests.m */,
 				54F9852D1AB22E7E000096ED /* AXQueryTests.m */,
 				54F985301AB22E7E000096ED /* AXUserServiceTest.m */,
@@ -493,6 +499,7 @@
 				543A27CE1B46C7EC001F2BC2 /* AXUser.swift in Sources */,
 				544F7D5C1B2762AE00510DA2 /* AXObjectService.swift in Sources */,
 				54F984F71AB22801000096ED /* AXImageView.m in Sources */,
+				54E4E95C1C43D8E3000D5F30 /* AXModel.swift in Sources */,
 				54F984F41AB22801000096ED /* AXFileService.m in Sources */,
 				54F985171AB22801000096ED /* AXUserService.m in Sources */,
 				54F984F11AB22801000096ED /* AXFile.m in Sources */,
@@ -518,6 +525,7 @@
 				54F9854D1AB23B7A000096ED /* OHHTTPStubsResponse+HTTPMessage.m in Sources */,
 				54F985391AB22E7E000096ED /* AXKeychainTests.m in Sources */,
 				54B51E681BD0E4DE0063A209 /* RealtimeTests.swift in Sources */,
+				54E4E95A1C43D6ED000D5F30 /* AXModelTests.swift in Sources */,
 				544F7D5A1B2624AD00510DA2 /* AXStubs.m in Sources */,
 				54F9853B1AB22E7E000096ED /* AXQueryTests.m in Sources */,
 				54F9854B1AB23B7A000096ED /* OHHTTPStubs+NSURLSessionConfiguration.m in Sources */,
