@@ -28,19 +28,23 @@ import Foundation
     }
     
     public func watch(name: String) {
-        watch(name, collection: nil, order: nil, filter: nil)
+        watch(name, collection: nil, expand: nil, order: nil, filter: nil)
+    }
+    
+    public func watch(name: String, expand: Int) {
+        watch(name, collection: nil, expand: expand, order: nil, filter: nil)
     }
     
     public func watch(name: String, filter: String) {
-        watch(name, collection: nil, order: nil, filter: filter)
+        watch(name, collection: nil, expand: nil, order: nil, filter: filter)
     }
     
     public func watch(name: String, order: String) {
-        watch(name, collection: nil, order: order, filter: nil)
+        watch(name, collection: nil, expand: nil, order: order, filter: nil)
     }
     
-    public func watch(name: String, collection: String?, order: String?, filter: String?) {
-        let observer = AXModelArrayObserver(model: self, name: name, collection: collection, order: order, filter: filter)
+    public func watch(name: String, collection: String?, expand: Int?, order: String?, filter: String?) {
+        let observer = AXModelArrayObserver(model: self, name: name, collection: collection, expand: expand, order: order, filter: filter)
         observers[name] = observer
         observer.load()
         observer.connect()
@@ -65,28 +69,37 @@ import Foundation
         eventHub.dispatch(AXModelEvent(type: event))
     }
     
-    private func update(object: AXObject) {
-        if let id = object.objectID {
-            if let existing = allObjects[id] {
-                existing.importValues(object)
-            } else {
-                allObjects[id] = object
-            }
-            observers.forEach() {
-                $1.sort()
-            }
-            notify("change")
+    private func update(object: AXObject, depth: Int = 0) {
+        normalize(object, depth: depth)
+        observers.forEach() {
+            $1.sort()
         }
+        notify("change")
     }
     
-    private func normalize(object: AXObject) -> AXObject {
+    private func normalize(object: AXObject, depth: Int = 0) -> AXObject {
+        var normalized = object
         if let id = object.objectID {
             if allObjects[id] == nil {
-                allObjects[id] = object
+                normalized = object
+                allObjects[id] = normalized
+            } else {
+                normalized = allObjects[id]!
+                normalized.importValues(object)
             }
-            return allObjects[id]!
         }
-        return object
+        if depth >= 0 {
+            object.allProperties.keys.forEach() { key in
+                if let property = object.object(key) {
+                    normalized[key] = self.normalize(property, depth: depth - 1)
+                } else if let property = object.objects(key) {
+                    normalized[key] = property.map() {
+                        self.normalize($0, depth: depth - 1)
+                    }
+                }
+            }
+        }
+        return normalized
     }
     
 }
@@ -109,18 +122,26 @@ private class AXModelArrayObserver: AXModelObserver {
     private let collection: String
     private let order: String
     private let filter: String
+    private let expand: Int
     private var objects: [AXObject] = []
+    private var connectedRelations: [String:Bool] = [:]
+    private var expandedObjects: [String:Int] = [:]
     
-    init(model:AXModel, name: String, collection: String? = nil, order: String? = nil, filter: String? = nil) {
+    init(model:AXModel, name: String, collection: String? = nil, expand: Int? = nil, order: String? = nil, filter: String? = nil) {
         self.model = model
         self.name = name
         self.collection = collection ?? name
         self.order = order ?? "-created"
         self.filter = filter ?? ""
+        self.expand = expand ?? 0
     }
     
     private func set(objects: [AXObject]) {
-        self.objects = objects.map(model.normalize)
+        self.objects = objects.map {
+            let x = model.normalize($0, depth: self.expand)
+            self.registerRelations(x, depth: self.expand)
+            return x
+        }
         sort()
         model.notify("change")
     }
@@ -129,6 +150,21 @@ private class AXModelArrayObserver: AXModelObserver {
         objects.append(model.normalize(object))
         sort()
         model.notify("change")
+    }
+    
+    private func update(object: AXObject) {
+        let depth = expandedObjects[object.objectID ?? ""] ?? 0
+        
+        func _update() {
+            model.update(object, depth: depth)
+            registerRelations(object, depth: depth)
+        }
+        
+        if depth > 0 {
+            object.expand(depth) { _ in _update() }
+        } else {
+            _update()
+        }
     }
     
     private func remove(object: AXObject) {
@@ -173,10 +209,14 @@ private class AXModelArrayObserver: AXModelObserver {
     }
     
     func load() {
+        var options: [String:AnyObject] = [:]
+        if expand > 0 {
+            options["expand"] = expand
+        }
         if filter != "" {
-            AXObject.find(collection, queryString: filter, completion: handleLoadCompleted)
+            AXObject.find(collection, queryString: filter, options: options, completion: handleLoadCompleted)
         } else {
-            AXObject.findAll(collection, completion: handleLoadCompleted)
+            AXObject.findAll(collection, options: options, completion: handleLoadCompleted)
         }
     }
     
@@ -195,12 +235,36 @@ private class AXModelArrayObserver: AXModelObserver {
         }
         channel.on("object.updated") {
             if let object = $0.object {
-                self.model.update(object)
+                self.update(object)
             }
         }
         channel.on("object.deleted") {
             if let object = $0.object {
                 self.remove(object)
+            }
+        }
+    }
+    
+    func connectRelation(collection: String) {
+        if !(connectedRelations[collection] ?? false) {
+            connectedRelations[collection] = true
+            let channel = model.createChannel("objects/\(collection)", filter: "")
+            channel.on("object.updated") {
+                if let object = $0.object {
+                    self.update(object)
+                }
+            }
+        }
+    }
+    
+    func registerRelations(object: AXObject, depth: Int) {
+        if let id = object.objectID {
+            expandedObjects[id] = depth
+        }
+        if depth > 0 {
+            object.relatedObjects.forEach() {
+                self.connectRelation($0.collectionName)
+                registerRelations($0, depth: depth-1)
             }
         }
     }

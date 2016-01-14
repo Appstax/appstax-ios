@@ -9,7 +9,7 @@ import Foundation
 }
 
 internal struct Relation {
-    var type: String
+    let type: String
     var ids: [String]
 }
 
@@ -26,7 +26,7 @@ internal struct Relation {
     private var properties: [String:AnyObject]
     private var grants: [[String:AnyObject]]
     private var revokes: [[String:AnyObject]]
-    private var relations: [String:Relation]
+    internal var relations: [String:Relation]
     
     internal convenience init(collectionName: String) {
         self.init(collectionName: collectionName, properties: [:], status:.New)
@@ -55,7 +55,7 @@ internal struct Relation {
         var files: [String:AXFile] = [:]
         for (key, value) in properties {
             if let details = value as? [String:AnyObject] {
-                if details["sysDatatype"] as! String == "file" {
+                if details["sysDatatype"] as? String == "file" {
                     let filename = details["filename"] as! String
                     let url = fileService.urlForFileName(filename, objectID: objectID, propertyName: key, collectionName: collectionName)
                     files[key] = AXFile(url: url, name: filename, status: AXFileStatusSaved)
@@ -70,7 +70,7 @@ internal struct Relation {
     internal func setupInitialRelationsProperties() {
         for (key, value) in properties {
             if let details = value as? [String:AnyObject] {
-                if details["sysDatatype"] as! String == "relation" {
+                if details["sysDatatype"] as? String == "relation" {
                     setupRelationBacking(key, details)
                     setupRelationProperty(key, details)
                 }

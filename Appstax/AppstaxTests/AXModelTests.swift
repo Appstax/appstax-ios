@@ -7,6 +7,75 @@ import XCTest
     
     var realtimeService: AXRealtimeService!
     
+    let itemsResponse = ["objects":[[
+        "sysObjectId":"id0",
+        "prop1": [
+            "sysDatatype": "relation",
+            "sysRelationType": "single",
+            "sysCollection": "collection2",
+            "sysObjects": [[
+                "sysObjectId": "id1",
+                "prop3": "value3"
+            ]]
+        ],
+        "prop2": [
+            "sysDatatype": "relation",
+            "sysRelationType": "array",
+            "sysCollection": "collection3",
+            "sysObjects": [[
+                "sysObjectId": "id2",
+                "prop4": "value4a"
+            ],[
+                "sysObjectId": "id3",
+                "prop4": "value4b"
+            ]]
+        ]
+    ]]]
+    
+    let itemsResponseDeep = ["objects":[[
+        "sysObjectId":"id0",
+        "prop1": [
+            "sysDatatype": "relation",
+            "sysRelationType": "single",
+            "sysCollection": "collection2",
+            "sysObjects": [[
+                "sysObjectId": "id1",
+                "prop2": "value2",
+                "prop3": [
+                    "sysDatatype": "relation",
+                    "sysRelationType": "single",
+                    "sysCollection": "collection3",
+                    "sysObjects": [[
+                        "sysObjectId": "id2",
+                        "prop4": "value4"
+                    ]]
+                ]
+            ]]
+        ]
+    ]]]
+    
+    let itemsResponseDeepArray = ["objects":[[
+        "sysObjectId":"id0",
+        "prop1": [
+            "sysDatatype": "relation",
+            "sysRelationType": "array",
+            "sysCollection": "collection2",
+            "sysObjects": [[
+                "sysObjectId": "id1",
+                "prop2": "value2",
+                "prop3": [
+                    "sysDatatype": "relation",
+                    "sysRelationType": "single",
+                    "sysCollection": "collection3",
+                    "sysObjects": [[
+                        "sysObjectId": "id2",
+                        "prop4": "value4"
+                    ]]
+                ]
+            ]]
+        ]
+    ]]]
+    
     override func setUp() {
         super.setUp()
         OHHTTPStubs.setEnabled(true)
@@ -21,6 +90,7 @@ import XCTest
         OHHTTPStubs.setEnabled(false)
     }
     
+    // MARK: Array/Collection observers
     
     func testShouldAddArrayAndUpdateItWithInitialData() {
         weak var async = expectationWithDescription("async")
@@ -427,8 +497,8 @@ import XCTest
             return AXChannel($0, filter: $1)
         }
         
-        model.watch("barItems", collection: "items", order: nil, filter:"foo='bar'")
-        model.watch("bazItems", collection: "items", order: nil, filter:"foo='baz'")
+        model.watch("barItems", collection: "items", expand: nil, order: nil, filter:"foo='bar'")
+        model.watch("bazItems", collection: "items", expand: nil, order: nil, filter:"foo='baz'")
         
         XCTAssertTrue(model["barItems"] is [AXObject])
         XCTAssertTrue(model["bazItems"] is [AXObject])
@@ -450,6 +520,336 @@ import XCTest
             AXAssertEqual(channelNames[1], "objects/items")
             AXAssertEqual(channelFilters[0], "foo='bar'")
             AXAssertEqual(channelFilters[1], "foo='baz'")
+        }
+    }
+    
+    // MARK: Relations
+
+    func testRelationsShouldBeLoadedInitiallyWhenExpandIsSpecified() {
+        weak var async = expectationWithDescription("async")
+        AXStubs.method("GET", urlPath: "/objects/items", query: "expanddepth=2", response: itemsResponse, statusCode: 200)
+        
+        let model = AXModel()
+        model.watch("items", expand: 2)
+        
+        delay(0.3) {
+            async?.fulfill()
+        }
+
+        waitForExpectationsWithTimeout(3) { error in
+            AXAssertEqual(model["items"]?.count, 1)
+            AXAssertEqual(model["items"]?[0].object("prop1")?.objectID, "id1")
+            AXAssertEqual(model["items"]?[0].objects("prop2")?[0].objectID, "id2")
+            AXAssertEqual(model["items"]?[0].objects("prop2")?[1].objectID, "id3")
+        }
+    }
+    
+    func testShouldSubscribeToUnfilteredObjectChannelsForRelatedCollections() {
+        weak var async = expectationWithDescription("async")
+        AXStubs.method("GET", urlPath: "/objects/items", query: "expanddepth=2", response: itemsResponse, statusCode: 200)
+        
+        let model = AXModel()
+        
+        var channelNames: [String] = []
+        var channelFilters: [String] = []
+        model.channelFactory = {
+            channelNames.append($0)
+            channelFilters.append($1)
+            return AXChannel($0, filter: $1)
+        }
+        
+        model.watch("items", expand: 2)
+        delay(0.3) {
+            async?.fulfill()
+        }
+        
+        waitForExpectationsWithTimeout(3) { error in
+            AXAssertEqual(channelNames.count, 3)
+            AXAssertEqual(channelFilters.count, 3)
+            AXAssertEqual(channelNames[0], "objects/items")
+            AXAssertEqual(channelNames[1], "objects/collection2")
+            AXAssertEqual(channelNames[2], "objects/collection3")
+            AXAssertEqual(channelFilters[0], "")
+            AXAssertEqual(channelFilters[1], "")
+            AXAssertEqual(channelFilters[2], "")
+        }
+    }
+    
+    func testShouldUpdateRelatedObjectsInPlace() {
+        weak var async = expectationWithDescription("async")
+        AXStubs.method("GET", urlPath: "/objects/items", query: "expanddepth=1", response: itemsResponse, statusCode: 200)
+        
+        let model = AXModel()
+        model.watch("items", expand: 1)
+        
+        var cached: [String:AXObject?] = [:]
+        delay(0.3) {
+            cached["item0"] = model["items"]?[0] as? AXObject
+            cached["item0_prop1"] = model["items"]?[0].object("prop1")
+            cached["item0_prop2_1"] = model["items"]?[0].objects("prop2")?[1]
+            
+            self.realtimeService.webSocketDidReceiveMessage([
+                "event": "object.updated",
+                "channel": "objects/collection2",
+                "data": ["sysObjectId": "id1", "prop3": "value3 new!"]
+            ])
+            
+            self.realtimeService.webSocketDidReceiveMessage([
+                "event": "object.updated",
+                "channel": "objects/collection3",
+                "data": ["sysObjectId": "id3", "prop4": "value4b new!"]
+            ])
+            
+            delay(0.3) {
+                async?.fulfill()
+            }
+        }
+        
+        waitForExpectationsWithTimeout(3) { error in
+            AXAssertEqual(model["items"]?[0].object("prop1")?["prop3"], "value3 new!")
+            AXAssertEqual(model["items"]?[0].objects("prop2")?[1]["prop4"], "value4b new!")
+            
+            // check object normalization
+            AXAssertEqual(model["items"]?[0], cached["item0"] ?? nil)
+            AXAssertEqual(model["items"]?[0].object("prop1"), cached["item0_prop1"] ?? nil)
+            AXAssertEqual(model["items"]?[0].objects("prop2")?[1], cached["item0_prop2_1"] ?? nil)
+        }
+    }
+    
+    func testShouldReExpandRelationsWhenUpdatingAnObjectLoadedWithRelations() {
+        weak var async = expectationWithDescription("async")
+        
+        var item0ExpandResponse = itemsResponse["objects"]![0]
+        item0ExpandResponse["prop2b"] = "prop2b is new"
+
+        AXStubs.method("GET", urlPath: "/objects/items",     query: "expanddepth=1", response: itemsResponse, statusCode: 200)
+        AXStubs.method("GET", urlPath: "/objects/items/id0", query: "expanddepth=1", response: item0ExpandResponse, statusCode: 200)
+        
+        let model = AXModel()
+        model.watch("items", expand: 1)
+        
+        var cached: [String:AXObject?] = [:]
+        delay(0.3) {
+            cached["item0"] = model["items"]?[0] as? AXObject
+            cached["item0_prop1"] = model["items"]?[0].object("prop1")
+            cached["item0_prop2_1"] = model["items"]?[0].objects("prop2")?[1]
+            
+            self.realtimeService.webSocketDidReceiveMessage([
+                "event": "object.updated",
+                "channel": "objects/items",
+                "data": [
+                    "sysObjectId": "id0",
+                    "prop1": [
+                        "sysDatatype": "relation",
+                        "sysRelationType": "single",
+                        "sysCollection": "collection2",
+                        "sysObjects": ["id1"] // realtime updates are not expanded
+                    ],
+                    "prop2": [
+                        "sysDatatype": "relation",
+                        "sysRelationType": "array",
+                        "sysCollection": "collection3",
+                        "sysObjects": ["id2", "id3"] // realtime updates are not expanded
+                    ],
+                    "prop2b": "prop2b is new"
+                ]
+            ])
+            
+            delay(0.3) {
+                async?.fulfill()
+            }
+        }
+        
+        waitForExpectationsWithTimeout(30) { error in
+            AXAssertEqual(model["items"]?[0].string("prop2b"), "prop2b is new")
+            AXAssertEqual(model["items"]?[0].object("prop1")?["prop3"], "value3")
+            AXAssertEqual(model["items"]?[0].objects("prop2")?[1]["prop4"], "value4b")
+            
+            // check object normalization
+            AXAssertEqual(model["items"]?[0], cached["item0"] ?? nil)
+            AXAssertEqual(model["items"]?[0].object("prop1"), cached["item0_prop1"] ?? nil)
+            AXAssertEqual(model["items"]?[0].objects("prop2")?[1], cached["item0_prop2_1"] ?? nil)
+        }
+    }
+    
+    func testShouldUpdateDeepObjectsAndReExpandRelations() {
+        weak var async = expectationWithDescription("async")
+        
+        let id1ExpandResponse = [
+            "sysObjectId": "id1",
+            "prop2": "value2 new!",
+            "prop3": [
+                "sysDatatype": "relation",
+                "sysRelationType": "single",
+                "sysCollection": "collection3",
+                "sysObjects": [[
+                    "sysObjectId": "id2",
+                    "prop4": "value4 new!"
+                ]]
+            ]
+        ]
+        
+        AXStubs.method("GET", urlPath: "/objects/items", query: "expanddepth=2", response: itemsResponseDeep, statusCode: 200)
+        AXStubs.method("GET", urlPath: "/objects/collection2/id1", query: "expanddepth=1", response: id1ExpandResponse, statusCode: 200)
+        
+        let model = AXModel()
+        model.watch("items", expand: 2)
+        
+        var cached: [String:AXObject?] = [:]
+        delay(0.3) {
+            cached["item0"] = model["items"]?[0] as? AXObject
+            cached["item0_prop1"] = model["items"]?[0].object("prop1")
+            cached["item0_prop1_prop3"] = model["items"]?[0].object("prop1")?.object("prop3")
+            
+            self.realtimeService.webSocketDidReceiveMessage([
+                "event": "object.updated",
+                "channel": "objects/collection2",
+                "data": [
+                    "sysObjectId": "id1",
+                    "prop2": "value2 new!",
+                    "prop3": [
+                        "sysDatatype": "relation",
+                        "sysRelationType": "single",
+                        "sysCollection": "collection3",
+                        "sysObjects": ["id2"]
+                    ]
+                ]
+            ])
+            
+            delay(0.3) {
+                async?.fulfill()
+            }
+        }
+        
+        waitForExpectationsWithTimeout(30) { error in
+            AXAssertEqual(model["items"]?[0].string("prop1.prop2"), "value2 new!")
+            AXAssertEqual(model["items"]?[0].string("prop1.prop3.prop4"), "value4 new!")
+            
+            // check object normalization
+            AXAssertEqual(model["items"]?[0], cached["item0"] ?? nil)
+            AXAssertEqual(model["items"]?[0].object("prop1"), cached["item0_prop1"] ?? nil)
+            AXAssertEqual(model["items"]?[0].object("prop1")?.object("prop3"), cached["item0_prop1_prop3"] ?? nil)
+        }
+    }
+    
+    func testShouldUpdateDeepObjectsInArrayAndReExpandRelations() {
+        weak var async = expectationWithDescription("async")
+        
+        let id1ExpandResponse = [
+            "sysObjectId": "id1",
+            "prop2": "value2 new!",
+            "prop3": [
+                "sysDatatype": "relation",
+                "sysRelationType": "single",
+                "sysCollection": "collection3",
+                "sysObjects": [[
+                    "sysObjectId": "id2",
+                    "prop4": "value4 new!"
+                ]]
+            ]
+        ]
+        
+        AXStubs.method("GET", urlPath: "/objects/items", query: "expanddepth=2", response: itemsResponseDeepArray, statusCode: 200)
+        AXStubs.method("GET", urlPath: "/objects/collection2/id1", query: "expanddepth=1", response: id1ExpandResponse, statusCode: 200)
+        
+        let model = AXModel()
+        model.watch("items", expand: 2)
+        
+        var cached: [String:AXObject?] = [:]
+        delay(0.3) {
+            cached["item0"] = model["items"]?[0] as? AXObject
+            cached["item0_prop1_0"] = model["items"]?[0].objects("prop1")?[0]
+            cached["item0_prop1_0_prop3"] = model["items"]?[0].objects("prop1")?[0].object("prop3")
+            
+            self.realtimeService.webSocketDidReceiveMessage([
+                "event": "object.updated",
+                "channel": "objects/collection2",
+                "data": [
+                    "sysObjectId": "id1",
+                    "prop2": "value2 new!",
+                    "prop3": [
+                        "sysDatatype": "relation",
+                        "sysRelationType": "single",
+                        "sysCollection": "collection3",
+                        "sysObjects": ["id2"]
+                    ]
+                ]
+            ])
+            
+            delay(0.3) {
+                async?.fulfill()
+            }
+        }
+        
+        waitForExpectationsWithTimeout(30) { error in
+            AXAssertEqual(model["items"]?[0].objects("prop1")?[0].string("prop2"), "value2 new!")
+            AXAssertEqual(model["items"]?[0].objects("prop1")?[0].string("prop3.prop4"), "value4 new!")
+            
+            // check object normalization
+            AXAssertEqual(model["items"]?[0], cached["item0"] ?? nil)
+            AXAssertEqual(model["items"]?[0].objects("prop1")?[0], cached["item0_prop1_0"] ?? nil)
+            AXAssertEqual(model["items"]?[0].objects("prop1")?[0].object("prop3"), cached["item0_prop1_0_prop3"] ?? nil)
+        }
+    }
+    
+    func testShouldGetUpdatesForRelatedObjectAppearingAfterInitialLoad() {
+        weak var async = expectationWithDescription("async")
+        
+        let initialResponse = ["objects":[["sysObjectId":"id000"]]]
+        let expandResponse = [
+            "sysObjectId": "id000",
+            "prop1": [
+                "sysDatatype": "relation",
+                "sysRelationType": "single",
+                "sysCollection": "collection2",
+                "sysObjects": [[
+                    "sysObjectId": "id001",
+                    "prop2": "value2"
+                ]]
+            ]
+        ]
+        
+        AXStubs.method("GET", urlPath: "/objects/items", query: "expanddepth=1", response: initialResponse, statusCode: 200)
+        AXStubs.method("GET", urlPath: "/objects/items/id000", query: "expanddepth=1", response: expandResponse, statusCode: 200)
+        
+        let model = AXModel()
+        model.watch("items", expand: 1)
+        
+        delay(0.3) {
+            self.realtimeService.webSocketDidReceiveMessage([
+                "event": "object.updated",
+                "channel": "objects/items",
+                "data": [
+                    "sysObjectId":"id000",
+                    "prop1": [
+                        "sysDatatype": "relation",
+                        "sysRelationType": "single",
+                        "sysCollection": "collection2",
+                        "sysObjects": ["id001"]
+                    ]
+                ]
+            ])
+            
+            delay(0.3) {
+                AXAssertEqual(model["items"]?[0].string("prop1.prop2"), "value2")
+                
+                self.realtimeService.webSocketDidReceiveMessage([
+                    "event": "object.updated",
+                    "channel": "objects/collection2",
+                    "data": [
+                        "sysObjectId":"id001",
+                        "prop2": "value2 new!"
+                    ]
+                ])
+                
+                delay(0.3) {
+                    async?.fulfill()
+                }
+            }
+        }
+        
+        waitForExpectationsWithTimeout(30) { error in
+            AXAssertEqual(model["items"]?[0].string("prop1.prop2"), "value2 new!")
         }
     }
     
