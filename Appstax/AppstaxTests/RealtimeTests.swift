@@ -6,12 +6,11 @@ import XCTest
 @objc class RealtimeTests: XCTestCase {
     
     private var realtimeService: AXRealtimeService!
-    
-    var appKeyHeader: String?
-    var websocketUrl: NSURL?
-    var serverReceived: [[String:AnyObject]] = []
-    var sessionRequestShouldFail = false
-    var websocketRequestShouldFail = false
+    private var appKeyHeader: String?
+    private var websocketUrl: NSURL?
+    private var serverReceived: [[String:AnyObject]] = []
+    private var sessionRequestShouldFail = false
+    private var websocketRequestShouldFail = false
     
     override func setUp() {
         super.setUp()
@@ -36,9 +35,10 @@ import XCTest
         }
         realtimeService.webSocketFactory = {
             self.websocketUrl = $0
-            return MockWebSocket(self.realtimeService, fail: self.websocketRequestShouldFail) {
+            let webSocket = MockWebSocket(self.realtimeService, fail: self.websocketRequestShouldFail) {
                 self.serverReceived.append($0)
             }
+            return webSocket
         }
     }
     
@@ -283,28 +283,35 @@ import XCTest
         }
         
         waitForExpectationsWithTimeout(3) { error in
-            AXAssertEqual(received["a1"]?[0].type, "open")
-            AXAssertEqual(received["a2"]?[0].type, "open")
-            AXAssertEqual(received["aw"]?[0].type, "open")
-            AXAssertEqual(received["b1"]?[0].type, "open")
-            AXAssertEqual(received["b2"]?[0].type, "open")
-            AXAssertEqual(received["bw"]?[0].type, "open")
+            AXAssertEqual(received["a1"]?[0].type, "status")
+            AXAssertEqual(received["a2"]?[0].type, "status")
+            AXAssertEqual(received["aw"]?[0].type, "status")
+            AXAssertEqual(received["b1"]?[0].type, "status")
+            AXAssertEqual(received["b2"]?[0].type, "status")
+            AXAssertEqual(received["bw"]?[0].type, "status")
             
-            AXAssertEqual(received["a1"]?[1].type, "message")
-            AXAssertEqual(received["a2"]?[1].type, "message")
-            AXAssertEqual(received["aw"]?[1].type, "message")
-            AXAssertEqual(received["b1"]?[1].type, "message")
-            AXAssertEqual(received["b2"]?[1].type, "message")
-            AXAssertEqual(received["bw"]?[1].type, "message")
+            AXAssertEqual(received["a1"]?[1].type, "open")
+            AXAssertEqual(received["a2"]?[1].type, "open")
+            AXAssertEqual(received["aw"]?[1].type, "open")
+            AXAssertEqual(received["b1"]?[1].type, "open")
+            AXAssertEqual(received["b2"]?[1].type, "open")
+            AXAssertEqual(received["bw"]?[1].type, "open")
             
-            AXAssertEqual(received["a1"]?[1].channel, "public/a/1")
-            AXAssertEqual(received["a2"]?[1].channel, "public/a/2")
-            AXAssertEqual(received["aw"]?[1].channel, "public/a/1")
-            AXAssertEqual(received["aw"]?[2].channel, "public/a/2")
-            AXAssertEqual(received["b1"]?[1].channel, "public/b/1")
-            AXAssertEqual(received["b2"]?[1].channel, "public/b/2")
-            AXAssertEqual(received["bw"]?[1].channel, "public/b/1")
-            AXAssertEqual(received["bw"]?[2].channel, "public/b/2")
+            AXAssertEqual(received["a1"]?[2].type, "message")
+            AXAssertEqual(received["a2"]?[2].type, "message")
+            AXAssertEqual(received["aw"]?[2].type, "message")
+            AXAssertEqual(received["b1"]?[2].type, "message")
+            AXAssertEqual(received["b2"]?[2].type, "message")
+            AXAssertEqual(received["bw"]?[2].type, "message")
+            
+            AXAssertEqual(received["a1"]?[2].channel, "public/a/1")
+            AXAssertEqual(received["a2"]?[2].channel, "public/a/2")
+            AXAssertEqual(received["aw"]?[2].channel, "public/a/1")
+            AXAssertEqual(received["aw"]?[3].channel, "public/a/2")
+            AXAssertEqual(received["b1"]?[2].channel, "public/b/1")
+            AXAssertEqual(received["b2"]?[2].channel, "public/b/2")
+            AXAssertEqual(received["bw"]?[2].channel, "public/b/1")
+            AXAssertEqual(received["bw"]?[3].channel, "public/b/2")
         }
     }
     
@@ -426,6 +433,37 @@ import XCTest
             AXAssertEqual(receivedObjects[2]?.string("prop3"), "value3")
         }
     }
+    
+    func testShouldTriggerStatusEventsThrougoutConnectionLifecycle() {
+        let async = expectationWithDescription("async")
+        
+        var statusChanges: [[String:AnyObject]] = []
+        realtimeService.on("status") { event in
+            let status = self.realtimeService.status
+            statusChanges.append(["eventType": event.type, "status": status.rawValue])
+        }
+        
+        AXAssertEqual(realtimeService.status.rawValue, AXRealtimeServiceStatus.Disconnected.rawValue)
+        
+        let channel = AXChannel("public/foo")
+        channel.send("foo")
+        
+        delay(1) {
+            AXAssertEqual(statusChanges.count, 2)
+            self.realtimeService.webSocketDidDisconnect(nil)
+            delay(3) {
+                AXAssertEqual(statusChanges.count, 4)
+                async.fulfill()
+            }
+        }
+        waitForExpectationsWithTimeout(10) { error in
+            AXAssertEqual(statusChanges[0]["status"], AXRealtimeServiceStatus.Connecting.rawValue)
+            AXAssertEqual(statusChanges[1]["status"], AXRealtimeServiceStatus.Connected.rawValue)
+            AXAssertEqual(statusChanges[2]["status"], AXRealtimeServiceStatus.Connecting.rawValue)
+            AXAssertEqual(statusChanges[3]["status"], AXRealtimeServiceStatus.Connected.rawValue)
+        }
+    }
+    
 
 }
 

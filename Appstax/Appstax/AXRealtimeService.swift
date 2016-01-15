@@ -11,7 +11,6 @@ import Starscream
 class AXRealtimeService: NSObject {
     
     private var apiClient: AXApiClient
-    private var status: AXRealtimeServiceStatus = .Disconnected
     private var connectionCheckTimer: NSTimer?
     private var webSocket: AXWebSocketAdapter?
     private var realtimeSessionRequested: Bool = false
@@ -19,6 +18,22 @@ class AXRealtimeService: NSObject {
     private var eventHub = AXEventHub()
     private var queue: [[String:AnyObject]] = []
     private var idCounter = 0
+    private(set) var status: AXRealtimeServiceStatus = .Disconnected {
+        didSet {
+            if status != oldValue {
+                eventHub.dispatch(AXEvent(type: "status"))
+            }
+        }
+    }
+    var statusString: String {
+        get {
+            switch status {
+            case .Disconnected: return "disconnected"
+            case .Connecting: return "connecting"
+            case .Connected: return "connected"
+            }
+        }
+    }
     
     var webSocketFactory: ((url: NSURL) -> (AXWebSocketAdapter))?
     

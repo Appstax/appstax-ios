@@ -3,13 +3,14 @@ import Foundation
 
 @objc public class AXModel: NSObject {
 
+    private let realtimeService: AXRealtimeService
     private var eventHub = AXEventHub()
     private var observers:[String:AXModelObserver] = [:]
     private var allObjects:[String:AXObject] = [:]
     internal var channelFactory:((String, String) -> (AXChannel))?
     
     public override init() {
-        
+        realtimeService = Appstax.defaultContext.realtimeService
     }
     
     private convenience init(channelFactory: ((String, String) -> (AXChannel))) {
@@ -44,10 +45,18 @@ import Foundation
     }
     
     public func watch(name: String, collection: String?, expand: Int?, order: String?, filter: String?) {
-        let observer = AXModelArrayObserver(model: self, name: name, collection: collection, expand: expand, order: order, filter: filter)
-        observers[name] = observer
-        observer.load()
-        observer.connect()
+        var observer: AXModelObserver?
+        switch name {
+            case "status":
+                observer = AXModelStatusObserver(model: self, realtimeService: realtimeService)
+            default:
+                observer = AXModelArrayObserver(model: self, name: name, collection: collection, expand: expand, order: order, filter: filter)
+        }
+        if let observer = observer {
+            observers[name] = observer
+            observer.load()
+            observer.connect()
+        }
     }
     
     public func on(type: String, handler: (AXModelEvent) -> ()) {
@@ -113,6 +122,28 @@ private protocol AXModelObserver {
     func connect()
     func sort()
     func get() -> AnyObject
+}
+
+private class AXModelStatusObserver: AXModelObserver {
+    
+    private var realtimeService: AXRealtimeService
+    
+    init(model: AXModel, realtimeService: AXRealtimeService) {
+        self.realtimeService = realtimeService
+        self.realtimeService.on("status") { _ in
+            model.notify("change")
+        }
+    }
+    
+    func load() {}
+    func connect() {
+        realtimeService.connect()
+    }
+    func sort() {}
+    func get() -> AnyObject {
+        return realtimeService.statusString
+    }
+    
 }
 
 private class AXModelArrayObserver: AXModelObserver {

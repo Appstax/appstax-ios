@@ -853,5 +853,55 @@ import XCTest
         }
     }
     
+    // MARK: Status
+
+    func testShouldTriggerChangeEventsAndUpdateStatusTroughoutConnectionLifecycle() {
+        let async = expectationWithDescription("async")
+        
+        AXStubs.method("POST", urlPath: "/messaging/realtime/sessions") { request in
+            return OHHTTPStubsResponse(JSONObject: ["realtimeSessionId":"testrsession"], statusCode: 200, headers: [:])
+        }
+        realtimeService.webSocketFactory = { _ in
+            return MockWebSocket(self.realtimeService)
+        }
+        
+        var statusChanges: [String] = []
+        let model = AXModel()
+        model.on("change") { event in
+            statusChanges.append(model["status"] as? String ?? "")
+        }
+        model.watch("status")
+        
+        
+        delay(1) {
+            AXAssertEqual(statusChanges.count, 2)
+            self.realtimeService.webSocketDidDisconnect(nil)
+            delay(3) {
+                AXAssertEqual(statusChanges.count, 4)
+                async.fulfill()
+            }
+        }
+        waitForExpectationsWithTimeout(10) { error in
+            AXAssertEqual(statusChanges[0], "connecting")
+            AXAssertEqual(statusChanges[1], "connected")
+            AXAssertEqual(statusChanges[2], "connecting")
+            AXAssertEqual(statusChanges[3], "connected")
+        }
+    }
+    
+}
+
+
+
+private class MockWebSocket: AXWebSocketAdapter {
+
+    init(_ realtimeService: AXRealtimeService) {
+        delay(0.5) {
+            realtimeService.webSocketDidConnect()
+        }
+    }
+    
+    func send(message:AnyObject) {}
+    
 }
 
