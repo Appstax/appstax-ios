@@ -96,7 +96,11 @@ import Foundation
     }
     
     private func notify(event: String) {
-        eventHub.dispatch(AXModelEvent(type: event))
+        notify(AXModelEvent(type: event))
+    }
+    
+    private func notify(event: AXModelEvent) {
+        eventHub.dispatch(event)
     }
     
     private func update(object: AXObject, depth: Int = 0) {
@@ -136,6 +140,12 @@ import Foundation
 
 public class AXModelEvent: AXEvent {
     
+    private(set) var error: String?
+    
+    init(type: String, error: String? = nil) {
+        super.init(type: type)
+        self.error = error
+    }
 }
 
 private protocol AXModelObserver {
@@ -273,7 +283,9 @@ private class AXModelArrayObserver: AXModelObserver {
     }
     
     func handleLoadCompleted(objects:[AXObject]?, error:NSError?) {
-        if let objects = objects {
+        if let error = error {
+            self.model.notify(AXModelEvent(type: "error", error: error.userInfo["errorMessage"] as? String))
+        } else if let objects = objects {
             self.set(objects)
         }
     }
@@ -294,6 +306,9 @@ private class AXModelArrayObserver: AXModelObserver {
             if let object = $0.object {
                 self.remove(object)
             }
+        }
+        channel.on("error") {
+            self.model.notify(AXModelEvent(type: "error", error: $0.error))
         }
     }
     

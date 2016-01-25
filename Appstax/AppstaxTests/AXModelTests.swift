@@ -1026,6 +1026,74 @@ import XCTest
         }
     }
     
+    // MARK: Error handling
+    
+    func testShouldGetErrorEventWhenLoadingFails() {
+        weak var async = expectationWithDescription("async")
+        AXStubs.method("GET", urlPath: "/objects/posts") { request in
+            return OHHTTPStubsResponse(JSONObject: ["errorMessage":"The error is 42!"], statusCode: 422, headers: [:])
+        }
+        
+        let model = AXModel()
+        model.watch("posts")
+        
+        var errorCount = 0
+        var eventError: String? = nil
+        model.on("error") {
+            errorCount++
+            eventError = $0.error
+            async?.fulfill()
+        }
+        
+        waitForExpectationsWithTimeout(3) { error in
+            AXAssertEqual(model["posts"]?.count, 0)
+            AXAssertEqual(errorCount, 1)
+            AXAssertEqual(eventError, "The error is 42!")
+        }
+    }
+    
+    func testShouldGetErrorEventWhenAnObjectChannelGetsAnError() {
+        weak var async = expectationWithDescription("async")
+        
+        AXStubs.method("GET", urlPath: "/objects/posts") { request in
+            return OHHTTPStubsResponse(JSONObject: ["objects":[
+                ["sysObjectId": "id1", "content": "c1", "sysCreated": "2015-08-19T11:00:00"],
+                ["sysObjectId": "id2", "content": "c2", "sysCreated": "2015-08-19T10:00:00"]
+                ]], statusCode: 200, headers: [:])
+        }
+        AXStubs.method("POST", urlPath: "/messaging/realtime/sessions") { request in
+            return OHHTTPStubsResponse(JSONObject: ["realtimeSessionId":"testrsession"], statusCode: 200, headers: [:])
+        }
+        realtimeService.webSocketFactory = { _ in
+            return MockWebSocket(self.realtimeService)
+        }
+        
+        let model = AXModel()
+        model.watch("posts")
+        
+        var errorCount = 0
+        var eventError: String? = nil
+        model.on("error") {
+            errorCount++
+            eventError = $0.error
+            async?.fulfill()
+        }
+        
+        delay(1) {
+            self.realtimeService.webSocketDidReceiveMessage([
+                "event": "error",
+                "channel": "objects/posts",
+                "error": "Oh, noes!"
+            ])
+        }
+        
+        waitForExpectationsWithTimeout(3) { error in
+            AXAssertEqual(model["posts"]?.count, 2)
+            AXAssertEqual(errorCount, 1)
+            AXAssertEqual(eventError, "Oh, noes!")
+        }
+    }
+    
 }
 
 
