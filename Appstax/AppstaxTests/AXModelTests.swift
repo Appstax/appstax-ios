@@ -889,6 +889,143 @@ import XCTest
         }
     }
     
+    // MARK: Reloading
+
+    func testShouldReloadAllObserverDataWhenRequested() {
+        weak var async = expectationWithDescription("async")
+        
+        var initial = true
+        AXStubs.method("GET", urlPath: "/objects/posts") { request in
+            if initial {
+                return OHHTTPStubsResponse(JSONObject: ["objects":[
+                    ["sysObjectId": "id1", "content": "1a", "sysCreated": "2015-08-19T11:00:00"],
+                    ["sysObjectId": "id2", "content": "2a", "sysCreated": "2015-08-19T10:00:00"]
+                    ]], statusCode: 200, headers: [:])
+            } else {
+                return OHHTTPStubsResponse(JSONObject: ["objects":[
+                    ["sysObjectId": "id1", "content": "1b", "sysCreated": "2015-08-19T11:00:00"],
+                    ["sysObjectId": "id2", "content": "2b", "sysCreated": "2015-08-19T10:00:00"]
+                    ]], statusCode: 200, headers: [:])
+            }
+        }
+        AXStubs.method("GET", urlPath: "/objects/comments") { request in
+            if initial {
+                return OHHTTPStubsResponse(JSONObject: ["objects":[
+                    ["sysObjectId": "id3", "content": "3a", "sysCreated": "2015-08-19T11:00:00"],
+                    ["sysObjectId": "id4", "content": "4a", "sysCreated": "2015-08-19T10:00:00"]
+                    ]], statusCode: 200, headers: [:])
+            } else {
+                return OHHTTPStubsResponse(JSONObject: ["objects":[
+                    ["sysObjectId": "id3", "content": "3b", "sysCreated": "2015-08-19T11:00:00"],
+                    ["sysObjectId": "id4", "content": "4b", "sysCreated": "2015-08-19T10:00:00"]
+                    ]], statusCode: 200, headers: [:])
+            }
+        }
+        
+        let model = AXModel()
+        
+        var changeCalls = 0
+        model.on("change") { _ in
+            changeCalls++
+        }
+        
+        model.watch("posts")
+        model.watch("comments")
+        
+        delay(0.3) {
+            AXAssertEqual(changeCalls, 2)
+            AXAssertEqual(model["posts"]?.count, 2)
+            AXAssertEqual(model["comments"]?.count, 2)
+            
+            initial = false
+            model.reload()
+            delay(0.3) { async?.fulfill() }
+        }
+        
+        waitForExpectationsWithTimeout(3) { error in
+            AXAssertEqual(changeCalls, 4)
+            AXAssertEqual(model["posts"]?[0].objectID, "id1")
+            AXAssertEqual(model["posts"]?[1].objectID, "id2")
+            AXAssertEqual(model["comments"]?[0].objectID, "id3")
+            AXAssertEqual(model["comments"]?[1].objectID, "id4")
+            AXAssertEqual(model["posts"]?[0]["content"], "1b")
+            AXAssertEqual(model["posts"]?[1]["content"], "2b")
+            AXAssertEqual(model["comments"]?[0]["content"], "3b")
+            AXAssertEqual(model["comments"]?[1]["content"], "4b")
+        }
+    }
+    
+    func testShouldReloadAllObserverDataAfterReconnection() {
+        weak var async = expectationWithDescription("async")
+        
+        var initial = true
+        AXStubs.method("GET", urlPath: "/objects/posts") { request in
+            if initial {
+                return OHHTTPStubsResponse(JSONObject: ["objects":[
+                    ["sysObjectId": "id1", "content": "1a", "sysCreated": "2015-08-19T11:00:00"],
+                    ["sysObjectId": "id2", "content": "2a", "sysCreated": "2015-08-19T10:00:00"]
+                    ]], statusCode: 200, headers: [:])
+            } else {
+                return OHHTTPStubsResponse(JSONObject: ["objects":[
+                    ["sysObjectId": "id1", "content": "1b", "sysCreated": "2015-08-19T11:00:00"],
+                    ["sysObjectId": "id2", "content": "2b", "sysCreated": "2015-08-19T10:00:00"]
+                    ]], statusCode: 200, headers: [:])
+            }
+        }
+        AXStubs.method("GET", urlPath: "/objects/comments") { request in
+            if initial {
+                return OHHTTPStubsResponse(JSONObject: ["objects":[
+                    ["sysObjectId": "id3", "content": "3a", "sysCreated": "2015-08-19T11:00:00"],
+                    ["sysObjectId": "id4", "content": "4a", "sysCreated": "2015-08-19T10:00:00"]
+                    ]], statusCode: 200, headers: [:])
+            } else {
+                return OHHTTPStubsResponse(JSONObject: ["objects":[
+                    ["sysObjectId": "id3", "content": "3b", "sysCreated": "2015-08-19T11:00:00"],
+                    ["sysObjectId": "id4", "content": "4b", "sysCreated": "2015-08-19T10:00:00"]
+                    ]], statusCode: 200, headers: [:])
+            }
+        }
+        AXStubs.method("POST", urlPath: "/messaging/realtime/sessions") { request in
+            return OHHTTPStubsResponse(JSONObject: ["realtimeSessionId":"testrsession"], statusCode: 200, headers: [:])
+        }
+        realtimeService.webSocketFactory = { _ in
+            return MockWebSocket(self.realtimeService)
+        }
+        
+        let model = AXModel()
+        
+        var changeCalls = 0
+        model.on("change") { _ in
+            changeCalls++
+        }
+        
+        model.watch("posts")
+        model.watch("comments")
+        
+        delay(1) {
+            AXAssertEqual(changeCalls, 2)
+            AXAssertEqual(model["posts"]?.count, 2)
+            AXAssertEqual(model["comments"]?.count, 2)
+            
+            initial = false
+            self.realtimeService.webSocketDidDisconnect(nil)
+            
+            delay(3) { async?.fulfill() }
+        }
+        
+        waitForExpectationsWithTimeout(5) { error in
+            AXAssertEqual(changeCalls, 4)
+            AXAssertEqual(model["posts"]?[0].objectID, "id1")
+            AXAssertEqual(model["posts"]?[1].objectID, "id2")
+            AXAssertEqual(model["comments"]?[0].objectID, "id3")
+            AXAssertEqual(model["comments"]?[1].objectID, "id4")
+            AXAssertEqual(model["posts"]?[0]["content"], "1b")
+            AXAssertEqual(model["posts"]?[1]["content"], "2b")
+            AXAssertEqual(model["comments"]?[0]["content"], "3b")
+            AXAssertEqual(model["comments"]?[1]["content"], "4b")
+        }
+    }
+    
 }
 
 

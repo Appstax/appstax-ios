@@ -7,10 +7,13 @@ import Foundation
     private var eventHub = AXEventHub()
     private var observers:[String:AXModelObserver] = [:]
     private var allObjects:[String:AXObject] = [:]
+    private var connectedStatusCount = 0
     internal var channelFactory:((String, String) -> (AXChannel))?
     
     public override init() {
         realtimeService = Appstax.defaultContext.realtimeService
+        super.init()
+        setupReloadAfterReconnect()
     }
     
     private convenience init(channelFactory: ((String, String) -> (AXChannel))) {
@@ -63,6 +66,24 @@ import Foundation
         eventHub.on(type) {
             if let event = $0 as? AXModelEvent {
                 handler(event)
+            }
+        }
+    }
+    
+    public func reload() {
+        observers.forEach() {
+            $1.load()
+        }
+    }
+
+    private func setupReloadAfterReconnect() {
+        realtimeService.on("status") {
+            event in
+            if self.realtimeService.status == .Connected {
+                self.connectedStatusCount++
+                if self.connectedStatusCount > 1 {
+                    self.reload()
+                }
             }
         }
     }
