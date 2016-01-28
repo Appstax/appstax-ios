@@ -5,6 +5,7 @@ import Foundation
     
     private var apiClient: AXApiClient
     private var loginManager: AXLoginUIManager!
+    private var eventHub = AXEventHub()
     private(set) public var keychain: AXKeychain = AXKeychain()
 
     private var _currentUser: AXUser?
@@ -44,6 +45,7 @@ import Foundation
                 let sessionID = dictionary?["sysSessionId"] as? String
                 self.setSessionID(sessionID)
                 let objectID = properties["sysObjectId"] as? String
+                let username = properties["sysUsername"] as? String ?? username
                 let user = AXUser(username: username, properties: properties)
                 if login {
                     self.currentUser = user
@@ -52,6 +54,7 @@ import Foundation
                     self.keychain.setObject(sessionID, forKeyedSubscript: "SessionID")
                 }
                 completion?(user, nil)
+                self.eventHub.dispatch(AXEvent(type: "signup"))
             }
         }
     }
@@ -67,11 +70,13 @@ import Foundation
                 let sessionID = dictionary?["sysSessionId"] as? String
                 self.setSessionID(sessionID)
                 let objectID = properties["sysObjectId"] as? String
+                let username = properties["sysUsername"] as? String ?? username
                 self.currentUser = AXUser(username: username, properties: properties)
                 self.keychain.setObject(username, forKeyedSubscript: "Username")
                 self.keychain.setObject(objectID, forKeyedSubscript: "UserObjectID")
                 self.keychain.setObject(sessionID, forKeyedSubscript: "SessionID")
                 completion?(self.currentUser, nil)
+                self.eventHub.dispatch(AXEvent(type: "login"))
             }
         }
     }
@@ -97,6 +102,11 @@ import Foundation
         keychain.setObject(nil, forKeyedSubscript: "Username")
         currentUser = nil
         apiClient.updateSessionID(nil)
+        eventHub.dispatch(AXEvent(type: "logout"))
+    }
+    
+    func on(type: String, handler: (AXEvent) -> ()) {
+        eventHub.on(type, handler: handler)
     }
     
     private func setSessionID(sessionID: String?) {

@@ -88,6 +88,7 @@ import XCTest
     override func tearDown() {
         super.tearDown()
         OHHTTPStubs.setEnabled(false)
+        Appstax.defaultContext.userService.keychain.clear()
     }
     
     // MARK: Array/Collection observers
@@ -886,6 +887,162 @@ import XCTest
             AXAssertEqual(statusChanges[1], "connected")
             AXAssertEqual(statusChanges[2], "connecting")
             AXAssertEqual(statusChanges[3], "connected")
+        }
+    }
+    
+    // MARK: Current user observer
+    
+    func testCurrentUserShouldBeNilBeforeLogin() {
+        let async = expectationWithDescription("async")
+        
+        let model = AXModel()
+        model.watch("currentUser")
+        
+        delay(0.1) {
+            async.fulfill()
+        }
+        waitForExpectationsWithTimeout(10) { error in
+            AXAssertNil(model["currentUser"])
+        }
+    }
+    
+    func testCurrentUserShouldBeLoadedWithUserFromServerWhenAlreadyLoggedIn() {
+        let async = expectationWithDescription("async")
+        
+        let userData = ["sysObjectId":"user1002", "fullName":"Justin Time"]
+        AXStubs.method("GET", urlPath: "/objects/users/user1002", response: userData, statusCode: 200)
+        
+        let keychain = Appstax.defaultContext.userService.keychain
+        keychain.setObject("session-id-9876", forKeyedSubscript: "SessionID")
+        keychain.setObject("justin", forKeyedSubscript: "Username")
+        keychain.setObject("user1002", forKeyedSubscript: "UserObjectID")
+        
+        let model = AXModel()
+        model.watch("currentUser")
+        model.on("change") { _ in
+            async.fulfill()
+        }
+        
+        waitForExpectationsWithTimeout(3) { error in
+            let user = model["currentUser"] as? AXUser
+            AXAssertNotNil(user)
+            AXAssertEqual(user?.username, "justin")
+            AXAssertEqual(user?["fullName"], "Justin Time")
+            AXAssertEqual(user?.objectID, "user1002")
+        }
+    }
+    
+    func testCurrentUserShouldBeLoadedWithUserFromServerAfterLogin() {
+        let async = expectationWithDescription("async")
+        
+        let sessionData = ["sysSessionId":"session2003", "user":["sysObjectId":"user1002", "sysUsername":"justin", "fullName":"Justin Time"]]
+        AXStubs.method("POST", urlPath: "/sessions", response: sessionData, statusCode: 200)
+        
+        let model = AXModel()
+        model.watch("currentUser")
+        model.on("change") { _ in
+            async.fulfill()
+        }
+        
+        AXUser.login(username: "foo", password: "bar") { _ in }
+
+        waitForExpectationsWithTimeout(3) { error in
+            let user = model["currentUser"] as? AXUser
+            AXAssertNotNil(user)
+            AXAssertEqual(user?.username, "justin")
+            AXAssertEqual(user?["fullName"], "Justin Time")
+            AXAssertEqual(user?.objectID, "user1002")
+        }
+    }
+    
+    func testCurrentUserShouldBeLoadedWithUserFromServerAfterSignup() {
+        let async = expectationWithDescription("async")
+        
+        let sessionData = ["sysSessionId":"session2003", "user":["sysObjectId":"user1002", "sysUsername":"justin", "fullName":"Justin Time"]]
+        AXStubs.method("POST", urlPath: "/users", response: sessionData, statusCode: 200)
+        
+        let model = AXModel()
+        model.watch("currentUser")
+        model.on("change") { _ in
+            async.fulfill()
+        }
+        
+        AXUser.signup(username: "foo", password: "bar") { _ in }
+        
+        waitForExpectationsWithTimeout(3) { error in
+            let user = model["currentUser"] as? AXUser
+            AXAssertNotNil(user)
+            AXAssertEqual(user?.username, "justin")
+            AXAssertEqual(user?["fullName"], "Justin Time")
+            AXAssertEqual(user?.objectID, "user1002")
+        }
+    }
+    
+    func testCurrentUserShouldBeNilAfterLogout() {
+        let async = expectationWithDescription("async")
+        
+        let sessionData = ["sysSessionId":"session2003", "user":["sysObjectId":"user1002", "sysUsername":"justin", "fullName":"Justin Time"]]
+        AXStubs.method("POST", urlPath: "/sessions", response: sessionData, statusCode: 200)
+        
+        let model = AXModel()
+        model.watch("currentUser")
+        
+        var userChanges: [AXUser?] = []
+        model.on("change") { _ in
+            userChanges.append(model["currentUser"] as? AXUser ?? nil)
+        }
+        
+        AXUser.login(username: "foo", password: "bar") { _ in }
+        delay(0.1) {
+            AXUser.logout()
+            delay(0.1) {
+                async.fulfill()
+            }
+        }
+        
+        waitForExpectationsWithTimeout(3) { error in
+            AXAssertEqual(userChanges.count, 2)
+            AXAssertNotNil(userChanges[0])
+            AXAssertNil(userChanges[1])
+        }
+    }
+    
+    func testShouldBeUpdatedOnObjectChannel() {
+        let async = expectationWithDescription("async")
+        
+        let sessionData = ["sysSessionId":"session2003", "user":["sysObjectId":"user1002", "sysUsername":"justin", "fullName":"Justin Time"]]
+        AXStubs.method("POST", urlPath: "/sessions", response: sessionData, statusCode: 200)
+        
+        let model = AXModel()
+        model.watch("currentUser")
+        
+        var userChanges: [AXUser?] = []
+        model.on("change") { _ in
+            userChanges.append(model["currentUser"] as? AXUser ?? nil)
+        }
+        
+        AXUser.login(username: "foo", password: "bar") { _ in }
+        delay(0.1) {
+            self.realtimeService.webSocketDidReceiveMessage([
+                "event": "object.updated",
+                "channel": "objects/users",
+                "data": [
+                    "sysObjectId":"user1002",
+                    "sysUsername":"jcase",
+                    "fullName":"Justin Case"
+                ]
+            ])
+
+            delay(0.1) {
+                async.fulfill()
+            }
+        }
+        
+        waitForExpectationsWithTimeout(3) { error in
+            AXAssertEqual(userChanges.count, 2)
+            XCTAssertTrue(userChanges[0] === userChanges[1])
+            AXAssertEqual(userChanges[1]?["fullName"], "Justin Case")
+            AXAssertEqual(userChanges[1]?.username, "jcase")
         }
     }
     

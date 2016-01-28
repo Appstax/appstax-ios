@@ -52,6 +52,8 @@ import Foundation
         switch name {
             case "status":
                 observer = AXModelStatusObserver(model: self, realtimeService: realtimeService)
+            case "currentUser":
+                observer = AXModelCurrentUserObserver(model: self, userService: Appstax.defaultContext.userService)
             default:
                 observer = AXModelArrayObserver(model: self, name: name, collection: collection, expand: expand, order: order, filter: filter)
         }
@@ -152,7 +154,61 @@ private protocol AXModelObserver {
     func load()
     func connect()
     func sort()
-    func get() -> AnyObject
+    func get() -> AnyObject?
+}
+
+private class AXModelCurrentUserObserver: AXModelObserver {
+    
+    private var model: AXModel
+    private var userService: AXUserService
+    private var user: AXUser?
+    
+    init(model: AXModel, userService: AXUserService) {
+        self.model = model
+        self.userService = userService
+        self.setupUserServiceEvents()
+    }
+    
+    private func setupUserServiceEvents() {
+        userService.on("login")  { _ in self.importCurrentUser() }
+        userService.on("logout") { _ in self.importCurrentUser() }
+        userService.on("signup") { _ in self.importCurrentUser() }
+    }
+    
+    func importCurrentUser() {
+        set(userService.currentUser)
+    }
+    
+    func load() {
+        if let currentUser = userService.currentUser {
+            currentUser.refresh() { _ in
+                self.user = self.model.normalize(currentUser) as? AXUser
+                self.model.notify("change")
+            }
+        }
+    }
+    
+    func connect() {
+        let channel = model.createChannel("objects/users", filter: "")
+        channel.on("object.updated") {
+            self.set($0.object as? AXUser)
+        }
+    }
+    
+    private func set(user: AXUser?) {
+        if let user = user {
+            self.user = model.normalize(user) as? AXUser
+        } else {
+            self.user = nil
+        }
+        self.model.notify("change")
+    }
+    
+    func sort() {}
+    func get() -> AnyObject? {
+        return user
+    }
+    
 }
 
 private class AXModelStatusObserver: AXModelObserver {
@@ -171,7 +227,7 @@ private class AXModelStatusObserver: AXModelObserver {
         realtimeService.connect()
     }
     func sort() {}
-    func get() -> AnyObject {
+    func get() -> AnyObject? {
         return realtimeService.statusString
     }
     
@@ -266,7 +322,7 @@ private class AXModelArrayObserver: AXModelObserver {
         }
     }
     
-    func get() -> AnyObject {
+    func get() -> AnyObject? {
         return objects
     }
     
