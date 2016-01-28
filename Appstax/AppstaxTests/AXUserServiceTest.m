@@ -44,7 +44,7 @@
         return [[request.URL path] isEqualToString:@"/users"] &&
                [request.HTTPMethod isEqualToString:@"POST"];
     } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
-        return [OHHTTPStubsResponse responseWithJSONObject:@{}
+        return [OHHTTPStubsResponse responseWithJSONObject:@{@"user":@{}}
                                                 statusCode:200 headers:nil];
     }];
 
@@ -71,7 +71,7 @@
         [request.HTTPMethod isEqualToString:@"POST"] &&
         [request.URL.query isEqualToString:@"login=false"];
     } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
-        return [OHHTTPStubsResponse responseWithJSONObject:@{}
+        return [OHHTTPStubsResponse responseWithJSONObject:@{@"user":@{}}
                                                 statusCode:200 headers:nil];
     }];
     
@@ -104,7 +104,7 @@
         postData = [NSJSONSerialization JSONObjectWithData:httpBody options:0 error:nil];
         postUrl = request.URL;
         [exp1 fulfill];
-        return [OHHTTPStubsResponse responseWithJSONObject:@{}
+        return [OHHTTPStubsResponse responseWithJSONObject:@{@"user":@{}}
                                                 statusCode:200 headers:nil];
     }];
     
@@ -130,7 +130,7 @@
         postData = [NSJSONSerialization JSONObjectWithData:httpBody options:0 error:nil];
         postUrl = request.URL;
         [exp1 fulfill];
-        return [OHHTTPStubsResponse responseWithJSONObject:@{}
+        return [OHHTTPStubsResponse responseWithJSONObject:@{@"user":@{}}
                                                 statusCode:200 headers:nil];
     }];
     
@@ -163,7 +163,7 @@
         postData = [NSJSONSerialization JSONObjectWithData:httpBody options:0 error:nil];
         postUrl = request.URL;
         [exp1 fulfill];
-        return [OHHTTPStubsResponse responseWithJSONObject:@{}
+        return [OHHTTPStubsResponse responseWithJSONObject:@{@"user":@{}}
                                                 statusCode:200 headers:nil];
     }];
     
@@ -215,7 +215,7 @@
         return [[request.URL path] isEqualToString:@"/users"] &&
                [request.HTTPMethod isEqualToString:@"POST"];
     } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
-        return [OHHTTPStubsResponse responseWithJSONObject:@{@"sysSessionId":@"the-session-id"}
+        return [OHHTTPStubsResponse responseWithJSONObject:@{@"sysSessionId":@"the-session-id",@"user":@{}}
                                                 statusCode:200 headers:nil];
     }];
 
@@ -282,7 +282,7 @@
         return [[request.URL path] isEqualToString:@"/users"] &&
                [request.HTTPMethod isEqualToString:@"POST"];
     } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
-        return [OHHTTPStubsResponse responseWithJSONObject:@{@"sysSessionId":@"sid"}
+        return [OHHTTPStubsResponse responseWithJSONObject:@{@"sysSessionId":@"sid",@"user":@{}}
                                                 statusCode:200 headers:nil];
     }];
     
@@ -337,7 +337,7 @@
         NSData *httpBody = [NSURLProtocol propertyForKey:@"HTTPBody" inRequest:request];
         postData = [NSJSONSerialization JSONObjectWithData:httpBody options:0 error:nil];
         [exp1 fulfill];
-        return [OHHTTPStubsResponse responseWithJSONObject:@{}
+        return [OHHTTPStubsResponse responseWithJSONObject:@{@"user":@{}}
                                                 statusCode:200 headers:nil];
     }];
     
@@ -356,7 +356,7 @@
         return [[request.URL path] isEqualToString:@"/sessions"] &&
         [request.HTTPMethod isEqualToString:@"POST"];
     } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
-        return [OHHTTPStubsResponse responseWithJSONObject:@{@"sysSessionId":@"1234-5678"}
+        return [OHHTTPStubsResponse responseWithJSONObject:@{@"sysSessionId":@"1234-5678",@"user":@{}}
                                                 statusCode:200 headers:nil];
     }];
     
@@ -401,7 +401,7 @@
         return [[request.URL path] isEqualToString:@"/sessions"] &&
         [request.HTTPMethod isEqualToString:@"POST"];
     } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
-        return [OHHTTPStubsResponse responseWithJSONObject:@{@"sysSessionId":@"thesessionid"}
+        return [OHHTTPStubsResponse responseWithJSONObject:@{@"sysSessionId":@"thesessionid",@"user":@{}}
                                                 statusCode:200 headers:nil];
     }];
     
@@ -451,7 +451,7 @@
         return [[request.URL path] isEqualToString:@"/sessions"] &&
         [request.HTTPMethod isEqualToString:@"POST"];
     } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
-        return [OHHTTPStubsResponse responseWithJSONObject:@{}
+        return [OHHTTPStubsResponse responseWithJSONObject:@{@"user":@{}}
                                                 statusCode:200 headers:nil];
     }];
     

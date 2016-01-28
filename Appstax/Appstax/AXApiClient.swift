@@ -94,7 +94,7 @@ import Foundation
         }.resume()
     }
     
-    public func deleteUrl(url: NSURL, completion: ((NSError?) -> ())?) {
+    public func deleteUrl(url: NSURL, completion: ((NSError?) -> ())? = nil) {
         sendHttpBody(NSData(), toUrl: url, method: "DELETE", headers: [:]) {
             completion?($1)
         }

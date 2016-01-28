@@ -2,8 +2,8 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-@class AXUserService;
 @class AXLoginViews;
+@class AXUserService;
 
 @interface AXLoginUIManager : NSObject
 
