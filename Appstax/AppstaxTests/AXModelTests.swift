@@ -32,6 +32,22 @@ import XCTest
         ]
     ]]]
     
+    let itemsResponseUnexpanded = ["objects":[[
+        "sysObjectId":"id0",
+        "prop1": [
+            "sysDatatype": "relation",
+            "sysRelationType": "single",
+            "sysCollection": "collection2",
+            "sysObjects": ["id1"]
+        ],
+        "prop2": [
+            "sysDatatype": "relation",
+            "sysRelationType": "array",
+            "sysCollection": "collection3",
+            "sysObjects": ["id2", "id3"]
+        ]
+    ]]]
+    
     let itemsResponseDeep = ["objects":[[
         "sysObjectId":"id0",
         "prop1": [
@@ -670,6 +686,38 @@ import XCTest
             AXAssertEqual(model["items"]?[0], cached["item0"] ?? nil)
             AXAssertEqual(model["items"]?[0].object("prop1"), cached["item0_prop1"] ?? nil)
             AXAssertEqual(model["items"]?[0].objects("prop2")?[1], cached["item0_prop2_1"] ?? nil)
+        }
+    }
+    
+    func testShouldNotReExpandRelationsWhenUpdatingAnObjectLoadedWithRelationsWithoutExpand() {
+        weak var async = expectationWithDescription("async")
+        
+        Appstax.setLogLevel("trace")
+        
+        var itemRequests = 0
+        AXStubs.method("GET", urlPath: "/objects/items", response: itemsResponseUnexpanded, statusCode: 200)
+        AXStubs.method("GET", urlPath: "/objects/items/id0") { _ in
+            itemRequests++
+            return OHHTTPStubsResponse(JSONObject: ["objects":[]], statusCode: 200, headers: [:])
+        }
+        
+        let model = AXModel()
+        model.watch("items")
+        
+        delay(0.3) {
+            self.realtimeService.webSocketDidReceiveMessage([
+                "event": "object.updated",
+                "channel": "objects/items",
+                "data": self.itemsResponseUnexpanded["objects"]![0]
+            ])
+            
+            delay(0.3) {
+                async?.fulfill()
+            }
+        }
+        
+        waitForExpectationsWithTimeout(30) { error in
+            AXAssertEqual(itemRequests, 0)
         }
     }
     
