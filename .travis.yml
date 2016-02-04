@@ -4,7 +4,6 @@ install: ''
 before_script: 
   - ./Scripts/addkey.sh
   - brew update
-  - brew install carthage
 script: ./build.sh
 git:
   depth: 1
