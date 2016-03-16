@@ -9,10 +9,8 @@ FOUNDATION_EXPORT const unsigned char AppstaxVersionString[];
 #import "AXFile.h"
 #import "AXImageView.h"
 #import "AXQuery.h"
-#import "AXLoginViews.h"
 
 // TODO: Make internal
 #import "AXFileService.h"
-#import "AXLoginUIManager.h"
 #import "AXKeychain.h"
 #import "AXPermissionsService.h"

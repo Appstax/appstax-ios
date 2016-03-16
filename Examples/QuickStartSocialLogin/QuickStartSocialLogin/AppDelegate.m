@@ -14,7 +14,7 @@
     
     //[Appstax setAppKey:@"NkxXMTRibGhEWHBLcg=="];
     [Appstax setAppKey:@"b29NZ1ZXcUNCb2piRw==" baseUrl:@"https://test-aws.appstax.com/api/latest/"];
-    [Appstax setLogLevel:@"debug"];
+    [Appstax setLogLevel:@"trace"];
     
     return YES;
 }

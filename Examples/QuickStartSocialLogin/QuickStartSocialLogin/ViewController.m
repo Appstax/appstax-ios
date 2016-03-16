@@ -14,6 +14,12 @@
     [self updateLabel];
 }
 
+- (IBAction)requireLogin:(id)sender {
+    [AXUser requireLogin:^(AXUser *user) {
+        [self updateLabel];
+    }];
+}
+
 - (IBAction)logout:(id)sender {
     [AXUser logout];
     [self updateLabel];
