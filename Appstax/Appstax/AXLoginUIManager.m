@@ -82,7 +82,7 @@
                               if(!error) {
                                   [self finish];
                               } else {
-                                  [_signupViewController showError:error.userInfo[@"ErrorMessage"]];
+                                  [_signupViewController showError:error.userInfo[@"errorMessage"]];
                               }
                           }];
 }
@@ -94,7 +94,7 @@
                              if(!error) {
                                  [self finish];
                              } else {
-                                 [_loginViewController showError:error.userInfo[@"ErrorMessage"]];
+                                 [_loginViewController showError:error.userInfo[@"errorMessage"]];
                              }
                          }];
 }

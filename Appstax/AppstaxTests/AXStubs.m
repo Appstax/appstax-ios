@@ -39,4 +39,11 @@
     } withStubResponse:responseBlock];
 }
 
++ (void)method:(NSString *)method urlString:(NSString *)urlString responding:(OHHTTPStubsResponseBlock)responseBlock {
+    [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+        return [[request.URL absoluteString] isEqualToString:urlString] &&
+        [request.HTTPMethod isEqualToString:method];
+    } withStubResponse:responseBlock];
+}
+
 @end

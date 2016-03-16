@@ -157,7 +157,11 @@ import Foundation
     }
     
     public func urlEncode(string: String) -> String {
-        let characterSet = NSCharacterSet(charactersInString: " ='\"#%/<>?@^`{|}").invertedSet
+        return AXApiClient.urlEncode(string)
+    }
+    
+    public static func urlEncode(string: String) -> String {
+        let characterSet = NSCharacterSet(charactersInString: " =:'\"#%/<>?@^`{|}").invertedSet
         return string.stringByAddingPercentEncodingWithAllowedCharacters(characterSet) ?? string
     }
     

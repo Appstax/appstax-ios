@@ -27,8 +27,7 @@ import Foundation
         self.loginManager = AXLoginUIManager(userService: self)
     }
     
-    public func signupWithUsername(username: String, password: String, login: Bool, properties: [String:AnyObject], completion: ((AXUser?, NSError?) -> ())?) {
-        
+    public func signup(username username: String, password: String, login: Bool, properties: [String:AnyObject], completion: ((AXUser?, NSError?) -> ())?) {
         var url = apiClient.urlByConcatenatingStrings(["users"])
         if !login {
             url = apiClient.urlByConcatenatingStrings(["users?login=false"])
@@ -59,8 +58,7 @@ import Foundation
         }
     }
     
-    public func loginWithUsername(username: String, password: String, completion: ((AXUser?, NSError?) -> ())?) {
-        
+    public func login(username username: String, password: String, completion: ((AXUser?, NSError?) -> ())?) {
         let url = apiClient.urlByConcatenatingStrings(["sessions"])
         apiClient.postDictionary(["sysUsername":username, "sysPassword":password], toUrl: url!) {
             dictionary, error in
@@ -71,6 +69,69 @@ import Foundation
                 self.setSessionID(sessionID)
                 let objectID = properties["sysObjectId"] as? String
                 let username = properties["sysUsername"] as? String ?? username
+                self.currentUser = AXUser(username: username, properties: properties)
+                self.keychain.setObject(username, forKeyedSubscript: "Username")
+                self.keychain.setObject(objectID, forKeyedSubscript: "UserObjectID")
+                self.keychain.setObject(sessionID, forKeyedSubscript: "SessionID")
+                completion?(self.currentUser, nil)
+                self.eventHub.dispatch(AXEvent(type: "login"))
+            }
+        }
+    }
+    
+    public func login(provider provider: String, fromViewController: UIViewController?, completion: ((AXUser?, NSError?) -> ())?) {
+        let authViewController = AXAuthViewController()
+        
+        fromViewController?.presentViewController(authViewController, animated: true, completion: nil)
+        
+        getProviderConfig(provider) {
+            config, error in
+            if let error = error {
+                completion?(nil, error)
+            } else if let clientId = config?["clientId"] as? String {
+                let uri = "https://www.facebook.com/dialog/oauth?client_id={clientId}&redirect_uri={redirectUri}"
+                let redirectUri = "https://appstax.com/api/latest/sessions/auth"
+                authViewController.runOAuth(uri: uri, redirectUri: redirectUri, clientId: clientId) {
+                    result, error in
+                    authViewController.dismissViewControllerAnimated(true, completion: nil)
+                    
+                    if let error = error {
+                        completion?(nil, error)
+                    } else if let result = result {
+                        self.login(provider: provider, authResult: result, completion: completion)
+                    }
+                }
+            }
+        }
+    }
+    
+    func getProviderConfig(provider: String, completion:(([String:AnyObject]?, NSError?) -> ())) {
+        let url = apiClient.urlFromTemplate("sessions/providers/:provider", parameters: ["provider": provider])!
+        apiClient.dictionaryFromUrl(url, completion: completion)
+    }
+    
+    func login(provider provider:String, authResult: AXAuthResult, completion: ((AXUser?, NSError?) -> ())?) {
+        let url = apiClient.urlByConcatenatingStrings(["sessions"])
+        let data = [
+            "sysProvider": [
+                "type": provider,
+                "data": [
+                    "code": authResult.authCode ?? "",
+                    "redirectUri": authResult.redirectUri
+                ]
+            ]
+        ]
+        apiClient.postDictionary(data, toUrl: url!) {
+            dictionary, error in
+            
+            if let error = error {
+                completion?(nil, error)
+            } else {
+                let properties = dictionary?["user"] as? [String:AnyObject]? ?? [:]
+                let sessionID = dictionary?["sysSessionId"] as? String
+                self.setSessionID(sessionID)
+                let objectID = properties?["sysObjectId"] as? String
+                let username = properties?["sysUsername"] as? String ?? ""
                 self.currentUser = AXUser(username: username, properties: properties)
                 self.keychain.setObject(username, forKeyedSubscript: "Username")
                 self.keychain.setObject(objectID, forKeyedSubscript: "UserObjectID")

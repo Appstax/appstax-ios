@@ -22,6 +22,8 @@
 
 /* Begin PBXBuildFile section */
 		541610741C5A67BA00DDE472 /* AXUserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541610731C5A67BA00DDE472 /* AXUserService.swift */; };
+		5428AAC81C92DC5D00975A29 /* SocialLoginFacebookTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5428AAC71C92DC5D00975A29 /* SocialLoginFacebookTest.swift */; };
+		5428AACA1C930E9600975A29 /* AXAuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5428AAC91C930E9600975A29 /* AXAuthViewController.swift */; };
 		543A27CC1B4687A7001F2BC2 /* AXObjectAccessorsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 543A27CB1B4687A7001F2BC2 /* AXObjectAccessorsTests.swift */; };
 		543A27CE1B46C7EC001F2BC2 /* AXUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 543A27CD1B46C7EC001F2BC2 /* AXUser.swift */; };
 		544F7D591B2624A900510DA2 /* AXUserServiceTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 54F985301AB22E7E000096ED /* AXUserServiceTest.m */; };
@@ -30,6 +32,7 @@
 		544F7D5E1B2765F900510DA2 /* AXObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544F7D5D1B2765F900510DA2 /* AXObject.swift */; };
 		544F7D601B28CEF400510DA2 /* ObjectRelationsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544F7D5F1B28CEF400510DA2 /* ObjectRelationsTests.swift */; };
 		544F7D621B28D2AD00510DA2 /* AXAsserts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544F7D611B28D2AD00510DA2 /* AXAsserts.swift */; };
+		547C99641C97FE9200FCBEB0 /* AXAuthViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 547C99631C97FE9200FCBEB0 /* AXAuthViewController.xib */; };
 		5484DD741B208FBE00D0FAFD /* AXApiClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5484DD731B208FBE00D0FAFD /* AXApiClient.swift */; };
 		5484DDF01B21D0DA00D0FAFD /* Appstax.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5484DDEF1B21D0DA00D0FAFD /* Appstax.swift */; };
 		54B51E5B1BD0D7B60063A209 /* Starscream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54B51E5A1BD0D7B60063A209 /* Starscream.framework */; };
@@ -94,12 +97,15 @@
 
 /* Begin PBXFileReference section */
 		541610731C5A67BA00DDE472 /* AXUserService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AXUserService.swift; sourceTree = "<group>"; };
+		5428AAC71C92DC5D00975A29 /* SocialLoginFacebookTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SocialLoginFacebookTest.swift; sourceTree = "<group>"; };
+		5428AAC91C930E9600975A29 /* AXAuthViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AXAuthViewController.swift; sourceTree = "<group>"; };
 		543A27CB1B4687A7001F2BC2 /* AXObjectAccessorsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AXObjectAccessorsTests.swift; sourceTree = "<group>"; };
 		543A27CD1B46C7EC001F2BC2 /* AXUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AXUser.swift; sourceTree = "<group>"; };
 		544F7D5B1B2762AE00510DA2 /* AXObjectService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AXObjectService.swift; sourceTree = "<group>"; };
 		544F7D5D1B2765F900510DA2 /* AXObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AXObject.swift; sourceTree = "<group>"; };
 		544F7D5F1B28CEF400510DA2 /* ObjectRelationsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObjectRelationsTests.swift; sourceTree = "<group>"; };
 		544F7D611B28D2AD00510DA2 /* AXAsserts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AXAsserts.swift; sourceTree = "<group>"; };
+		547C99631C97FE9200FCBEB0 /* AXAuthViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AXAuthViewController.xib; sourceTree = "<group>"; };
 		5484DD731B208FBE00D0FAFD /* AXApiClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AXApiClient.swift; sourceTree = "<group>"; };
 		5484DDEE1B21D0D900D0FAFD /* AppstaxTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "AppstaxTests-Bridging-Header.h"; path = "../Appstax/AppstaxTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		5484DDEF1B21D0DA00D0FAFD /* Appstax.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Appstax.swift; sourceTree = "<group>"; };
@@ -225,6 +231,8 @@
 			children = (
 				54F985191AB22817000096ED /* Headers */,
 				5484DDEF1B21D0DA00D0FAFD /* Appstax.swift */,
+				5428AAC91C930E9600975A29 /* AXAuthViewController.swift */,
+				547C99631C97FE9200FCBEB0 /* AXAuthViewController.xib */,
 				54B51E5E1BD0E1F60063A209 /* AXChannel.swift */,
 				54B51E5F1BD0E1F60063A209 /* AXEventHub.swift */,
 				54F984D01AB22801000096ED /* AXFile.m */,
@@ -274,6 +282,7 @@
 				54F985301AB22E7E000096ED /* AXUserServiceTest.m */,
 				544F7D5F1B28CEF400510DA2 /* ObjectRelationsTests.swift */,
 				54B51E671BD0E4DE0063A209 /* RealtimeTests.swift */,
+				5428AAC71C92DC5D00975A29 /* SocialLoginFacebookTest.swift */,
 				54B51E661BD0E4C60063A209 /* Resources */,
 				54F984BF1AB22755000096ED /* Supporting Files */,
 			);
@@ -437,6 +446,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				54F985051AB22801000096ED /* AXLoginViewController.xib in Resources */,
+				547C99641C97FE9200FCBEB0 /* AXAuthViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -501,6 +511,7 @@
 				54F984F11AB22801000096ED /* AXFile.m in Sources */,
 				54B51E631BD0E1F60063A209 /* AXRealtimeService.swift in Sources */,
 				54F985031AB22801000096ED /* AXLoginViewController.m in Sources */,
+				5428AACA1C930E9600975A29 /* AXAuthViewController.swift in Sources */,
 				54F985081AB22801000096ED /* AXLoginViews.m in Sources */,
 				54F985111AB22801000096ED /* AXQuery.m in Sources */,
 				54B51E611BD0E1F60063A209 /* AXChannel.swift in Sources */,
@@ -516,6 +527,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5428AAC81C92DC5D00975A29 /* SocialLoginFacebookTest.swift in Sources */,
 				544F7D601B28CEF400510DA2 /* ObjectRelationsTests.swift in Sources */,
 				54F985341AB22E7E000096ED /* AppstaxTests.m in Sources */,
 				54F9854D1AB23B7A000096ED /* OHHTTPStubsResponse+HTTPMessage.m in Sources */,

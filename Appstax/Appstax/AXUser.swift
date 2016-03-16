@@ -4,7 +4,7 @@ import Foundation
 @objc public class AXUser: AXObject {
  
     public convenience init(username: String) {
-        self.init(username: username)
+        self.init(username: username, properties:[:])
     }
     
     public convenience init(username: String, properties: [String:AnyObject]?) {
@@ -24,23 +24,27 @@ import Foundation
     }
     
     public static func signup(username username: String, password: String, completion: ((AXUser?, NSError?) -> ())?) {
-        Appstax.defaultContext.userService.signupWithUsername(username, password: password, login: true, properties: [:], completion: completion)
+        Appstax.defaultContext.userService.signup(username: username, password: password, login: true, properties: [:], completion: completion)
     }
     
     public static func signup(username username: String, password: String, login: Bool, completion: ((AXUser?, NSError?) -> ())?) {
-        Appstax.defaultContext.userService.signupWithUsername(username, password: password, login: login, properties: [:], completion: completion)
+        Appstax.defaultContext.userService.signup(username: username, password: password, login: login, properties: [:], completion: completion)
     }
     
     public static func signup(username username: String, password: String, properties: [String:AnyObject], completion: ((AXUser?, NSError?) -> ())?) {
-        Appstax.defaultContext.userService.signupWithUsername(username, password: password, login: true, properties: properties, completion: completion)
+        Appstax.defaultContext.userService.signup(username: username, password: password, login: true, properties: properties, completion: completion)
     }
     
     public static func signup(username username: String, password: String, login: Bool, properties: [String:AnyObject], completion: ((AXUser?, NSError?) -> ())?) {
-        Appstax.defaultContext.userService.signupWithUsername(username, password: password, login: login, properties: properties, completion: completion)
+        Appstax.defaultContext.userService.signup(username: username, password: password, login: login, properties: properties, completion: completion)
     }
     
     public static func login(username username: String, password: String, completion: ((AXUser?, NSError?) -> ())?) {
-        Appstax.defaultContext.userService.loginWithUsername(username, password: password, completion: completion)
+        Appstax.defaultContext.userService.login(username: username, password: password, completion: completion)
+    }
+    
+    public static func login(provider provider: String, fromViewController: UIViewController?, completion: ((AXUser?, NSError?) -> ())?) {
+        Appstax.defaultContext.userService.login(provider: provider, fromViewController: fromViewController, completion: completion)
     }
     
     public static func requireLogin(completion: ((AXUser) -> ())?) {
