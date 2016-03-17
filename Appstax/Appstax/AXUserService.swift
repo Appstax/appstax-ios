@@ -89,7 +89,12 @@ import Foundation
             if let error = error {
                 completion?(nil, error)
             } else if let clientId = config?["clientId"] as? String {
-                let uri = "https://www.facebook.com/dialog/oauth?client_id={clientId}&redirect_uri={redirectUri}"
+                var uri = ""
+                switch provider {
+                    case "facebook": uri = "https://www.facebook.com/dialog/oauth?client_id={clientId}&redirect_uri={redirectUri}"
+                    case "google": uri = "https://accounts.google.com/o/oauth2/v2/auth?client_id={clientId}&redirect_uri={redirectUri}&nonce={nonce}&response_type=code&scope=profile+email"
+                    default: break;
+                }
                 let redirectUri = "https://appstax.com/api/latest/sessions/auth"
                 authViewController.runOAuth(uri: uri, redirectUri: redirectUri, clientId: clientId) {
                     result, error in

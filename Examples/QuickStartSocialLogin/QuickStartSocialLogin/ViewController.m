@@ -42,6 +42,13 @@
     }];
 }
 
+- (IBAction)loginWithGoogle:(id)sender {
+    [AXUser loginWithProvider:@"google" fromViewController:self completion:^(AXUser *user, NSError *error) {
+        self.lastError = error;
+        [self updateLabel];
+    }];
+}
+
 - (void)updateLabel {
     AXUser *user = [AXUser currentUser];
     if(self.lastError != nil) {

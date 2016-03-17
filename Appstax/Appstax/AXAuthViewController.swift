@@ -40,6 +40,7 @@ class AXAuthViewController: UIViewController, UIWebViewDelegate {
         let uri = uri
                     .stringByReplacingOccurrencesOfString("{redirectUri}", withString: AXApiClient.urlEncode(redirectUri))
                     .stringByReplacingOccurrencesOfString("{clientId}", withString: clientId)
+                    .stringByReplacingOccurrencesOfString("{nonce}", withString: generateNonce())
         
         AXLog.debug("Opening auth: \(uri)")
         
@@ -85,6 +86,10 @@ class AXAuthViewController: UIViewController, UIWebViewDelegate {
         running = false
         completion = nil
         result = nil
+    }
+    
+    func generateNonce() -> String {
+        return NSUUID().UUIDString.stringByReplacingOccurrencesOfString("-", withString: "")
     }
     
     deinit {

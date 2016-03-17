@@ -24,8 +24,8 @@
                                     <action selector="loginWithFacebook:" destination="BYZ-38-t0r" eventType="touchUpInside" id="In2-s5-nMQ"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" preservesSuperviewLayoutMargins="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ts6-Uh-igh">
-                                <rect key="frame" x="179" y="290" width="243" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" preservesSuperviewLayoutMargins="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ts6-Uh-igh">
+                                <rect key="frame" x="285" y="328" width="31" height="15"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
@@ -44,8 +44,15 @@
                                     <action selector="requireLoginWithButtons:" destination="BYZ-38-t0r" eventType="touchUpInside" id="UL0-eZ-QrB"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Eow-Oh-7aU">
+                                <rect key="frame" x="236" y="166" width="128" height="30"/>
+                                <state key="normal" title="Log in with Google"/>
+                                <connections>
+                                    <action selector="loginWithGoogle:" destination="BYZ-38-t0r" eventType="touchUpInside" id="XMa-45-Zkh"/>
+                                </connections>
+                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dwM-sg-bg6">
-                                <rect key="frame" x="274" y="166" width="52" height="30"/>
+                                <rect key="frame" x="274" y="204" width="52" height="30"/>
                                 <state key="normal" title="Log out"/>
                                 <connections>
                                     <action selector="logout:" destination="BYZ-38-t0r" eventType="touchUpInside" id="qvY-Iq-WMM"/>
@@ -54,8 +61,11 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="dwM-sg-bg6" firstAttribute="top" secondItem="Eow-Oh-7aU" secondAttribute="bottom" constant="8" id="44L-gL-xNx"/>
                             <constraint firstItem="txm-FF-Fgg" firstAttribute="centerX" secondItem="yyT-mj-WVt" secondAttribute="centerX" id="BEo-u8-3OW"/>
+                            <constraint firstItem="Eow-Oh-7aU" firstAttribute="centerX" secondItem="txm-FF-Fgg" secondAttribute="centerX" id="Bbo-IS-t9U"/>
                             <constraint firstItem="rJY-zF-xgt" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="32" id="C5y-ed-Nxx"/>
+                            <constraint firstItem="Eow-Oh-7aU" firstAttribute="top" secondItem="txm-FF-Fgg" secondAttribute="bottom" constant="8" id="FW4-kf-2Qh"/>
                             <constraint firstItem="dwM-sg-bg6" firstAttribute="centerX" secondItem="txm-FF-Fgg" secondAttribute="centerX" id="IJJ-No-ykv"/>
                             <constraint firstItem="rJY-zF-xgt" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Rr9-i4-Q8Y"/>
                             <constraint firstItem="Ts6-Uh-igh" firstAttribute="top" secondItem="dwM-sg-bg6" secondAttribute="bottom" constant="94" id="Svj-Qt-ixd"/>
@@ -65,6 +75,11 @@
                             <constraint firstItem="yyT-mj-WVt" firstAttribute="centerX" secondItem="rJY-zF-xgt" secondAttribute="centerX" id="co9-Yw-AJa"/>
                             <constraint firstItem="txm-FF-Fgg" firstAttribute="top" secondItem="yyT-mj-WVt" secondAttribute="bottom" constant="8" id="xeF-w4-9yo"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="Xft-rJ-5op"/>
+                            </mask>
+                        </variation>
                     </view>
                     <connections>
                         <outlet property="label" destination="Ts6-Uh-igh" id="6NZ-D9-ILA"/>
