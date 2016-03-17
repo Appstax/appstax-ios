@@ -1,11 +1,11 @@
 
 import UIKit
 
-public class AXLoginViews {
+@objc public class AXLoginViews: NSObject {
     
     var size: CGSize
-    var login: UIView
-    var signup: UIView
+    public var login: UIView
+    public var signup: UIView
     
     init(size: CGSize) {
         self.size = size

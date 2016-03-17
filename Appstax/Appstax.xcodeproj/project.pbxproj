@@ -38,6 +38,7 @@
 		5484DDF01B21D0DA00D0FAFD /* Appstax.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5484DDEF1B21D0DA00D0FAFD /* Appstax.swift */; };
 		54B0D8741C99975500A06441 /* AXLoginUIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B0D8731C99975500A06441 /* AXLoginUIManager.swift */; };
 		54B0D8761C999A7B00A06441 /* AXLoginViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B0D8751C999A7B00A06441 /* AXLoginViews.swift */; };
+		54B0D8781C99AA2D00A06441 /* AXLoginConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B0D8771C99AA2D00A06441 /* AXLoginConfig.swift */; };
 		54B51E5B1BD0D7B60063A209 /* Starscream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54B51E5A1BD0D7B60063A209 /* Starscream.framework */; };
 		54B51E611BD0E1F60063A209 /* AXChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B51E5E1BD0E1F60063A209 /* AXChannel.swift */; };
 		54B51E621BD0E1F60063A209 /* AXEventHub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B51E5F1BD0E1F60063A209 /* AXEventHub.swift */; };
@@ -109,6 +110,7 @@
 		5484DDEF1B21D0DA00D0FAFD /* Appstax.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Appstax.swift; sourceTree = "<group>"; };
 		54B0D8731C99975500A06441 /* AXLoginUIManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AXLoginUIManager.swift; sourceTree = "<group>"; };
 		54B0D8751C999A7B00A06441 /* AXLoginViews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AXLoginViews.swift; sourceTree = "<group>"; };
+		54B0D8771C99AA2D00A06441 /* AXLoginConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AXLoginConfig.swift; sourceTree = "<group>"; };
 		54B51E5A1BD0D7B60063A209 /* Starscream.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Starscream.framework; path = ../Carthage/Build/iOS/Starscream.framework; sourceTree = "<group>"; };
 		54B51E5E1BD0E1F60063A209 /* AXChannel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AXChannel.swift; sourceTree = "<group>"; };
 		54B51E5F1BD0E1F60063A209 /* AXEventHub.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AXEventHub.swift; sourceTree = "<group>"; };
@@ -235,6 +237,7 @@
 				5484DD731B208FBE00D0FAFD /* AXApiClient.swift */,
 				54F984D81AB22801000096ED /* AXKeychain.m */,
 				54FD6EB51B343B89000E89B6 /* AXLog.swift */,
+				54B0D8771C99AA2D00A06441 /* AXLoginConfig.swift */,
 				54B0D8731C99975500A06441 /* AXLoginUIManager.swift */,
 				547C99651C9970C300FCBEB0 /* AXLoginViewController.swift */,
 				54F984DD1AB22801000096ED /* AXLoginViewController.xib */,
@@ -507,6 +510,7 @@
 				5484DDF01B21D0DA00D0FAFD /* Appstax.swift in Sources */,
 				54F9850E1AB22801000096ED /* AXPermissionsService.m in Sources */,
 				5484DD741B208FBE00D0FAFD /* AXApiClient.swift in Sources */,
+				54B0D8781C99AA2D00A06441 /* AXLoginConfig.swift in Sources */,
 				544F7D5E1B2765F900510DA2 /* AXObject.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

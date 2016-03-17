@@ -24,18 +24,20 @@ class AXLoginUIManager {
         navigationController.navigationBarHidden = true
     }
     
-    func setupCustomViews(setup:((AXLoginViews!)->())?) {
+    func runConfig(run:((AXLoginConfig)->())?) {
         let views = AXLoginViews(size: loginViewController.view.bounds.size)
-        setup?(views)
+        let config = AXLoginConfig(views: views, providers: [])
+        run?(config)
         signupViewController.backgroundView = views.signup
-        signupViewController.backgroundView = views.login
+        signupViewController.providers = config.providers
+        loginViewController.backgroundView = views.login
     }
     
-    func presentModalLoginWithViews(loginViews: ((AXLoginViews!)->())?, completion:()->()) {
+    func presentModalLoginWithConfig(config:((AXLoginConfig)->())?, completion:()->()) {
         self.completion = completion
         dispatch_async(dispatch_get_main_queue()) {
             self.presentationRoot = UIApplication.sharedApplication().keyWindow?.rootViewController
-            self.setupCustomViews(loginViews)
+            self.runConfig(config)
             self.presentationRoot.presentViewController(self.navigationController, animated: true, completion: nil)
         }
     }
@@ -46,6 +48,17 @@ class AXLoginUIManager {
         }
         if viewController === loginViewController {
             loginViewControllerDidPressSubmitButton()
+        }
+    }
+    
+    func viewControllerDidPressProviderButton(viewController: AXLoginViewController, provider: String) {
+        userService.login(provider: provider, fromViewController: viewController) {
+            user, error in
+            if let error = error {
+                viewController.showError(error.userInfo["errorMessage"] as? String ?? "")
+            } else {
+                self.finish()
+            }
         }
     }
     

@@ -3,6 +3,10 @@ import UIKit
 
 class AXLoginViewController: UIViewController {
     
+    
+    @IBOutlet var facebookButton: UIButton!
+    @IBOutlet var googleButton: UIButton!
+    
     @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var submitButton: UIButton!
@@ -10,6 +14,8 @@ class AXLoginViewController: UIViewController {
     @IBOutlet weak var errorLabel: UILabel!
     @IBOutlet weak var goToLoginButton: UIButton!
     @IBOutlet weak var backgroundContainer: UIView!
+    @IBOutlet weak var providerButtonsContainer: UIView!
+    @IBOutlet weak var providerButtonsHeightConstraint: NSLayoutConstraint!
     
     var submitTitle: String = ""
     var goToLoginHidden: Bool = false
@@ -22,12 +28,17 @@ class AXLoginViewController: UIViewController {
             backgroundView?.removeFromSuperview()
         }
         didSet {
-            if viewLoaded {
-                if let bg = backgroundView {
-                    bg.frame = backgroundContainer.bounds
-                    backgroundContainer.addSubview(bg)
-                }
+            ensureViewLoaded()
+            if let bg = backgroundView {
+                bg.frame = backgroundContainer.bounds
+                backgroundContainer.addSubview(bg)
             }
+        }
+    }
+    
+    var providers: [String] = [] {
+        didSet {
+            updateProviderButtons();
         }
     }
     
@@ -53,6 +64,10 @@ class AXLoginViewController: UIViewController {
         goToLoginButton.hidden = goToLoginHidden
     }
     
+    func ensureViewLoaded() {
+        _ = self.view
+    }
+    
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         if textField === usernameTextField {
             passwordTextField.becomeFirstResponder()
@@ -72,6 +87,46 @@ class AXLoginViewController: UIViewController {
     
     @IBAction func pressedGoToLoginButton(sender: AnyObject?) {
         loginUIManager.viewControllerDidPressGoToLoginButton(self)
+    }
+    
+    func updateProviderButtons() {
+        let buttonHeight: CGFloat = 44
+        let buttonSpacing: CGFloat = 10
+        let buttonWidth = providerButtonsContainer.frame.width
+        
+        var y = CGFloat(0)
+        
+        providerButtonsContainer.subviews.forEach({ v in v.removeFromSuperview() })
+        providers.enumerate().forEach({
+            index, provider in
+            
+            if let button = buttonForProvider(provider) {
+                button.tag = index
+                button.frame = CGRect(x: 0, y: y, width: buttonWidth, height: buttonHeight)
+                button.removeTarget(nil, action: nil, forControlEvents: .AllEvents)
+                button.addTarget(self, action: "didPressProviderButton:", forControlEvents: .TouchUpInside)
+                
+                providerButtonsContainer.addSubview(button)
+                y += buttonHeight + buttonSpacing
+            }
+        })
+        
+        providerButtonsHeightConstraint.constant = y
+    }
+    
+    func buttonForProvider(provider: String) -> UIButton? {
+        switch(provider) {
+            case "facebook": return facebookButton
+            case "google":   return googleButton
+            default: return nil
+        }
+    }
+    
+    func didPressProviderButton(button: UIButton) {
+        if providers.count > button.tag {
+            let provider = providers[button.tag]
+            loginUIManager.viewControllerDidPressProviderButton(self, provider: provider)
+        }
     }
     
     func clear() {

@@ -142,13 +142,17 @@ import Foundation
         }
     }
     
-    func requireLogin(completion: ((AXUser) -> ())?, withCustomViews views: ((AXLoginViews!) -> ())?) {
+    func requireLogin(completion: ((AXUser) -> ())?, withCustomViews views: ((AXLoginViews) -> ())?) {
+        requireLogin({ views?($0.views) }, completion: completion)
+    }
+    
+    func requireLogin(config: ((AXLoginConfig) -> ()), completion: ((AXUser) -> ())?) {
         if let user = currentUser {
             user.refresh() { _ in
                 completion?(user)
             }
-        } else if let views = views {
-            loginManager.presentModalLoginWithViews(views) { _ in
+        } else {
+            loginManager.presentModalLoginWithConfig(config) { _ in
                 completion?(self.currentUser!)
             }
         }

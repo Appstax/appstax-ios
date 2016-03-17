@@ -18,18 +18,14 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="txm-FF-Fgg">
-                                <rect key="frame" x="228" y="90" width="145" height="30"/>
+                                <rect key="frame" x="228" y="128" width="145" height="30"/>
                                 <state key="normal" title="Log in with Facebook"/>
                                 <connections>
                                     <action selector="loginWithFacebook:" destination="BYZ-38-t0r" eventType="touchUpInside" id="In2-s5-nMQ"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" preservesSuperviewLayoutMargins="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ts6-Uh-igh">
-                                <rect key="frame" x="179" y="231" width="243" height="21"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="243" id="ezU-Ea-6PF"/>
-                                    <constraint firstAttribute="height" constant="21" id="rgB-aA-vmu"/>
-                                </constraints>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" preservesSuperviewLayoutMargins="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ts6-Uh-igh">
+                                <rect key="frame" x="179" y="290" width="243" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
@@ -41,8 +37,15 @@
                                     <action selector="requireLogin:" destination="BYZ-38-t0r" eventType="touchUpInside" id="zXa-fw-Vyn"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yyT-mj-WVt">
+                                <rect key="frame" x="175" y="90" width="250" height="30"/>
+                                <state key="normal" title="Use requireLogin with social buttons"/>
+                                <connections>
+                                    <action selector="requireLoginWithButtons:" destination="BYZ-38-t0r" eventType="touchUpInside" id="UL0-eZ-QrB"/>
+                                </connections>
+                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dwM-sg-bg6">
-                                <rect key="frame" x="274" y="128" width="52" height="30"/>
+                                <rect key="frame" x="274" y="166" width="52" height="30"/>
                                 <state key="normal" title="Log out"/>
                                 <connections>
                                     <action selector="logout:" destination="BYZ-38-t0r" eventType="touchUpInside" id="qvY-Iq-WMM"/>
@@ -51,14 +54,16 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="Ts6-Uh-igh" firstAttribute="centerX" secondItem="dwM-sg-bg6" secondAttribute="centerX" id="Eok-80-gpd"/>
-                            <constraint firstItem="rJY-zF-xgt" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="32" id="L81-wH-8cE"/>
-                            <constraint firstItem="txm-FF-Fgg" firstAttribute="top" secondItem="rJY-zF-xgt" secondAttribute="bottom" constant="8" id="LHG-Q1-XCa"/>
-                            <constraint firstItem="dwM-sg-bg6" firstAttribute="top" secondItem="txm-FF-Fgg" secondAttribute="bottom" constant="8" id="LLw-qP-QAk"/>
-                            <constraint firstItem="dwM-sg-bg6" firstAttribute="centerX" secondItem="txm-FF-Fgg" secondAttribute="centerX" id="LMf-qT-5P0"/>
-                            <constraint firstItem="rJY-zF-xgt" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="MPh-6i-Zj9"/>
-                            <constraint firstItem="Ts6-Uh-igh" firstAttribute="top" secondItem="dwM-sg-bg6" secondAttribute="bottom" constant="73" id="cjC-I6-HIE"/>
-                            <constraint firstItem="txm-FF-Fgg" firstAttribute="centerX" secondItem="rJY-zF-xgt" secondAttribute="centerX" id="eqK-vp-H1Y"/>
+                            <constraint firstItem="txm-FF-Fgg" firstAttribute="centerX" secondItem="yyT-mj-WVt" secondAttribute="centerX" id="BEo-u8-3OW"/>
+                            <constraint firstItem="rJY-zF-xgt" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="32" id="C5y-ed-Nxx"/>
+                            <constraint firstItem="dwM-sg-bg6" firstAttribute="centerX" secondItem="txm-FF-Fgg" secondAttribute="centerX" id="IJJ-No-ykv"/>
+                            <constraint firstItem="rJY-zF-xgt" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Rr9-i4-Q8Y"/>
+                            <constraint firstItem="Ts6-Uh-igh" firstAttribute="top" secondItem="dwM-sg-bg6" secondAttribute="bottom" constant="94" id="Svj-Qt-ixd"/>
+                            <constraint firstItem="dwM-sg-bg6" firstAttribute="top" secondItem="txm-FF-Fgg" secondAttribute="bottom" constant="8" id="Xft-rJ-5op"/>
+                            <constraint firstItem="Ts6-Uh-igh" firstAttribute="centerX" secondItem="dwM-sg-bg6" secondAttribute="centerX" id="boD-yS-g78"/>
+                            <constraint firstItem="yyT-mj-WVt" firstAttribute="top" secondItem="rJY-zF-xgt" secondAttribute="bottom" constant="8" id="ceA-Zz-KNM"/>
+                            <constraint firstItem="yyT-mj-WVt" firstAttribute="centerX" secondItem="rJY-zF-xgt" secondAttribute="centerX" id="co9-Yw-AJa"/>
+                            <constraint firstItem="txm-FF-Fgg" firstAttribute="top" secondItem="yyT-mj-WVt" secondAttribute="bottom" constant="8" id="xeF-w4-9yo"/>
                         </constraints>
                     </view>
                     <connections>

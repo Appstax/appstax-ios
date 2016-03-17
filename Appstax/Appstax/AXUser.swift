@@ -55,12 +55,12 @@ import Foundation
         })
     }
     
+    public static func requireLogin(config: ((AXLoginConfig) -> ()), completion: ((AXUser) -> ())?) {
+        Appstax.defaultContext.userService.requireLogin(config, completion: completion)
+    }
+    
     public static func requireLogin(completion: ((AXUser) -> ())?, withCustomViews views: ((AXLoginViews) -> ())?) {
-        Appstax.defaultContext.userService.requireLogin({
-                completion?($0)
-            }, withCustomViews: {
-                views?($0)
-            })
+        Appstax.defaultContext.userService.requireLogin(completion, withCustomViews: views)
     }
 
     public static func currentUser() -> AXUser? {

@@ -20,6 +20,16 @@
     }];
 }
 
+- (IBAction)requireLoginWithButtons:(id)sender {
+    [AXUser requireLogin:^(AXLoginConfig *config) {
+        config.providers = @[@"facebook", @"google"];
+        config.views.signup.backgroundColor = [UIColor colorWithWhite:0 alpha:0.05];
+        config.views.login.backgroundColor = [UIColor colorWithWhite:0 alpha:0.05];
+    } completion:^(AXUser *user) {
+        [self updateLabel];
+    }];
+}
+
 - (IBAction)logout:(id)sender {
     [AXUser logout];
     [self updateLabel];
