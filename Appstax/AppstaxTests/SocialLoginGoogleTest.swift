@@ -143,7 +143,7 @@ import XCTest
         
         waitForExpectationsWithTimeout(timeout + 1) { error in
             let provider = self.sessionPostBody?["sysProvider"] as? [String:AnyObject]
-            let providerData = provider?["data"]
+            let providerData = provider?["data"] as? [String:String]
             AXAssertEqual(provider?["type"], "google")
             AXAssertEqual(providerData?["code"], "the-auth-code-23456")
             AXAssertEqual(providerData?["redirectUri"], "https://appstax.com/api/latest/sessions/auth")
