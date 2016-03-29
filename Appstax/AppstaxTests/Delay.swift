@@ -3,7 +3,7 @@ import Foundation
 
 func delay(time: NSTimeInterval, _ fn: () -> ()) {
     let action = DelayAction(fn: fn)
-    NSTimer.scheduledTimerWithTimeInterval(time, target: action, selector: "execute", userInfo: nil, repeats: false)
+    NSTimer.scheduledTimerWithTimeInterval(time, target: action, selector: #selector(DelayAction.execute), userInfo: nil, repeats: false)
 }
 
 class DelayAction: NSObject {

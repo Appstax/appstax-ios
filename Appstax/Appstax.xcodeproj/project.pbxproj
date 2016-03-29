@@ -103,7 +103,7 @@
 		544F7D5B1B2762AE00510DA2 /* AXObjectService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AXObjectService.swift; sourceTree = "<group>"; };
 		544F7D5D1B2765F900510DA2 /* AXObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AXObject.swift; sourceTree = "<group>"; };
 		544F7D5F1B28CEF400510DA2 /* ObjectRelationsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObjectRelationsTests.swift; sourceTree = "<group>"; };
-		544F7D611B28D2AD00510DA2 /* AXAsserts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AXAsserts.swift; sourceTree = "<group>"; };
+		544F7D611B28D2AD00510DA2 /* AXAsserts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = AXAsserts.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		547C99631C97FE9200FCBEB0 /* AXAuthViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AXAuthViewController.xib; sourceTree = "<group>"; };
 		547C99651C9970C300FCBEB0 /* AXLoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AXLoginViewController.swift; sourceTree = "<group>"; };
 		5484DD731B208FBE00D0FAFD /* AXApiClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AXApiClient.swift; sourceTree = "<group>"; };

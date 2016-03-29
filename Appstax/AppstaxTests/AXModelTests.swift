@@ -113,7 +113,7 @@ import XCTest
         weak var async = expectationWithDescription("async")
         var requestCount = 0
         AXStubs.method("GET", urlPath: "/objects/posts") { request in
-            requestCount++
+            requestCount += 1
             return OHHTTPStubsResponse(JSONObject: ["objects":[
                 ["sysObjectId": "id1", "content": "c1", "sysCreated": "2015-08-19T11:00:00"],
                 ["sysObjectId": "id2", "content": "c2", "sysCreated": "2015-08-19T10:00:00"]
@@ -126,12 +126,12 @@ import XCTest
         model.watch("posts")
         AXAssertNotNil(model["posts"])
         XCTAssertTrue(model["posts"] is [AXObject])
-        AXAssertEqual(model["posts"]?.count, 0)
+        AXAssertCount(model["posts"], 0)
         
         delay(0.3) { async?.fulfill() }
         waitForExpectationsWithTimeout(3) { error in
             AXAssertEqual(requestCount, 1)
-            AXAssertEqual(model["posts"]?.count, 2)
+            AXAssertCount(model["posts"], 2)
             AXAssertEqual(model["posts"]?[0].objectID, "id1")
             AXAssertEqual(model["posts"]?[1].objectID, "id2")
             AXAssertEqual(model["posts"]?[0].collectionName, "posts")
@@ -256,7 +256,7 @@ import XCTest
         }
         
         waitForExpectationsWithTimeout(3) { error in
-            AXAssertEqual(model["posts"]?.count, 1)
+            AXAssertCount(model["posts"], 1)
         }
     }
     
@@ -276,7 +276,7 @@ import XCTest
         ])
         
         waitForExpectationsWithTimeout(3) { error in
-            AXAssertEqual(model["posts"]?.count, 1)
+            AXAssertCount(model["posts"], 1)
             AXAssertEqual(model["posts"]?[0]["content"], "c3")
         }
     }
@@ -417,7 +417,7 @@ import XCTest
         
         var changes = 0
         model.on("change") { _ in
-            changes++
+            changes += 1
         }
         
         self.realtimeService.webSocketDidReceiveMessage([
@@ -465,7 +465,7 @@ import XCTest
         model.watch("posts", filter:"foo='bar'")
         
         delay(0.3) {
-            AXAssertEqual(model["posts"]?.count, 3)
+            AXAssertCount(model["posts"], 3)
             self.realtimeService.webSocketDidReceiveMessage([
                 "event": "object.created",
                 "channel": "objects/posts",
@@ -477,13 +477,13 @@ import XCTest
         }
         
         waitForExpectationsWithTimeout(3) { error in
-            AXAssertEqual(model["posts"]?.count, 4)
+            AXAssertCount(model["posts"], 4)
             AXAssertEqual(model["posts"]?[0].objectID, "id4")
             AXAssertEqual(model["posts"]?[1].objectID, "id1")
             AXAssertEqual(model["posts"]?[2].objectID, "id2")
             AXAssertEqual(model["posts"]?[3].objectID, "id3")
-            AXAssertEqual(channelNames.count, 1)
-            AXAssertEqual(channelFilters.count, 1)
+            AXAssertCount(channelNames, 1)
+            AXAssertCount(channelFilters, 1)
             AXAssertEqual(channelNames[0], "objects/posts")
             AXAssertEqual(channelFilters[0], "foo='bar'")
         }
@@ -525,8 +525,8 @@ import XCTest
         }
         
         waitForExpectationsWithTimeout(3) { error in
-            AXAssertEqual(model["barItems"]?.count, 2)
-            AXAssertEqual(model["bazItems"]?.count, 2)
+            AXAssertCount(model["barItems"], 2)
+            AXAssertCount(model["bazItems"], 2)
             AXAssertEqual(model["barItems"]?[0].objectID, "id1")
             AXAssertEqual(model["barItems"]?[1].objectID, "id2")
             AXAssertEqual(model["bazItems"]?[0].objectID, "id3")
@@ -554,7 +554,7 @@ import XCTest
         }
 
         waitForExpectationsWithTimeout(3) { error in
-            AXAssertEqual(model["items"]?.count, 1)
+            AXAssertCount(model["items"], 1)
             AXAssertEqual(model["items"]?[0].object("prop1")?.objectID, "id1")
             AXAssertEqual(model["items"]?[0].objects("prop2")?[0].objectID, "id2")
             AXAssertEqual(model["items"]?[0].objects("prop2")?[1].objectID, "id3")
@@ -697,7 +697,7 @@ import XCTest
         var itemRequests = 0
         AXStubs.method("GET", urlPath: "/objects/items", response: itemsResponseUnexpanded, statusCode: 200)
         AXStubs.method("GET", urlPath: "/objects/items/id0") { _ in
-            itemRequests++
+            itemRequests += 1
             return OHHTTPStubsResponse(JSONObject: ["objects":[]], statusCode: 200, headers: [:])
         }
         
@@ -1131,7 +1131,7 @@ import XCTest
         
         var changeCalls = 0
         model.on("change") { _ in
-            changeCalls++
+            changeCalls += 1
         }
         
         model.watch("posts")
@@ -1139,8 +1139,8 @@ import XCTest
         
         delay(0.3) {
             AXAssertEqual(changeCalls, 2)
-            AXAssertEqual(model["posts"]?.count, 2)
-            AXAssertEqual(model["comments"]?.count, 2)
+            AXAssertCount(model["posts"], 2)
+            AXAssertCount(model["comments"], 2)
             
             initial = false
             model.reload()
@@ -1201,7 +1201,7 @@ import XCTest
         
         var changeCalls = 0
         model.on("change") { _ in
-            changeCalls++
+            changeCalls += 1
         }
         
         model.watch("posts")
@@ -1209,8 +1209,8 @@ import XCTest
         
         delay(1) {
             AXAssertEqual(changeCalls, 2)
-            AXAssertEqual(model["posts"]?.count, 2)
-            AXAssertEqual(model["comments"]?.count, 2)
+            AXAssertCount(model["posts"], 2)
+            AXAssertCount(model["comments"], 2)
             
             initial = false
             self.realtimeService.webSocketDidDisconnect(nil)
@@ -1245,13 +1245,13 @@ import XCTest
         var errorCount = 0
         var eventError: String? = nil
         model.on("error") {
-            errorCount++
+            errorCount += 1
             eventError = $0.error
             async?.fulfill()
         }
         
         waitForExpectationsWithTimeout(3) { error in
-            AXAssertEqual(model["posts"]?.count, 0)
+            AXAssertCount(model["posts"], 0)
             AXAssertEqual(errorCount, 1)
             AXAssertEqual(eventError, "The error is 42!")
         }
@@ -1279,7 +1279,7 @@ import XCTest
         var errorCount = 0
         var eventError: String? = nil
         model.on("error") {
-            errorCount++
+            errorCount += 1
             eventError = $0.error
             async?.fulfill()
         }
@@ -1293,7 +1293,7 @@ import XCTest
         }
         
         waitForExpectationsWithTimeout(3) { error in
-            AXAssertEqual(model["posts"]?.count, 2)
+            AXAssertCount(model["posts"], 2)
             AXAssertEqual(errorCount, 1)
             AXAssertEqual(eventError, "Oh, noes!")
         }

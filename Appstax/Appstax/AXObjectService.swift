@@ -132,7 +132,7 @@ public class AXObjectService {
         for object in objects {
             saveObject(object) {
                 object, error in
-                completionCount++
+                completionCount += 1
                 if firstError == nil && error != nil {
                     firstError = error
                 }

@@ -104,7 +104,7 @@ class AXLoginViewController: UIViewController {
                 button.tag = index
                 button.frame = CGRect(x: 0, y: y, width: buttonWidth, height: buttonHeight)
                 button.removeTarget(nil, action: nil, forControlEvents: .AllEvents)
-                button.addTarget(self, action: "didPressProviderButton:", forControlEvents: .TouchUpInside)
+                button.addTarget(self, action: #selector(AXLoginViewController.didPressProviderButton(_:)), forControlEvents: .TouchUpInside)
                 
                 providerButtonsContainer.addSubview(button)
                 y += buttonHeight + buttonSpacing

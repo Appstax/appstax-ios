@@ -55,11 +55,11 @@ import Appstax
         ])
         
         AXAssertEqual(object["prop1"], "id1")
-        AXAssertEqual(object["prop2"]?.count, 2)
+        AXAssertEqual(object.array("prop2")?.count, 2)
         AXAssertEqual(object["prop2"]?[0], "id2")
         AXAssertEqual(object["prop2"]?[1], "id3")
         AXAssertNil(object["prop3"])
-        AXAssertEqual(object["prop4"]?.count, 0)
+        AXAssertEqual(object.array("prop4")?.count, 0)
     }
     
     func testShouldIncludeRelatedObjectsAsExpandedProperties() {

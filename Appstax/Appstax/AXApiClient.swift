@@ -215,12 +215,13 @@ import Foundation
         }
     }
     
-    func logResponse(response: NSURLResponse?, data: NSData?, var error: NSError?) {
+    func logResponse(response: NSURLResponse?, data: NSData?, error: NSError?) {
         if let httpResponse = response as? NSHTTPURLResponse {
-            if error == nil {
-                error = errorFromResponse(httpResponse, data: data)
+            var err = error
+            if err == nil {
+                err = errorFromResponse(httpResponse, data: data)
             }
-            if error == nil {
+            if err == nil {
                 AXLog.debug("HTTP Response: \(httpResponse.statusCode) \(httpResponse.URL!)")
             } else {
                 AXLog.error("HTTP Response: \(httpResponse.statusCode) \(httpResponse.URL!)")

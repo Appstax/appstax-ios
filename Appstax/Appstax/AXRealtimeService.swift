@@ -50,8 +50,10 @@ class AXRealtimeService: NSObject {
     }
     
     func send(command command: String, channel: String, message: AnyObject? = nil, data: AnyObject? = nil, filter: String? = nil) {
+        idCounter += 1
+
         var packet: [String:AnyObject] = [:]
-        packet["id"] = "id \(idCounter++)"
+        packet["id"] = "id \(idCounter)"
         packet["command"] = command
         packet["channel"] = channel
         if message != nil {
@@ -86,7 +88,7 @@ class AXRealtimeService: NSObject {
             connectSession()
         }
         if connectionCheckTimer == nil {
-            connectionCheckTimer = NSTimer.scheduledTimerWithTimeInterval(2.0, target: self, selector: "checkConnection", userInfo: nil, repeats: true)
+            connectionCheckTimer = NSTimer.scheduledTimerWithTimeInterval(2.0, target: self, selector: #selector(AXRealtimeService.checkConnection), userInfo: nil, repeats: true)
         }
     }
     

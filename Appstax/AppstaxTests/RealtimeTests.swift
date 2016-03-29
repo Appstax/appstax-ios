@@ -72,7 +72,7 @@ import XCTest
         let channel = AXChannel("public/chat")
         var channelOpen = 0
         channel.on("open") { _ in
-            channelOpen++
+            channelOpen += 1
         }
         
         delay(2) {

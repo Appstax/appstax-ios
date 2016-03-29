@@ -82,7 +82,7 @@ import Foundation
         realtimeService.on("status") {
             event in
             if self.realtimeService.status == .Connected {
-                self.connectedStatusCount++
+                self.connectedStatusCount += 1
                 if self.connectedStatusCount > 1 {
                     self.reload()
                 }

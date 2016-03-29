@@ -6,7 +6,7 @@
 	<dict>
 		<key>Headers/Starscream-Swift.h</key>
 		<data>
-		nLAntnI8LfeWiyuz2epvpUAiFzI=
+		bUm51LBtGmxpQt69iFY6alzK8vI=
 		</data>
 		<key>Headers/Starscream.h</key>
 		<data>
@@ -14,23 +14,23 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		A5hD/nBiIskGtw6dKGIryzCg1I0=
+		RnIXtzN8c06V4Uq+V23d5+aHW3U=
 		</data>
 		<key>Modules/Starscream.swiftmodule/arm.swiftdoc</key>
 		<data>
-		BAZ6uRpHqoBwTPA8gh2w1v+vneY=
+		uEv0jOfaNy8BSA7CvMnnuk1Zkis=
 		</data>
 		<key>Modules/Starscream.swiftmodule/arm.swiftmodule</key>
 		<data>
-		EtdDNYd2+75hNRr08sZ8g5qkayI=
+		QyxkklJQqiZB173c7yvGn8bI4io=
 		</data>
 		<key>Modules/Starscream.swiftmodule/arm64.swiftdoc</key>
 		<data>
-		S7O9/E8qJ/sCRmvB1ZYWhhGf7gg=
+		x6jbfcgWbup4AhP8EcMLl5ZsniQ=
 		</data>
 		<key>Modules/Starscream.swiftmodule/arm64.swiftmodule</key>
 		<data>
-		cO1C1B5LDAqPhbViV8EgK6e1L1Y=
+		/uOMsp+jQa0sFl6RPYV6yP6NcJ8=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -40,33 +40,82 @@
 	<key>files2</key>
 	<dict>
 		<key>Headers/Starscream-Swift.h</key>
-		<data>
-		nLAntnI8LfeWiyuz2epvpUAiFzI=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			bUm51LBtGmxpQt69iFY6alzK8vI=
+			</data>
+			<key>hash2</key>
+			<data>
+			a2eKAQEOnG9aYeOC2ODADxcbAsOUqJx+OHA6OHtMY8g=
+			</data>
+		</dict>
 		<key>Headers/Starscream.h</key>
-		<data>
-		bIF/9oSljUDPWlbHwEoxEPdpaHo=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			bIF/9oSljUDPWlbHwEoxEPdpaHo=
+			</data>
+			<key>hash2</key>
+			<data>
+			uDB1F1BYBSS///5Kx3sW3b25gGjxudlItQDs2UvmKGE=
+			</data>
+		</dict>
 		<key>Modules/Starscream.swiftmodule/arm.swiftdoc</key>
-		<data>
-		BAZ6uRpHqoBwTPA8gh2w1v+vneY=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			uEv0jOfaNy8BSA7CvMnnuk1Zkis=
+			</data>
+			<key>hash2</key>
+			<data>
+			yuqrAT01g+1wvsZofjfTBcgsW8mVs1PGCrqnLVEr7fc=
+			</data>
+		</dict>
 		<key>Modules/Starscream.swiftmodule/arm.swiftmodule</key>
-		<data>
-		EtdDNYd2+75hNRr08sZ8g5qkayI=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			QyxkklJQqiZB173c7yvGn8bI4io=
+			</data>
+			<key>hash2</key>
+			<data>
+			OT6E4r9TZkNTWJNIKyc947Jj7D9ccpnGpL9YTJ6mRsM=
+			</data>
+		</dict>
 		<key>Modules/Starscream.swiftmodule/arm64.swiftdoc</key>
-		<data>
-		S7O9/E8qJ/sCRmvB1ZYWhhGf7gg=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			x6jbfcgWbup4AhP8EcMLl5ZsniQ=
+			</data>
+			<key>hash2</key>
+			<data>
+			9CliNewxTw1ivLWZxvBFYDuWKyJ0fjMKMsxW/rPKnNA=
+			</data>
+		</dict>
 		<key>Modules/Starscream.swiftmodule/arm64.swiftmodule</key>
-		<data>
-		cO1C1B5LDAqPhbViV8EgK6e1L1Y=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			/uOMsp+jQa0sFl6RPYV6yP6NcJ8=
+			</data>
+			<key>hash2</key>
+			<data>
+			URXZ2ymG0Cv1aH1dJrgnIpPWhyiaO5fwlQOfc5NDCY4=
+			</data>
+		</dict>
 		<key>Modules/module.modulemap</key>
-		<data>
-		HjjuyHQpBc+8gZQzXW2Q2pe5wHw=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			HjjuyHQpBc+8gZQzXW2Q2pe5wHw=
+			</data>
+			<key>hash2</key>
+			<data>
+			aCZTejIiEJGpNC1M0/ejfoCDl9809WHT+yVcfVUViBw=
+			</data>
+		</dict>
 	</dict>
 	<key>rules</key>
 	<dict>
