@@ -64,17 +64,8 @@ import Foundation
             dictionary, error in
             if let error = error {
                 completion?(nil, error)
-            } else if let properties = dictionary?["user"] as? [String:AnyObject]? ?? [:] {
-                let sessionID = dictionary?["sysSessionId"] as? String
-                self.setSessionID(sessionID)
-                let objectID = properties["sysObjectId"] as? String
-                let username = properties["sysUsername"] as? String ?? username
-                self.currentUser = AXUser(username: username, properties: properties)
-                self.keychain.setObject(username, forKeyedSubscript: "Username")
-                self.keychain.setObject(objectID, forKeyedSubscript: "UserObjectID")
-                self.keychain.setObject(sessionID, forKeyedSubscript: "SessionID")
-                completion?(self.currentUser, nil)
-                self.eventHub.dispatch(AXEvent(type: "login"))
+            } else {
+                self.handleLoginSuccess(dictionary, username: username, completion: completion)
             }
         }
     }
@@ -132,19 +123,23 @@ import Foundation
             if let error = error {
                 completion?(nil, error)
             } else {
-                let properties = dictionary?["user"] as? [String:AnyObject]? ?? [:]
-                let sessionID = dictionary?["sysSessionId"] as? String
-                self.setSessionID(sessionID)
-                let objectID = properties?["sysObjectId"] as? String
-                let username = properties?["sysUsername"] as? String ?? ""
-                self.currentUser = AXUser(username: username, properties: properties)
-                self.keychain.setObject(username, forKeyedSubscript: "Username")
-                self.keychain.setObject(objectID, forKeyedSubscript: "UserObjectID")
-                self.keychain.setObject(sessionID, forKeyedSubscript: "SessionID")
-                completion?(self.currentUser, nil)
-                self.eventHub.dispatch(AXEvent(type: "login"))
+                self.handleLoginSuccess(dictionary, completion: completion)
             }
         }
+    }
+    
+    private func handleLoginSuccess(result: [String:AnyObject]?, username: String? = nil, completion: ((AXUser?, NSError?) -> ())?) {
+        let properties = result?["user"] as? [String:AnyObject]? ?? [:]
+        let sessionID = result?["sysSessionId"] as? String
+        self.setSessionID(sessionID)
+        let objectID = properties?["sysObjectId"] as? String
+        let username = properties?["sysUsername"] as? String ?? username ?? ""
+        self.currentUser = AXUser(username: username, properties: properties)
+        self.keychain.setObject(username, forKeyedSubscript: "Username")
+        self.keychain.setObject(objectID, forKeyedSubscript: "UserObjectID")
+        self.keychain.setObject(sessionID, forKeyedSubscript: "SessionID")
+        completion?(self.currentUser, nil)
+        self.eventHub.dispatch(AXEvent(type: "login"))
     }
     
     func requireLogin(completion: ((AXUser) -> ())?, withCustomViews views: ((AXLoginViews) -> ())?) {
@@ -173,6 +168,33 @@ import Foundation
         currentUser = nil
         apiClient.updateSessionID(nil)
         eventHub.dispatch(AXEvent(type: "logout"))
+    }
+    
+    func requestPasswordReset(email: String, completion: ((NSError?) -> ())?) {
+        let url = apiClient.urlFromTemplate("/users/reset/email", parameters: [:])!
+        apiClient.postDictionary(["email":email], toUrl: url) {
+            completion?($1)
+        }
+    }
+    
+    func changePassword(password: String, username: String, code: String, login: Bool, completion:((AXUser?, NSError?) -> ())?) {
+        let url = apiClient.urlFromTemplate("/users/reset/password", parameters: [:])!
+        let data: [String:AnyObject] = [
+            "password": password,
+            "username": username,
+            "pinCode": code,
+            "login": login ? kCFBooleanTrue : kCFBooleanFalse
+        ]
+        apiClient.postDictionary(data, toUrl: url) {
+            dictionary, error in
+            if error != nil {
+                completion?(nil, error)
+            } else if login {
+                self.handleLoginSuccess(dictionary, completion: completion)
+            } else {
+                completion?(nil, nil)
+            }
+        }
     }
     
     func on(type: String, handler: (AXEvent) -> ()) {

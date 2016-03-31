@@ -717,5 +717,153 @@
     [self waitForExpectationsWithTimeout:3 handler:^(NSError *error) {}];
 }
 
+- (void)testPasswordResetShouldSendRequestWithEmail {
+    __block XCTestExpectation *async = [self expectationWithDescription:@"async"];
+    __block NSDictionary *postData;
+    
+    [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+        return [[request.URL path] isEqualToString:@"/users/reset/email"] &&
+        [request.HTTPMethod isEqualToString:@"POST"];
+    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+        NSData *httpBody = [NSURLProtocol propertyForKey:@"HTTPBody" inRequest:request];
+        postData = [NSJSONSerialization JSONObjectWithData:httpBody options:0 error:nil];
+        return [OHHTTPStubsResponse responseWithJSONObject:@{}
+                                                statusCode:200 headers:nil];
+    }];
+    
+    [AXUser requestPasswordReset:@"my@email.com" completion:^(NSError *error) {
+        [async fulfill];
+    }];
+    
+    [self waitForExpectationsWithTimeout:1 handler:^(NSError *error) {
+        XCTAssertEqualObjects(postData[@"email"], @"my@email.com");
+    }];
+}
+
+- (void)testPasswordResetShouldReturnErrorIfEmailRequestFails {
+    __block XCTestExpectation *async = [self expectationWithDescription:@"async"];
+    
+    [AXStubs method:@"POST" urlPath:@"/users/reset/email" response:@{@"errorMessage": @"It didn't work"} statusCode:422];
+    
+    [AXUser requestPasswordReset:@"my@email.com" completion:^(NSError *error) {
+        XCTAssertNotNil(error);
+        XCTAssertEqualObjects(error.userInfo[@"errorMessage"], @"It didn't work");
+        [async fulfill];
+    }];
+    
+    [self waitForExpectationsWithTimeout:1 handler:^(NSError *error) {}];
+}
+
+- (void)testShouldChangePasswordWithUsernameNewPasswordAndCode {
+    __block XCTestExpectation *async = [self expectationWithDescription:@"async"];
+    __block NSDictionary *postData;
+    
+    [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+        return [[request.URL path] isEqualToString:@"/users/reset/password"] &&
+        [request.HTTPMethod isEqualToString:@"POST"];
+    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+        NSData *httpBody = [NSURLProtocol propertyForKey:@"HTTPBody" inRequest:request];
+        postData = [NSJSONSerialization JSONObjectWithData:httpBody options:0 error:nil];
+        return [OHHTTPStubsResponse responseWithJSONObject:@{}
+                                                statusCode:200 headers:nil];
+    }];
+    
+    [AXUser changePassword:@"the-new-password" username:@"the-user" code:@"the-super-secret" login:NO completion:^(AXUser *user, NSError *error) {
+        XCTAssertNil(user);
+        XCTAssertNil(error);
+        [async fulfill];
+    }];
+    
+    [self waitForExpectationsWithTimeout:1 handler:^(NSError *error) {
+        XCTAssertEqualObjects(postData[@"password"], @"the-new-password");
+        XCTAssertEqualObjects(postData[@"username"], @"the-user");
+        XCTAssertEqualObjects(postData[@"pinCode"], @"the-super-secret");
+    }];
+}
+
+- (void)testShouldReturnErrorIfPasswordChangeRequestFails {
+    __block XCTestExpectation *async = [self expectationWithDescription:@"async"];
+    
+    [AXStubs method:@"POST" urlPath:@"/users/reset/password" response:@{@"errorMessage": @"Sorry, sorry"} statusCode:422];
+    
+    [AXUser changePassword:@"the-new-password" username:@"the-user" code:@"the-super-secret" login:NO completion:^(AXUser *user, NSError *error) {
+        XCTAssertNotNil(error);
+        XCTAssertEqualObjects(error.userInfo[@"errorMessage"], @"Sorry, sorry");
+        [async fulfill];
+    }];
+    
+    [self waitForExpectationsWithTimeout:1 handler:^(NSError *error) {}];
+}
+
+- (void)testPasswordChangeShouldNotLogInByDefault {
+    __block XCTestExpectation *async = [self expectationWithDescription:@"async"];
+    __block NSDictionary *postData;
+    __block NSString *postDataString;
+    
+    [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+        return [[request.URL path] isEqualToString:@"/users/reset/password"] &&
+        [request.HTTPMethod isEqualToString:@"POST"];
+    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+        NSData *httpBody = [NSURLProtocol propertyForKey:@"HTTPBody" inRequest:request];
+        postDataString = [[NSString alloc] initWithData:httpBody encoding:NSUTF8StringEncoding];
+        postData = [NSJSONSerialization JSONObjectWithData:httpBody options:0 error:nil];
+        return [OHHTTPStubsResponse responseWithJSONObject:@{}
+                                                statusCode:200 headers:nil];
+    }];
+    
+    XCTAssertNil([AXUser currentUser]);
+    XCTAssertNil([_apiClient sessionID]);
+    
+    [AXUser changePassword:@"a" username:@"b" code:@"c" login:NO completion:^(AXUser *user, NSError *error) {
+        XCTAssertNil(user);
+        XCTAssertNil(error);
+        [async fulfill];
+    }];
+    
+    [self waitForExpectationsWithTimeout:1 handler:^(NSError *error) {
+        XCTAssertFalse([postData[@"login"] boolValue]);
+        AXAssertContains(postDataString, @":false"); // must post proper json boolean
+        XCTAssertNil([AXUser currentUser]);
+        XCTAssertNil([_apiClient sessionID]);
+    }];
+}
+
+- (void)testPasswordChangeShouldLogInAndSetCurrentUserWhenRequested {
+    __block XCTestExpectation *async = [self expectationWithDescription:@"async"];
+    __block NSDictionary *postData;
+    __block NSString *postDataString;
+    
+    [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+        return [[request.URL path] isEqualToString:@"/users/reset/password"] &&
+        [request.HTTPMethod isEqualToString:@"POST"];
+    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+        NSData *httpBody = [NSURLProtocol propertyForKey:@"HTTPBody" inRequest:request];
+        postDataString = [[NSString alloc] initWithData:httpBody encoding:NSUTF8StringEncoding];
+        postData = [NSJSONSerialization JSONObjectWithData:httpBody options:0 error:nil];
+        return [OHHTTPStubsResponse responseWithJSONObject:@{@"sysSessionId":@"the-session",@"user":@{@"sysObjectId":@"the-userid",@"sysUsername":@"the-username"}}
+                                                statusCode:200 headers:nil];
+    }];
+    
+    XCTAssertNil([AXUser currentUser]);
+    XCTAssertNil([_apiClient sessionID]);
+    
+    __block AXUser *resultUser;
+    [AXUser changePassword:@"a" username:@"b" code:@"c" login:YES completion:^(AXUser *user, NSError *error) {
+        XCTAssertNil(error);
+        resultUser = user;
+        [async fulfill];
+    }];
+    
+    [self waitForExpectationsWithTimeout:1 handler:^(NSError *error) {
+        XCTAssertTrue([postData[@"login"] boolValue]);
+        AXAssertContains(postDataString, @":true"); // must post proper json boolean
+        XCTAssertNotNil(resultUser);
+        XCTAssertEqualObjects(resultUser.objectID, @"the-userid");
+        XCTAssertEqualObjects(resultUser.username, @"the-username");
+        XCTAssertEqualObjects([_apiClient sessionID], @"the-session");
+        XCTAssertEqualObjects(resultUser, [AXUser currentUser]);
+    }];
+}
+
 
 @end

@@ -70,4 +70,12 @@ import Foundation
     public static func logout() {
         Appstax.defaultContext.userService.logout()
     }
+    
+    public static func requestPasswordReset(email: String, completion: ((NSError?) -> ())?) {
+        Appstax.defaultContext.userService.requestPasswordReset(email, completion: completion)
+    }
+    
+    public static func changePassword(password: String, username: String, code: String, login: Bool, completion:((AXUser?, NSError?) -> ())?) {
+        Appstax.defaultContext.userService.changePassword(password, username: username, code: code, login: login, completion: completion)
+    }
 }
