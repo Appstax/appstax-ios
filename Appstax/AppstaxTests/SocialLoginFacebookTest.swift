@@ -129,6 +129,18 @@ import XCTest
         }
     }
     
+    func testShouldUseAskForPublicProfileAndEmailPermissions() {
+        let async = expectationWithDescription("async")
+        
+        AXUser.login(provider: "facebook", fromViewController: nil) { _ in
+            async.fulfill()
+        }
+        
+        waitForExpectationsWithTimeout(timeout) { error in
+            AXAssertStringContains(self.requestedAuthUrl, needle: "scope=public_profile,email")
+        }
+    }
+    
     func testShouldSendAuthCodeAndRedirectUriFromDialogToServer() {
         let async = expectationWithDescription("async")
         
