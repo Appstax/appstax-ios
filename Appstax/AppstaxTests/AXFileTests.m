@@ -19,6 +19,7 @@
     [super setUp];
     [OHHTTPStubs setEnabled:YES];
     [Appstax setAppKey:@"test-api-key" baseUrl:@"http://localhost:3000/"];
+    [Appstax setLogLevel:@"trace"];
     _apiClient = [[Appstax defaultContext] apiClient];
 }
 

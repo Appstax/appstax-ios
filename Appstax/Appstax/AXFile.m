@@ -10,7 +10,7 @@
 }
 
 + (instancetype)fileWithImage:(UIImage *)image name:(NSString *)name {
-    NSData *data = UIImagePNGRepresentation(image);
+    NSData *data = [AXFile dataFromImage:image mimeType:[AXFile mimeTypeFromFilename:name]];
     return [[AXFile alloc] initWithData:data dataPath:nil name:name url:nil status:AXFileStatusNew];
 }
 
@@ -78,6 +78,16 @@
         type = @"application/octet-stream";
     }
     return type;
+}
+
++ (NSData *)dataFromImage:(UIImage *)image mimeType:(NSString *)mimeType {
+    if([mimeType isEqualToString:@"image/png"]) {
+        return UIImagePNGRepresentation(image);
+    }
+    if([mimeType isEqualToString:@"image/jpeg"]) {
+        return UIImageJPEGRepresentation(image, 1);
+    }
+    return [NSData data];
 }
 
 

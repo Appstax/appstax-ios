@@ -32,33 +32,53 @@ import Foundation
         }
     }
     
-    public func sendMultipartFormData(dataParts: [String:AnyObject], toUrl: NSURL, method: String, completion: (([String:AnyObject]?, NSError?) -> ())?) {
+    public func sendMultipartFormData(dataPartsSource: [String:AnyObject], toUrl: NSURL, method: String, completion: (([String:AnyObject]?, NSError?) -> ())?) {
+        var dataParts = dataPartsSource
         let boundary = "Boundary-\(NSUUID().UUIDString)"
         let contentType = "multipart/form-data; boundary=\(boundary)"
         let body = NSMutableData()
         
+        // put object data first
+        let objectDataKey = "sysObjectData"
+        if let objectData = dataParts[objectDataKey] {
+            appendMultipartData(body: body, boundary: boundary, partName: objectDataKey, part: objectData)
+            dataParts.removeValueForKey(objectDataKey)
+        }
+        
         for (partName, part) in dataParts {
-            let filename = part["filename"] as! String? ?? ""
-            let mimeType = part["mimeType"] as! String? ?? ""
-            let data = part["data"] as! NSData
-            body.appendData(stringData("--\(boundary)\r\n"))
-            if filename != "" {
-                body.appendData(stringData("Content-Disposition: form-data; name=\"\(partName)\"; filename=\"\(filename)\"\r\n"))
-            } else {
-                body.appendData(stringData("Content-Disposition: form-data; name=\"\(partName)\r\n"))
-            }
-            if mimeType != "" {
-                body.appendData(stringData("Content-Type: \(mimeType)\r\n"))
-            }
-            body.appendData(stringData("\r\n"))
-            body.appendData(data)
-            body.appendData(stringData("\r\n"))
+            appendMultipartData(body: body, boundary:boundary, partName: partName, part: part)
         }
         body.appendData(stringData("--\(boundary)--\r\n"))
+        
+        if let bodyString = NSString(data: body, encoding: NSUTF8StringEncoding) {
+            AXLog.trace("Created multipart request body: \(bodyString)")
+        } else if let bodyString = NSString(data: body, encoding: NSASCIIStringEncoding) {
+            AXLog.trace("Created multipart request body (ASCII): \(bodyString)")
+        } else {
+            AXLog.trace("Created multipart request body. Unable to show string representation.")
+        }
         
         sendHttpBody(body, toUrl: toUrl, method: method, headers: ["Content-Type":contentType]) {
             completion?(self.deserializeDictionary($0), $1)
         }
+    }
+    
+    private func appendMultipartData(body body: NSMutableData, boundary: String, partName: String, part: AnyObject) {
+        let filename = part["filename"] as! String? ?? ""
+        let mimeType = part["mimeType"] as! String? ?? ""
+        let data = part["data"] as! NSData
+        body.appendData(stringData("--\(boundary)\r\n"))
+        if filename != "" {
+            body.appendData(stringData("Content-Disposition: form-data; name=\"\(partName)\"; filename=\"\(filename)\"\r\n"))
+        } else {
+            body.appendData(stringData("Content-Disposition: form-data; name=\"\(partName)\"\r\n"))
+        }
+        if mimeType != "" {
+            body.appendData(stringData("Content-Type: \(mimeType)\r\n"))
+        }
+        body.appendData(stringData("\r\n"))
+        body.appendData(data)
+        body.appendData(stringData("\r\n"))
     }
     
     public func dictionaryFromUrl(url: NSURL, completion: (([String:AnyObject]?, NSError?) -> ())?) {
@@ -209,9 +229,9 @@ import Foundation
         let url = request.URL?.absoluteString ?? "(no url)"
         AXLog.debug("HTTP Request: \(method) : \(url)")
         if let body = NSString(data: request.HTTPBody ?? NSData(), encoding: NSUTF8StringEncoding) {
-            AXLog.trace("HTTP Request Body: \(body)")
+            AXLog.trace("HTTP Request body: \(body)")
         } else {
-            AXLog.trace("No HTTP Request Body")
+            AXLog.trace("No HTTP Request body, or unable to decode it as UTF-8 string. Could be multipart.")
         }
     }
     

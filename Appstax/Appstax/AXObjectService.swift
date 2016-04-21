@@ -98,13 +98,18 @@ public class AXObjectService {
         
         for (key, file) in object.allFileProperties {
             file.status = AXFileStatusSaving
+            let data = fileService.dataForFile(file)
             multipart[key] = [
-                "data": fileService.dataForFile(file),
+                "data": data,
                 "mimeType": file.mimeType,
                 "filename": file.filename
             ]
+            AXLog.trace("Adding file to body: mimeType=\(file.mimeType), filename=\(file.filename), data=\(data.length) bytes")
         }
-        multipart["sysObjectData"] = ["data": apiClient.serializeDictionary(object.allPropertiesForSaving)]
+        
+        let objectData = apiClient.serializeDictionary(object.allPropertiesForSaving)
+        multipart["sysObjectData"] = ["data": objectData]
+        AXLog.trace("Object data in multipart body: \(NSString(data: objectData, encoding: NSUTF8StringEncoding))")
         
         apiClient.sendMultipartFormData(multipart, toUrl: url, method: "POST") {
             dictionary, error in
