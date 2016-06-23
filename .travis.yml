@@ -6,7 +6,7 @@ before_script:
   - brew update
 script: ./build.sh
 git:
-  depth: 1
+  depth: 10
 env:
   global:
   - CODE_SIGN_IDENTITY="iPhone Distribution: Appstax Technologies AS (L8V2M7RADW)"
