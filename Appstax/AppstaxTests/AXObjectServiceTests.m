@@ -652,4 +652,130 @@
     [self waitForExpectationsWithTimeout:3 handler:^(NSError *error) {}];
 }
 
+- (void)testShouldSendPagingAsQueryStringWhenPageAndPageSize {
+    __block XCTestExpectation *exp1 = [self expectationWithDescription:@"async1"];
+ 
+    [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+        return true;
+    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+        AXAssertContains([request.URL query], @"paging=yes");
+        AXAssertContains([request.URL query], @"pagenum=2");
+        AXAssertContains([request.URL query], @"pagelimit=145");
+        
+        [exp1 fulfill];
+        return [OHHTTPStubsResponse responseWithJSONObject:@{}
+                                                statusCode:200 headers:nil];
+    }];
+    
+    [AXObject findAll:@"foo1" options:@{@"page":@2,@"pageSize":@145} completion:nil];
+    
+    [self waitForExpectationsWithTimeout:3 handler:^(NSError *error) {}];
+
+    
+}
+- (void)testShouldSendPagingAsQueryStringWhenPageOnly {
+    __block XCTestExpectation *exp1 = [self expectationWithDescription:@"async1"];
+    
+    [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+        return true;
+    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+        AXAssertContains([request.URL query], @"paging=yes");
+        AXAssertContains([request.URL query], @"pagenum=12");
+        
+        [exp1 fulfill];
+        return [OHHTTPStubsResponse responseWithJSONObject:@{}
+                                                statusCode:200 headers:nil];
+    }];
+    
+    [AXObject findAll:@"foo1" options:@{@"page":@12} completion:nil];
+    
+    [self waitForExpectationsWithTimeout:3 handler:^(NSError *error) {}];
+    
+    
+}
+
+- (void)testShouldSendPagingAsQueryStringWhenPageSizeOnly {
+    __block XCTestExpectation *exp1 = [self expectationWithDescription:@"async1"];
+    
+    [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+        return true;
+    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+        AXAssertContains([request.URL query], @"paging=yes");
+        AXAssertContains([request.URL query], @"pagelimit=12");
+        
+        [exp1 fulfill];
+        return [OHHTTPStubsResponse responseWithJSONObject:@{}
+                                                statusCode:200 headers:nil];
+    }];
+    
+    [AXObject findAll:@"foo1" options:@{@"pageSize":@12} completion:nil];
+    
+    [self waitForExpectationsWithTimeout:3 handler:^(NSError *error) {}];
+    
+    
+}
+- (void)testShouldSendOrderAsQueryStringWhenDescendingOrder {
+    __block XCTestExpectation *exp1 = [self expectationWithDescription:@"async1"];
+    
+    [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+        return true;
+    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+        AXAssertContains([request.URL query], @"sortorder=desc");
+        AXAssertContains([request.URL query], @"sortcolumn=bar");
+        
+        [exp1 fulfill];
+        return [OHHTTPStubsResponse responseWithJSONObject:@{}
+                                                statusCode:200 headers:nil];
+    }];
+    
+    [AXObject findAll:@"foo1" options:@{@"order":@"-bar"} completion:nil];
+    
+    [self waitForExpectationsWithTimeout:3 handler:^(NSError *error) {}];
+    
+    
+}
+
+- (void)testShouldSendOrderAsQueryStringWhenAscendingOrder {
+    __block XCTestExpectation *exp1 = [self expectationWithDescription:@"async1"];
+    
+    [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+        return true;
+    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+        AXAssertContains([request.URL query], @"sortorder=asc");
+        AXAssertContains([request.URL query], @"sortcolumn=bar");
+        
+        [exp1 fulfill];
+        return [OHHTTPStubsResponse responseWithJSONObject:@{}
+                                                statusCode:200 headers:nil];
+    }];
+    
+    [AXObject findAll:@"foo1" options:@{@"order":@"bar"} completion:nil];
+    
+    [self waitForExpectationsWithTimeout:3 handler:^(NSError *error) {}];
+    
+    
+}
+- (void)testShouldSendOrderAndPagingAsQueryStringWhenPresent {
+    __block XCTestExpectation *exp1 = [self expectationWithDescription:@"async1"];
+    
+    [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+        return true;
+    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+        AXAssertContains([request.URL query], @"sortorder=asc");
+        AXAssertContains([request.URL query], @"sortcolumn=bar");
+        AXAssertContains([request.URL query], @"paging=yes");
+        AXAssertContains([request.URL query], @"pagelimit=12");
+        
+        [exp1 fulfill];
+        return [OHHTTPStubsResponse responseWithJSONObject:@{}
+                                                statusCode:200 headers:nil];
+    }];
+    
+    [AXObject findAll:@"foo1" options:@{@"order":@"bar", @"pageSize":@12} completion:nil];
+    
+    [self waitForExpectationsWithTimeout:3 handler:^(NSError *error) {}];
+    
+    
+}
+
 @end

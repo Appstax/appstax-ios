@@ -249,6 +249,27 @@ public class AXObjectService {
         if let expand = options?["expand"] as? Int {
             parameters["expanddepth"] = "\(expand)"
         }
+        if let order = options?["order"] as? String {
+            var startPos: Int = 0
+            var sortorder:String = "asc"
+            if order.hasPrefix("-") {
+                sortorder = "desc"
+                startPos = 1
+                
+            }
+            parameters["sortorder"] = sortorder
+            parameters["sortcolumn"] = order.substringFromIndex(order.startIndex.advancedBy(startPos))
+            
+        }
+        
+        if let page = options?["page"] as? Int {
+            parameters["paging"] = "yes"
+            parameters["pagenum"] = "\(page)"
+        }
+        if let pageSize = options?["pageSize"] as? Int {
+            parameters["paging"] = "yes"
+            parameters["pagelimit"] = "\(pageSize)"
+        }
         return parameters
     }
 }
